@@ -1,0 +1,196 @@
+<template>
+  <v-app style="background-color: #fafafa">
+    <v-card flat style="border-radius: 0 8px 8px 0;">
+      <v-navigation-drawer
+        v-model="show"
+        clipped
+        :expand-on-hover="!$vuetify.breakpoint.xs"
+        app
+        :permanent="!$vuetify.breakpoint.xs"
+        disable-resize-watcher
+        disable-route-watcher
+        mini-variant-width="65"
+        height=""
+        style="margin-top: 30vh"
+        class="py-5"
+      >
+        <div @mouseover="mouseover" @mouseleave="mouseleave">
+          <v-list
+            nav
+            class="d-flex flex-column justify-center"
+            :class="sidebarOpen ? '' : 'align-center'"
+          >
+            <template v-for="item in items">
+              <v-list-item
+                :key="item.text"
+                link
+                style="max-height: 60px; margin: 10px 15px 8px !important;"
+                :href="item.href"
+              >
+                <v-list-item-action>
+                  <img
+                    :src="item.icon"
+                    alt="avatar"
+                    style="width: 35px; height: 35px; margin-right: 5px; border-radius: 50px"
+                  >
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.text }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+          </v-list>
+        </div>
+      </v-navigation-drawer>
+    </v-card>
+
+    <v-btn
+      class="hidden-sm-and-up"
+      style="top: 50%; margin-left: -48px;"
+      color="pink"
+      dark
+      fab
+      fixed
+      left
+      @click="show = true"
+    >
+      <v-icon class="ml-6">
+        mdi-chevron-right
+      </v-icon>
+    </v-btn>
+
+    <v-app-bar clipped-left app color="blue darken-3" dark>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+        <span>NIM POOLS HUB</span>
+      </v-toolbar-title>
+      <v-spacer />
+      <v-text-field
+        v-model="address"
+        clearable
+        clear-icon="mdi-close"
+        flat
+        dense
+        solo-inverted
+        color="grey darken-4"
+        background-color="blue accent-2"
+        hide-details
+        append-icon="mdi-magnify"
+        label="Enter here your address"
+        @click:clear="clearAddress"
+      />
+    </v-app-bar>
+    <v-content>
+      <v-container class="fill-height pb-0" fluid style="background-color: #fafafa">
+        <v-row align="center" justify="center" class="pb-0">
+          <nuxt />
+        </v-row>
+      </v-container>
+    </v-content>
+    <v-btn
+      bottom
+      color="pink"
+      dark
+      fab
+      fixed
+      right
+      nuxt
+      href="/setupMiner"
+      @click="testData"
+    >
+      <v-icon>mdi-help</v-icon>
+    </v-btn>
+    <v-overlay opacity="1" :value="overlay" color="#260133">
+      <!-- <v-progress-circular indeterminate size="64"></v-progress-circular> -->
+      <Loading />
+    </v-overlay>
+  </v-app>
+</template>
+
+<script>
+import Loading from '~/components/Loading/Loading'
+
+export default {
+  components: {
+    Loading
+  },
+  data: () => ({
+    address: '',
+    overlay: true,
+    dialog: false,
+    mini: true,
+    show: null,
+    sidebarOpen: false,
+    items: [
+      { icon: '/nimpool.png', href: '/nimpool', text: 'NimPool' },
+      { icon: '/urp.jpg', href: '/urp', text: 'URP Best' },
+      { icon: '/siriuspool.png', href: '/siriuspool', text: 'SiriusPool' }
+    ]
+  }),
+  beforeMount () {
+    this.overlay = this.$route.name !== 'index'
+  },
+  mounted () {
+    this.address = this.$store.state.localStorage.address.replace(
+      /(.{4})/g,
+      '$1 '
+    )
+
+    const loading = setInterval(() => {
+      if (
+        typeof this.$store.state.urp.confirmed_balance !== 'undefined' &&
+        this.overlay
+      ) {
+        clearInterval(loading)
+        setTimeout(() => {
+          this.overlay = false
+        }, 1800)
+      }
+    }, 1000)
+  },
+  updated () {
+    if (this.address === null) { return }
+    this.address = this.address.toUpperCase()
+    let value = this.address
+    value = value.replace(/ /g, '')
+    value = value.substr(4) + value.substr(0, 4)
+
+    const num = value
+      .split('')
+      .map((c) => {
+        const code = c.toUpperCase().charCodeAt(0)
+        return code >= 48 && code <= 57 ? c : (code - 55).toString()
+      })
+      .join('')
+    let tmp = ''
+
+    for (let i = 0; i < Math.ceil(num.length / 6); i++) {
+      tmp = (parseInt(tmp + num.substr(i * 6, 6)) % 97).toString()
+    }
+
+    if (parseInt(tmp) === 1) {
+      this.$store.commit(
+        'localStorage/updateAddress',
+        this.address.replace(/ /g, '')
+      )
+      this.address = this.$store.state.localStorage.address.replace(
+        /(.{4})/g,
+        '$1 '
+      )
+    }
+  },
+  methods: {
+    clearAddress () {
+      this.$store.commit('localStorage/updateAddress', '')
+    },
+    testData () {
+      this.address = 'NQ47 TD6C UT1K X35M DLVC N7QN YK5N FXNY SP5N'
+    },
+    mouseover () {
+      this.sidebarOpen = true
+    },
+    mouseleave () {
+      this.sidebarOpen = false
+    }
+  }
+}
+</script>

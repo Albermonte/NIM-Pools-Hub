@@ -1,0 +1,22 @@
+{
+  "name": "nim-pools-hub",
+  "version": "1.0.0",
+  "description": "A place to start mining NIM",
+  "author": "Albermonte",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nimiq/style": "^0.7.6",
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/vuetify": "^1.0.0",
+    "axios": "^0.19.2",
+    "nuxt": "^2.0.0",
+    "nuxt-vuex-localstorage": "^1.2.6"
+  },
+  "devDependencies": {}
+}
