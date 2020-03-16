@@ -9,59 +9,72 @@
             <v-item>
               <template v-slot="{ active, toggle }">
                 <v-col class="text-center">
-                  <v-card
-                    max-width="250"
-                    min-width="230"
-                    min-height="65"
-                    :class="active ? 'light-blue--text text--darken-3' : 'grey--text'"
-                    class="mx-auto d-flex flex-column align-center v-card--account"
-                    outlined
-                    @click="toggle"
-                  >
-                    <v-card-text class="d-flex justify-center align-center">
-                      <img
-                        :src="pool.icon"
-                        alt="avatar"
-                        style="width: 35px; height: 35px; margin-right: 5px; border-radius: 50px"
-                      />
-                      <div
-                        class="pl-3 text-uppercase subtitle-2 text--primary"
-                        v-text="pool.displayName"
-                      />
-                    </v-card-text>
-                    <v-card-actions class="px-3 d-flex justify-space-between" style="width: 100%">
-                      <v-chip
+                  <v-tooltip color="var(--nimiq-blue)" top>
+                    <template v-slot:activator="{ on }">
+                      <v-card
+                        max-width="250"
+                        min-width="230"
+                        min-height="65"
+                        :class="active ? 'light-blue--text text--darken-3' : 'grey--text'"
+                        class="mx-auto d-flex flex-column align-center v-card--account"
                         outlined
-                        small
-                        :color="pool.message ==='Preferred' ? 'purple accent-3' : ''"
-                        class="font-weight-regular"
+                        @click="toggle"
+                        v-on="on"
                       >
-                        <v-icon left small style="margin-right: 2px !important">mdi-circle-medium</v-icon>
-                        {{ pool.message }}
-                      </v-chip>
-                      <v-chip
-                        v-if="pool.status === 'online'"
-                        color="green darken-2"
-                        class="font-weight-light"
-                        outlined
-                        small
-                      >
-                        <v-icon left small>mdi-transit-connection-variant</v-icon>Online
-                      </v-chip>
-                      <v-chip
-                        v-else-if="pool.status === 'offline'"
-                        color="red darken-2"
-                        class="font-weight-light"
-                        outlined
-                        small
-                      >
-                        <v-icon left small>mdi-transit-connection-variant</v-icon>Offline
-                      </v-chip>
-                      <v-chip v-else outlined small>
-                        <v-icon left small>mdi-transit-connection-variant</v-icon>Checking
-                      </v-chip>
-                    </v-card-actions>
-                  </v-card>
+                        <v-card-text class="d-flex justify-center align-center">
+                          <img
+                            :src="pool.icon"
+                            alt="avatar"
+                            style="width: 35px; height: 35px; margin-right: 5px; border-radius: 50px"
+                          />
+                          <div
+                            class="pl-3 text-uppercase subtitle-2 text--primary"
+                            v-text="pool.displayName"
+                          />
+                        </v-card-text>
+                        <v-card-actions
+                          class="px-3 d-flex justify-space-between"
+                          style="width: 100%"
+                        >
+                          <v-chip
+                            outlined
+                            small
+                            :color="pool.message ==='Preferred' ? 'purple accent-3' : ''"
+                            class="font-weight-regular"
+                          >
+                            <v-icon
+                              left
+                              small
+                              style="margin-right: 2px !important"
+                            >mdi-circle-medium</v-icon>
+                            {{ pool.message }}
+                          </v-chip>
+                          <v-chip
+                            v-if="pool.status === 'online'"
+                            color="green darken-2"
+                            class="font-weight-light"
+                            outlined
+                            small
+                          >
+                            <v-icon left small>mdi-transit-connection-variant</v-icon>Online
+                          </v-chip>
+                          <v-chip
+                            v-else-if="pool.status === 'offline'"
+                            color="red darken-2"
+                            class="font-weight-light"
+                            outlined
+                            small
+                          >
+                            <v-icon left small>mdi-transit-connection-variant</v-icon>Offline
+                          </v-chip>
+                          <v-chip v-else outlined small>
+                            <v-icon left small>mdi-transit-connection-variant</v-icon>Checking
+                          </v-chip>
+                        </v-card-actions>
+                      </v-card>
+                    </template>
+                    <span class="white--text text-center" v-html="pool.extras.join('<br>')"></span>
+                  </v-tooltip>
                 </v-col>
               </template>
             </v-item>
@@ -78,53 +91,82 @@ export default {
     selectedPool: null,
     poolList: [
       {
-        icon: '/nimpool.png',
-        name: 'nimpool',
-        displayName: 'NimPool',
-        message: 'Preferred',
-        status: ''
+        icon: "/nimpool.png",
+        name: "nimpool",
+        displayName: "NimPool",
+        message: "Preferred",
+        status: "",
+        extras: [" Pool fee: 1%", "Non-profit"]
       },
       {
-        icon: '/urp.jpg',
-        name: 'urp',
-        displayName: 'URP Best',
-        message: 'Lowest Fees',
-        status: ''
+        icon: "/icemining.png",
+        name: "icemining",
+        displayName: "Icemining",
+        message: "YIIMP based",
+        status: "",
+        extras: ["Pool fee: 1.25%", "Greatest Support"]
       },
       {
-        icon: '/siriuspool.png',
-        name: 'SiriusPool',
-        displayName: 'SiriusPool',
-        message: 'Low Hashrate',
-        status: ''
+        icon: "/siriuspool.png",
+        name: "siriuspool",
+        displayName: "SiriusPool",
+        message: "Low Hashrate",
+        status: "",
+        extras: ["Pool fee: 1%", "Greek Pool"]
+      },
+      {
+        icon: "/skypool.png",
+        name: "skypool",
+        displayName: "Skypool",
+        message: "China based",
+        status: "",
+        extras: ["Pool fee: ~1%", "Not using official protocol"]
+      },
+      {
+        icon: "/urp.png",
+        name: "urp",
+        displayName: "URP Best",
+        message: "Lowest Fees",
+        status: "",
+        extras: [" Pool fee: 0.5%"]
       }
     ]
   }),
   computed: {
-    selectPool () {
-      console.log(this.selectedPool) // eslint-disable-line no-console
-      return this.selectedPool
+    selectPool() {
+      console.log(this.selectedPool); // eslint-disable-line no-console
+      return this.selectedPool;
     }
   },
-  async mounted () {
-    const ipContinent = (await this.$axios.$get('https://ipapi.co/continent_code/'))
-    let region
-    if (ipContinent !== 'US') { region = 'eu' } else { region = 'us' }
+  async mounted() {
+    const ipContinent = await this.$axios.$get(
+      "https://ipapi.co/continent_code/"
+    );
+    let region;
+    if (ipContinent !== "US") {
+      region = "eu";
+    } else {
+      region = "us";
+    }
 
-    this.poolList.map(async (x) => {
-      if (x.name === 'nimpool') {
-        x.status = (await this.$axios.$get(`/api/isOnline/${x.name}` + region))
-          ? 'online'
-          : 'offline'
-        x.displayName = `${x.displayName} (${region.toUpperCase()})`
+    this.poolList.map(async x => {
+      if (x.name === "nimpool") {
+        x.status = (await this.$axios.$get(
+          `${window.location.origin}/api/isOnline/${x.name}` + region
+        ))
+          ? "online"
+          : "offline";
+        x.displayName = `${x.displayName} (${region.toUpperCase()})`;
       } else {
-        x.status = (await this.$axios.$get(`/api/isOnline/${x.name}`))
-          ? 'online'
-          : 'offline'
+        x.status = (await this.$axios.$get(
+          `${window.location.origin}/api/isOnline/${x.name}`
+        ))
+          ? "online"
+          : "offline";
       }
-    })
+    });
   }
-}
+};
 </script>
 
 <style lang="sass">
