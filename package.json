@@ -1,12 +1,12 @@
 {
   "name": "nim-pools-hub",
   "version": "1.0.0",
-  "description": "A place to start mining NIM",
+  "description": "A place where new miners can start mining NIM in the easiest way possible",
   "author": "Albermonte",
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
+    "build": "nuxt generate",
     "start": "nuxt start",
     "generate": "nuxt generate"
   },
