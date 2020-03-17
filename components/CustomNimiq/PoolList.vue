@@ -5,7 +5,14 @@
 
       <v-item-group v-model="selectedPool" class="mb-6">
         <v-row dense justify="center">
-          <v-col v-for="(pool, i) in poolList" :key="i" sm="8" md="4" lg="3">
+          <v-col
+            v-for="(pool, i) in poolList"
+            :key="i"
+            sm="8"
+            md="4"
+            lg="3"
+            style="max-width: 280px;"
+          >
             <v-item>
               <template v-slot="{ active, toggle }">
                 <v-col class="text-center">
@@ -16,10 +23,11 @@
                         min-width="230"
                         min-height="65"
                         :class="active ? 'light-blue--text text--darken-3' : 'grey--text'"
-                        class="mx-auto d-flex flex-column align-center v-card--account"
+                        class="d-flex flex-column align-center v-card--account"
                         outlined
                         @click="toggle"
                         v-on="on"
+                        :disabled="pool.status === 'offline'"
                       >
                         <v-card-text class="d-flex justify-center align-center">
                           <img
@@ -88,6 +96,7 @@
 <script>
 export default {
   data: () => ({
+    selectPool: 0,
     selectedPool: null,
     poolList: [
       {
@@ -96,7 +105,8 @@ export default {
         displayName: "NimPool",
         message: "Preferred",
         status: "",
-        extras: [" Pool fee: 1%", "Non-profit"]
+        extras: [" Pool fee: 1%", "Non-profit"],
+        url: "eu.nimpool.io:8444"
       },
       {
         icon: "/icemining.png",
@@ -104,7 +114,8 @@ export default {
         displayName: "Icemining",
         message: "YIIMP based",
         status: "",
-        extras: ["Pool fee: 1.25%", "Greatest Support"]
+        extras: ["Pool fee: 1.25%", "Greatest Support"],
+        url: "nimiq.icemining.ca:2053"
       },
       {
         icon: "/siriuspool.png",
@@ -112,7 +123,8 @@ export default {
         displayName: "SiriusPool",
         message: "Low Hashrate",
         status: "",
-        extras: ["Pool fee: 1%", "Greek Pool"]
+        extras: ["Pool fee: 1%", "Greek Pool"],
+        url: "siriuspool.net:8443"
       },
       {
         icon: "/skypool.png",
@@ -120,7 +132,8 @@ export default {
         displayName: "Skypool",
         message: "China based",
         status: "",
-        extras: ["Pool fee: ~1%", "Not using official protocol"]
+        extras: ["Pool fee: ~1%", "Not using official protocol"],
+        url: "hk1.nimiq.skypool.org:5000"
       },
       {
         icon: "/urp.png",
@@ -128,29 +141,31 @@ export default {
         displayName: "URP Best",
         message: "Lowest Fees",
         status: "",
-        extras: [" Pool fee: 0.5%"]
+        extras: [" Pool fee: 0.5%"],
+        url: ""
       }
     ]
   }),
-  computed: {
-    selectPool() {
-      console.log(this.selectedPool); // eslint-disable-line no-console
-      return this.selectedPool;
-    }
+  updated() {
+    //console.log(this.selectPool); // eslint-disable-line no-console
+    if (this.selectedPool !== undefined)
+      this.$root.$emit("poolURL", this.poolList[this.selectedPool].url);
+    else this.$root.$emit("poolURL", null);
   },
   async mounted() {
     const ipContinent = await this.$axios.$get(
       "https://ipapi.co/continent_code/"
     );
     let region;
-    if (ipContinent !== "US") {
-      region = "eu";
-    } else {
+    if (ipContinent === "US") {
       region = "us";
+    } else {
+      region = "eu";
     }
 
     this.poolList.map(async x => {
       if (x.name === "nimpool") {
+        if (region === "us") x.url = "us.nimpool.io:8444";
         x.status = (await this.$axios.$get(
           `${window.location.origin}/api/isOnline/${x.name}` + region
         ))
