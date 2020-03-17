@@ -1,4 +1,4 @@
-export const download = () => {
+export const download = (gpu, address, poolURL) => {
     const text = `:: Script Made By Albermonte
 @echo off
 mkdir NimiqMiner
@@ -8,6 +8,7 @@ powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.Security
 unzip.exe -o nq-miner-windows.zip -d nq-miner -x start_gpu.bat 
 del /f /q nq-miner-windows.zip
 del /f /q unzip.exe
+echo|set /p= "cd nq-miner & cls & @echo off & echo "------------------------START Miner----------------------" & SET UV_THREADPOOL_SIZE=32 & nq-miner.exe -t ${gpu} -a "${address}" -n "NQ-Miner" -p ${poolURL} & echo "------------------------END Miner----------------------" & echo "Something went wrong or you exited" & pause" > start_gpu.bat
 cls & echo. & echo. & echo. & echo. & echo. & echo. & echo. & echo ############################################################## & echo ######                                                  ###### & echo ######  Go to NimiqMiner folder and open start_gpu.bat  ###### & echo ######                                                  ###### & echo ############################################################## & echo. & echo. & echo. & echo. & echo. & echo. & echo Thanks & echo. & echo. & echo. & PAUSE
 `
     var element = document.createElement('a');

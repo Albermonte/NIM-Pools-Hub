@@ -64,6 +64,70 @@
           <v-stepper-content step="3" class="pt-2">
             <h2 class="mt-0 pb-2 text-center">{{ title }}</h2>
             <!-- eslint-disable-next-line -->
+            <p class="pb-4 text-center" v-html="text" />
+
+            <v-item-group
+              v-model="selectedGPU"
+              class="mx-auto d-flex justify-space-between"
+              style="width: 300px"
+            >
+              <v-item>
+                <v-chip
+                  x-large
+                  outlined
+                  class="font-weight-regular"
+                  :class="selectedGPU === 'cuda' ? 'green--text text--accent-4' : 'grey--text'"
+                  style="height: 100px; width: 120px"
+                  @click="selectedGPU = 'cuda'"
+                >
+                  <div
+                    class="d-flex flex-column justify-space-around align-center"
+                    style="height: 70%; width: 100%"
+                  >
+                    <v-icon large>mdi-expansion-card</v-icon>
+                    <span>NVIDIA</span>
+                  </div>
+                </v-chip>
+              </v-item>
+
+              <v-item>
+                <v-chip
+                  x-large
+                  outlined
+                  class="font-weight-regular"
+                  :class="selectedGPU === 'opencl' ? 'red--text text--accent-4' : 'grey--text'"
+                  style="height: 100px; width: 120px"
+                  @click="selectedGPU = 'opencl'"
+                >
+                  <div
+                    class="d-flex flex-column justify-space-around align-center"
+                    style="height: 70%; width: 100%"
+                  >
+                    <v-icon large>mdi-expansion-card-variant</v-icon>
+                    <span>AMD</span>
+                  </div>
+                </v-chip>
+              </v-item>
+            </v-item-group>
+
+            <div class="py-2 d-flex justify-end align-center" style="min-height: 70px">
+              <v-scroll-y-reverse-transition>
+                <v-btn v-if="isButtonActive" rounded text @click="page = page - 1">Back</v-btn>
+              </v-scroll-y-reverse-transition>
+
+              <v-scroll-y-reverse-transition>
+                <v-btn
+                  v-if="isButtonActive"
+                  rounded
+                  color="primary"
+                  @click="buttonClick"
+                >{{ buttonText }}</v-btn>
+              </v-scroll-y-reverse-transition>
+            </div>
+          </v-stepper-content>
+
+          <v-stepper-content step="4" class="pt-2">
+            <h2 class="mt-0 pb-2 text-center">{{ title }}</h2>
             <p class="pb-4 text-center">
               <span class="font-weight-bold">Pool:</span>
               {{selectedPool}}
@@ -122,27 +186,6 @@
               </v-scroll-y-reverse-transition>
             </div>
           </v-stepper-content>
-
-          <v-stepper-content step="4" class="pt-2">
-            <h2 class="mt-0 pb-2 text-center">{{ title }}</h2>
-            <!-- eslint-disable-next-line -->
-            <p class="pb-4 text-center" v-html="text" />
-
-            <div class="py-2 d-flex justify-end align-center" style="min-height: 70px">
-              <v-scroll-y-reverse-transition>
-                <v-btn v-if="isButtonActive" rounded text @click="page = page - 1">Back</v-btn>
-              </v-scroll-y-reverse-transition>
-
-              <v-scroll-y-reverse-transition>
-                <v-btn
-                  v-if="isButtonActive"
-                  rounded
-                  color="primary"
-                  @click="buttonClick"
-                >{{ buttonText }}</v-btn>
-              </v-scroll-y-reverse-transition>
-            </div>
-          </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
     </v-lazy>
@@ -172,13 +215,14 @@ export default {
     return {
       address: "",
       selectedPool: null,
+      selectedGPU: '',
       isActive: false,
       isButtonActive: false,
       validAddress: false,
       snackbar: false,
       snackbarText: "",
       timeout: 3000,
-      page: 3,
+      page: 1,
       maxPage: 4,
       content: [
         {
@@ -194,14 +238,13 @@ export default {
           button: "Let's MINE!"
         },
         {
-          title: "All Ready to Start Mining",
-          text: ``,
+          title: "What GPU do you have?",
+          text: "If you don't know, choose AMD",
           button: "Got it!"
         },
         {
-          title: "Old and new Accounts",
-          text:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus tristique, tortor ut vehicula tincidunt, turpis lacus aliquet arcu, vel consequat nisi odio vitae velit. Nam auctor tempor tincidunt. Proin rutrum, lacus sit amet rhoncus rutrum, justo nunc dapibus dolor, vitae commodo odio mi sit amet sem. Integer pellentesque augue urna, at fringilla nisi sollicitudin sed. Ut mollis leo non velit fermentum, eget varius dui lacinia. Donec id felis pellentesque, malesuada felis at, fermentum dui. In molestie justo quis enim aliquam, vel commodo odio varius. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In nec dapibus mauris, sed placerat justo. Nunc non consequat urna. Duis consequat ante sed porta sodales.",
+          title: "All Ready to Start Mining",
+          text: "",
           button: "Got it!"
         }
       ]
@@ -288,7 +331,7 @@ export default {
       alert("Soon");
     },
     downloadWindows() {
-      download();
+      download(this.selectedGPU, this.address, this.selectedPool);
     }
   }
 };
