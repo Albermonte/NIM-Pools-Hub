@@ -1,52 +1,53 @@
 <template>
   <v-app style="background-color: #fafafa">
-    <v-card flat style="border-radius: 0 8px 8px 0;">
-      <v-navigation-drawer
-        v-model="show"
-        clipped
-        :expand-on-hover="!$vuetify.breakpoint.xs"
-        app
-        :permanent="!$vuetify.breakpoint.xs"
-        disable-resize-watcher
-        disable-route-watcher
-        mini-variant-width="65"
-        height
-        style="margin-top: 30vh"
-        class="py-5"
-      >
-        <div @mouseover="mouseover" @mouseleave="mouseleave">
-          <v-list
-            nav
-            class="d-flex flex-column justify-center"
-            :class="sidebarOpen ? '' : 'align-center'"
-          >
-            <template v-for="pool in poolList">
-              <v-list-item
-                :key="pool.displayName"
-                link
-                style="max-height: 60px; margin: 10px 15px 8px !important;"
-                :href="`/${pool.name}`"
-              >
-                <v-list-item-action>
-                  <img
-                    :src="pool.icon"
-                    alt="avatar"
-                    style="width: 35px; height: 35px; margin-right: 5px; border-radius: 50px"
-                  />
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title>{{ pool.displayName }}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </template>
-          </v-list>
-        </div>
-      </v-navigation-drawer>
-    </v-card>
+    <div :class="[$vuetify.breakpoint.xs ? 'navbar-mobile' : 'navbar', show ? 'stay-on-top' : '']" :style="[$vuetify.breakpoint.xs && (show || sidebarOpen) ? 'width: 100%' : 'width: 0', sidebarOpen ? 'width: 100%' : 'width: 35px']">
+      <v-card flat style="border-radius: 0 8px 8px 0;">
+        <v-navigation-drawer
+          v-model="show"
+          clipped
+          :expand-on-hover="!$vuetify.breakpoint.xs"
+          :permanent="!$vuetify.breakpoint.xs"
+          disable-resize-watcher
+          disable-route-watcher
+          mini-variant-width="65"
+          height
+          class="py-5"
+        >
+          <div @mouseover="mouseover" @mouseleave="mouseleave">
+            <v-list
+              nav
+              class="d-flex flex-column justify-center"
+              :class="[!sidebarOpen && !$vuetify.breakpoint.xs ? 'align-center' : 'align-start', $vuetify.breakpoint.xs ? 'align-start' : '']"
+            >
+              <template v-for="pool in poolList">
+                <v-list-item
+                  :key="pool.displayName"
+                  link
+                  style="max-height: 60px; margin: 10px 15px 8px !important; width: 88%;"
+                  :href="`/${pool.name}`"
+                >
+                  <v-list-item-action>
+                    <img
+                      :src="pool.icon"
+                      alt="avatar"
+                      style="width: 35px; height: 35px; margin-right: 5px; border-radius: 50px"
+                    />
+                  </v-list-item-action>
+                  <v-list-item-content>
+                    <v-list-item-title>{{ pool.displayName }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </v-list>
+          </div>
+        </v-navigation-drawer>
+      </v-card>
+    </div>
 
     <v-btn
       class="hidden-sm-and-up"
       style="top: 50%; margin-left: -48px;"
+      :style="show ? 'z-index: 1': 'z-index:10'"
       color="pink"
       dark
       fab
@@ -87,7 +88,7 @@
     <v-btn bottom color="pink" dark fab fixed right nuxt href="/setupMiner" @click="testData">
       <v-icon>mdi-help</v-icon>
     </v-btn>
-    <v-overlay opacity="1" :value="overlay" color="#260133">
+    <v-overlay opacity="1" :value="overlay" color="#260133" style="z-index: 100">
       <!-- <v-progress-circular indeterminate size="64"></v-progress-circular> -->
       <Loading />
     </v-overlay>
@@ -221,3 +222,27 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.navbar {
+  height: calc(100vh - 64px);
+  margin-top: 64px;
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-mobile {
+  height: calc(100vh - 56px);
+  margin-top: 56px;
+  position: absolute;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+}
+
+.stay-on-top{
+  z-index: 10 !important;
+}
+</style>
