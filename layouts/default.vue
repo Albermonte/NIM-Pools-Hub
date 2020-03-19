@@ -1,6 +1,9 @@
 <template>
   <v-app style="background-color: #fafafa">
-    <div :class="[$vuetify.breakpoint.xs ? 'navbar-mobile' : 'navbar', show ? 'stay-on-top' : '']" :style="[$vuetify.breakpoint.xs && (show || sidebarOpen) ? 'width: 100%' : 'width: 0', sidebarOpen ? 'width: 100%' : 'width: 35px']">
+    <div
+      :class="[$vuetify.breakpoint.xs ? 'navbar-mobile' : 'navbar', show ? 'stay-on-top' : '']"
+      :style="[$vuetify.breakpoint.xs && (show || sidebarOpen) ? 'width: 100%' : 'width: 0', sidebarOpen ? 'width: 100%' : 'width: 35px']"
+    >
       <v-card flat style="border-radius: 0 8px 8px 0;">
         <v-navigation-drawer
           v-model="show"
@@ -25,6 +28,7 @@
                   link
                   style="max-height: 60px; margin: 10px 15px 8px !important; width: 88%;"
                   :href="`/${pool.name}`"
+                  :disabled="pool.status === 'offline'"
                 >
                   <v-list-item-action>
                     <img
@@ -35,6 +39,7 @@
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title>{{ pool.displayName }}</v-list-item-title>
+                    <v-list-item-subtitle :class="pool.status === 'offline' ? 'red--text' : 'green--text'" class="text-capitalize text--darken-2">{{ pool.status }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -59,8 +64,10 @@
     </v-btn>
 
     <v-app-bar clipped-left app color="blue darken-3" dark>
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
-        <span>NIM POOLS HUB</span>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4" @click="''">
+        <nuxt-link to="/" class="white--text">
+          {{ heading  }}
+        </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
       <v-text-field
@@ -96,6 +103,7 @@
 </template>
 
 <script>
+import config from '~/nuxt.config'
 import Loading from "~/components/Loading/Loading";
 
 export default {
@@ -109,6 +117,7 @@ export default {
     mini: true,
     show: null,
     sidebarOpen: false,
+    heading: config.head.title,
     poolList: [
       {
         icon: "/nimpool.png",
@@ -155,7 +164,7 @@ export default {
   beforeMount() {
     this.overlay = this.$route.name !== "index";
   },
-  mounted() {
+  async mounted() {
     this.address = this.$store.state.localStorage.address.replace(
       /(.{4})/g,
       "$1 "
@@ -172,6 +181,33 @@ export default {
         }, 1800);
       }
     }, 1000);
+
+    const ipContinent = await this.$axios.$get(
+      "https://ipapi.co/continent_code/"
+    );
+    let region;
+    if (ipContinent === "US") {
+      region = "us";
+    } else {
+      region = "eu";
+    }
+
+    this.poolList.map(async x => {
+      if (x.name === "nimpool") {
+        if (region === "us") x.url = "us.nimpool.io:8444";
+        x.status = (await this.$axios.$get(
+          `${window.location.origin}/api/isOnline/${x.name}` + region
+        ))
+          ? "online"
+          : "offline";
+      } else {
+        x.status = (await this.$axios.$get(
+          `${window.location.origin}/api/isOnline/${x.name}`
+        ))
+          ? "online"
+          : "offline";
+      }
+    });
   },
   updated() {
     if (this.address === null) {
@@ -242,7 +278,7 @@ export default {
   align-items: center;
 }
 
-.stay-on-top{
+.stay-on-top {
   z-index: 10 !important;
 }
 </style>
