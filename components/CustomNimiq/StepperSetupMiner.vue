@@ -144,7 +144,7 @@
                 outlined
                 class="font-weight-regular"
                 style="height: 100px; width: 120px"
-                @click="downloadLinux()"
+                @click="downloadLinuxHandler()"
               >
                 <div
                   class="d-flex flex-column justify-space-around align-center"
@@ -159,7 +159,7 @@
                 outlined
                 class="font-weight-regular"
                 style="height: 100px; width: 120px"
-                @click="downloadWindows()"
+                @click="downloadWindowsHandler()"
               >
                 <div
                   class="d-flex flex-column justify-space-around align-center"
@@ -204,7 +204,7 @@
 <script>
 import PageHeader from "./PageHeader.vue";
 import PoolList from "~/components/CustomNimiq/PoolList";
-import { download } from "~/components/downloadHelper";
+import { downloadWindows, downloadLinux } from "~/components/downloadHelper";
 
 export default {
   components: {
@@ -327,11 +327,11 @@ export default {
       this.snackbarText = message;
       this.snackbar = true;
     },
-    downloadLinux() {
-      alert("Soon");
+    downloadLinuxHandler() {
+      downloadLinux(this.selectedGPU, this.address, this.selectedPool)
     },
-    downloadWindows() {
-      download(this.selectedGPU, this.address, this.selectedPool);
+    downloadWindowsHandler() {
+      downloadWindows(this.selectedGPU, this.address, this.selectedPool);
     }
   }
 };

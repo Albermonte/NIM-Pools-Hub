@@ -65,7 +65,7 @@
 
     <v-app-bar clipped-left app color="blue darken-3" dark>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4" @click="''">
-        <nuxt-link to="/" class="white--text">
+        <nuxt-link to="/" class="white--text text-uppercase">
           {{ heading  }}
         </nuxt-link>
       </v-toolbar-title>
@@ -122,7 +122,7 @@ export default {
       {
         icon: "/nimpool.png",
         name: "nimpool",
-        displayName: "NimPool",
+        displayName: "Nimpool",
         message: "Preferred",
         status: "",
         extras: [" Pool fee: 1%", "Non-profit"]
@@ -138,7 +138,7 @@ export default {
       {
         icon: "/siriuspool.png",
         name: "siriuspool",
-        displayName: "SiriusPool",
+        displayName: "Siriuspool",
         message: "Low Hashrate",
         status: "",
         extras: ["Pool fee: 1%", "Greek Pool"]

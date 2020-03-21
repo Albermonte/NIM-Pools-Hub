@@ -102,7 +102,7 @@ export default {
       {
         icon: "/nimpool.png",
         name: "nimpool",
-        displayName: "NimPool",
+        displayName: "Nimpool",
         message: "Preferred",
         status: "",
         extras: [" Pool fee: 1%", "Non-profit"],
@@ -120,7 +120,7 @@ export default {
       {
         icon: "/siriuspool.png",
         name: "siriuspool",
-        displayName: "SiriusPool",
+        displayName: "Siriuspool",
         message: "Low Hashrate",
         status: "",
         extras: ["Pool fee: 1%", "Greek Pool"],

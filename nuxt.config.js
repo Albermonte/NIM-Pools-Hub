@@ -1,13 +1,13 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
-  mode: 'universal',
+  mode: 'spa',
   /*
   ** Headers of the page
   */
   head: {
-    titleTemplate: 'NIM POOLS HUB',
-    title: 'NIM POOLS HUB',
+    titleTemplate: 'NIM Pools Hub',
+    title: 'NIM Pools Hub',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -75,7 +75,7 @@ export default {
     }
   },
   serverMiddleware: [
-    '~/api/isOnline'
+    '~/api/api'
   ],
   /*
   ** Build configuration
