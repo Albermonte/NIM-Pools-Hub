@@ -47,7 +47,7 @@
                           <v-chip
                             outlined
                             small
-                            :color="pool.message ==='Preferred' ? 'purple accent-3' : ''"
+                            :color="pool.message ==='Recommended' ? 'purple accent-3' : ''"
                             class="font-weight-regular"
                           >
                             <v-icon
@@ -103,7 +103,7 @@ export default {
         icon: "/nimpool.png",
         name: "nimpool",
         displayName: "Nimpool",
-        message: "Preferred",
+        message: "Recommended",
         status: "",
         extras: [" Pool fee: 1%", "Non-profit"],
         url: "eu.nimpool.io:8444"

@@ -198,6 +198,16 @@
       {{ snackbarText }}
       <v-btn color="grey lighten-3" text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
+    <v-dialog v-model="dialog" persistent max-width="550">
+      <v-card>
+        <v-card-title class="headline">How to execute?</v-card-title>
+        <v-card-text>Open a terminal on the directory where <kbd>NIM_MinerSetup.sh</kbd> is located and run:<br><br> <code>chmod +x NIM_MinerSetup.sh</code></v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog = false">Done</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -215,13 +225,14 @@ export default {
     return {
       address: "",
       selectedPool: null,
-      selectedGPU: '',
+      selectedGPU: "",
       isActive: false,
       isButtonActive: false,
       validAddress: false,
       snackbar: false,
       snackbarText: "",
       timeout: 3000,
+      dialog: false,
       page: 1,
       maxPage: 4,
       content: [
@@ -328,7 +339,8 @@ export default {
       this.snackbar = true;
     },
     downloadLinuxHandler() {
-      downloadLinux(this.selectedGPU, this.address, this.selectedPool)
+      this.dialog = true;
+      downloadLinux(this.selectedGPU, this.address, this.selectedPool);
     },
     downloadWindowsHandler() {
       downloadWindows(this.selectedGPU, this.address, this.selectedPool);
