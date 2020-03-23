@@ -1,25 +1,43 @@
 <template>
-  <div class="load">
-    <svg
-      v-for="index in 4"
-      :key="index"
-      xmlns="http://www.w3.org/2000/svg"
-      data-name="Layer 1"
-      viewBox="0 0 64 64"
-    >
-      <defs>
-        <radialGradient id="a" cx="46" cy="55.62" r="59.47" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#ec991c" />
-          <stop offset="1" stop-color="#e9b213" />
-        </radialGradient>
-      </defs>
-      <path
-        d="M63.29 29.37L50 6.62A5.35 5.35 0 0045.33 4H18.67a5.35 5.35 0 00-4.62 2.62L.71 29.37a5.19 5.19 0 000 5.25l13.34 22.75A5.34 5.34 0 0018.67 60h26.66A5.34 5.34 0 0050 57.37l13.29-22.75a5.19 5.19 0 000-5.25z"
-        fill="url(#a)"
-      />
-    </svg>
-  </div>
+  <v-overlay opacity="1" :value="loading" color="#260133" style="z-index: 100">
+    <div class="load">
+      <svg
+        v-for="index in 4"
+        :key="index"
+        xmlns="http://www.w3.org/2000/svg"
+        data-name="Layer 1"
+        viewBox="0 0 64 64"
+      >
+        <defs>
+          <radialGradient id="a" cx="46" cy="55.62" r="59.47" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ec991c" />
+            <stop offset="1" stop-color="#e9b213" />
+          </radialGradient>
+        </defs>
+        <path
+          d="M63.29 29.37L50 6.62A5.35 5.35 0 0045.33 4H18.67a5.35 5.35 0 00-4.62 2.62L.71 29.37a5.19 5.19 0 000 5.25l13.34 22.75A5.34 5.34 0 0018.67 60h26.66A5.34 5.34 0 0050 57.37l13.29-22.75a5.19 5.19 0 000-5.25z"
+          fill="url(#a)"
+        />
+      </svg>
+    </div>
+  </v-overlay>
 </template>
+
+<script>
+export default {
+  data: () => ({
+    loading: false
+  }),
+  methods: {
+    start() {
+      this.loading = true;
+    },
+    finish() {
+      this.loading = false;
+    }
+  }
+};
+</script>
 
 <style scoped>
 /* https://codepen.io/zerospree/pen/aCjAz */

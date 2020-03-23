@@ -201,7 +201,7 @@
     <v-dialog v-model="dialog" persistent max-width="550">
       <v-card>
         <v-card-title class="headline">How to execute?</v-card-title>
-        <v-card-text>Open a terminal on the directory where <kbd>NIM_MinerSetup.sh</kbd> is located and run:<br><br> <code>chmod +x NIM_MinerSetup.sh</code></v-card-text>
+        <v-card-text v-html="modalText"></v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="green darken-1" text @click="dialog = false">Done</v-btn>
@@ -233,6 +233,7 @@ export default {
       snackbarText: "",
       timeout: 3000,
       dialog: false,
+      modalText: '',
       page: 1,
       maxPage: 4,
       content: [
@@ -339,10 +340,13 @@ export default {
       this.snackbar = true;
     },
     downloadLinuxHandler() {
+      this.modalText = 'Open a terminal on the directory where <kbd>NIM_MinerSetup.sh</kbd> is located and run:<br><br> <code>chmod +x NIM_MinerSetup.sh</code>'
       this.dialog = true;
       downloadLinux(this.selectedGPU, this.address, this.selectedPool);
     },
     downloadWindowsHandler() {
+      this.modalText = 'Doble click on <kbd>NIM_MinerSetup.bat</kbd><br><br>If a warning message is prompted, click on <code>More information</code> and next, click on <code>Execute anyway</code>'
+      this.dialog = true;
       downloadWindows(this.selectedGPU, this.address, this.selectedPool);
     }
   }

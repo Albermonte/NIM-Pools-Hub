@@ -19,3 +19,17 @@ export const mutations = {
     state.address = value
   }
 }
+
+export const actions = {
+  nuxtServerInit(vuexContext, context) {
+    vuexContext.commit()
+  }
+}
+
+export const getters = {
+  getNimiqInfo (state) {
+    return {
+
+    }
+  }
+}

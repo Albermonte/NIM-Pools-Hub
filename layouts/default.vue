@@ -39,7 +39,10 @@
                   </v-list-item-action>
                   <v-list-item-content>
                     <v-list-item-title>{{ pool.displayName }}</v-list-item-title>
-                    <v-list-item-subtitle :class="pool.status === 'offline' ? 'red--text' : 'green--text'" class="text-capitalize text--darken-2">{{ pool.status }}</v-list-item-subtitle>
+                    <v-list-item-subtitle
+                      :class="pool.status === 'offline' ? 'red--text' : 'green--text'"
+                      class="text-capitalize text--darken-2"
+                    >{{ pool.status }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -65,9 +68,7 @@
 
     <v-app-bar clipped-left app color="blue darken-3" dark>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4" @click="''">
-        <nuxt-link to="/" class="white--text text-uppercase">
-          {{ heading  }}
-        </nuxt-link>
+        <nuxt-link to="/" class="white--text text-uppercase">{{ heading }}</nuxt-link>
       </v-toolbar-title>
       <v-spacer />
       <v-text-field
@@ -95,82 +96,32 @@
     <v-btn bottom color="pink" dark fab fixed right nuxt href="/setupMiner" @click="testData">
       <v-icon>mdi-help</v-icon>
     </v-btn>
-    <v-overlay opacity="1" :value="overlay" color="#260133" style="z-index: 100">
-      <!-- <v-progress-circular indeterminate size="64"></v-progress-circular> -->
-      <Loading />
-    </v-overlay>
   </v-app>
 </template>
 
 <script>
-import config from '~/nuxt.config'
-import Loading from "~/components/Loading/Loading";
+import config from "~/nuxt.config";
 
 export default {
-  components: {
-    Loading
-  },
   data: () => ({
     address: "",
-    overlay: true,
-    dialog: false,
     mini: true,
     show: null,
     sidebarOpen: false,
-    heading: config.head.title,
-    poolList: [
-      {
-        icon: "/nimpool.png",
-        name: "nimpool",
-        displayName: "Nimpool",
-        message: "Preferred",
-        status: "",
-        extras: [" Pool fee: 1%", "Non-profit"]
-      },
-      {
-        icon: "/icemining.png",
-        name: "icemining",
-        displayName: "Icemining",
-        message: "YIIMP based",
-        status: "",
-        extras: ["Pool fee: 1.25%", "Greatest Support"]
-      },
-      {
-        icon: "/siriuspool.png",
-        name: "siriuspool",
-        displayName: "Siriuspool",
-        message: "Low Hashrate",
-        status: "",
-        extras: ["Pool fee: 1%", "Greek Pool"]
-      },
-      {
-        icon: "/skypool.png",
-        name: "skypool",
-        displayName: "Skypool",
-        message: "China based",
-        status: "",
-        extras: ["Pool fee: ~1%", "Not using official protocol"]
-      },
-      {
-        icon: "/urp.png",
-        name: "urp",
-        displayName: "URP Best",
-        message: "Lowest Fees",
-        status: "",
-        extras: [" Pool fee: 0.5%"]
-      }
-    ]
+    heading: config.head.title
   }),
-  beforeMount() {
-    this.overlay = this.$route.name !== "index";
+  computed: {
+    poolList () {
+      return this.$store.state.poolList
+    }
   },
-  async mounted() {
+  mounted() {
     this.address = this.$store.state.localStorage.address.replace(
       /(.{4})/g,
       "$1 "
     );
 
-    const loading = setInterval(() => {
+    /* const loading = setInterval(() => {
       if (
         typeof this.$store.state.urp.confirmed_balance !== "undefined" &&
         this.overlay
@@ -180,34 +131,7 @@ export default {
           this.overlay = false;
         }, 1800);
       }
-    }, 1000);
-
-    const ipContinent = await this.$axios.$get(
-      "https://ipapi.co/continent_code/"
-    );
-    let region;
-    if (ipContinent === "US") {
-      region = "us";
-    } else {
-      region = "eu";
-    }
-
-    this.poolList.map(async x => {
-      if (x.name === "nimpool") {
-        if (region === "us") x.url = "us.nimpool.io:8444";
-        x.status = (await this.$axios.$get(
-          `${window.location.origin}/api/isOnline/${x.name}` + region
-        ))
-          ? "online"
-          : "offline";
-      } else {
-        x.status = (await this.$axios.$get(
-          `${window.location.origin}/api/isOnline/${x.name}`
-        ))
-          ? "online"
-          : "offline";
-      }
-    });
+    }, 1000); */
   },
   updated() {
     if (this.address === null) {
@@ -255,7 +179,7 @@ export default {
     mouseleave() {
       this.sidebarOpen = false;
     }
-  }
+  },
 };
 </script>
 

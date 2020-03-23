@@ -98,88 +98,17 @@ export default {
   data: () => ({
     selectPool: 0,
     selectedPool: null,
-    poolList: [
-      {
-        icon: "/nimpool.png",
-        name: "nimpool",
-        displayName: "Nimpool",
-        message: "Recommended",
-        status: "",
-        extras: [" Pool fee: 1%", "Non-profit"],
-        url: "eu.nimpool.io:8444"
-      },
-      {
-        icon: "/icemining.png",
-        name: "icemining",
-        displayName: "Icemining",
-        message: "YIIMP based",
-        status: "",
-        extras: ["Pool fee: 1.25%", "Greatest Support"],
-        url: "nimiq.icemining.ca:2053"
-      },
-      {
-        icon: "/siriuspool.png",
-        name: "siriuspool",
-        displayName: "Siriuspool",
-        message: "Low Hashrate",
-        status: "",
-        extras: ["Pool fee: 1%", "Greek Pool"],
-        url: "siriuspool.net:8443"
-      },
-      {
-        icon: "/skypool.png",
-        name: "skypool",
-        displayName: "Skypool",
-        message: "China based",
-        status: "",
-        extras: ["Pool fee: ~1%", "Not using official protocol"],
-        url: "hk1.nimiq.skypool.org:5000"
-      },
-      {
-        icon: "/urp.png",
-        name: "urp",
-        displayName: "URP Best",
-        message: "Lowest Fees",
-        status: "",
-        extras: [" Pool fee: 0.5%"],
-        url: ""
-      }
-    ]
   }),
+  computed: {
+    poolList () {
+      return this.$store.state.poolList
+    }
+  },
   updated() {
-    //console.log(this.selectPool); // eslint-disable-line no-console
+    //console.log(this.poolList[this.selectedPool]); // eslint-disable-line no-console
     if (this.selectedPool !== undefined)
       this.$root.$emit("poolURL", this.poolList[this.selectedPool].url);
     else this.$root.$emit("poolURL", null);
-  },
-  async mounted() {
-    const ipContinent = await this.$axios.$get(
-      "https://ipapi.co/continent_code/"
-    );
-    let region;
-    if (ipContinent === "US") {
-      region = "us";
-    } else {
-      region = "eu";
-    }
-
-    this.poolList.map(async x => {
-      if (x.name === "nimpool") {
-        if (region === "us") x.url = "us.nimpool.io:8444";
-        x.status = (await this.$axios.$get(
-          `${window.location.origin}/api/isOnline/${x.name}` + region
-        ))
-          ? "online"
-          : "offline";
-        x.displayName = `${x.displayName} (${region.toUpperCase()})`;
-      } else {
-        x.status = (await this.$axios.$get(
-          `${window.location.origin}/api/isOnline/${x.name}`
-        ))
-          ? "online"
-          : "offline";
-      }
-    });
   }
 };
 </script>
