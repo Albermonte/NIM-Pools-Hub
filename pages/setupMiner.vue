@@ -12,12 +12,12 @@ export default {
   layout: 'tutorial',
   async fetch({ store, params, $axios }) {
     let poolList = [...store.state.poolList];
-    const ipContinent = await $axios.$get("https://ipapi.co/continent_code/");
+    const in_eu = await $axios.$get(`${window.location.origin}/api/in_eu`);
     let region;
-    if (ipContinent === "US") {
-      region = "us";
-    } else {
+    if (in_eu) {
       region = "eu";
+    } else {
+      region = "us";
     }
     poolList.map(async (x, index) => {
       if (x.name === "nimpool") {
