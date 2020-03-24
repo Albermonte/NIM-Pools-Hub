@@ -1,5 +1,6 @@
 const express = require('express')
 const axios = require('axios');
+const requestIp = require('request-ip');
 const app = express()
 
 // isOnline
@@ -104,7 +105,7 @@ app.get('/api/nimpool/:address', async function (req, res) {
 })
 
 app.get('/api/in_eu', async function (req, res) {
-  res.send({in_eu: (await axios.get(`https://ipapi.co/${req.ip}/json`)).data})
+  res.send({in_eu: (await axios.get(`https://ipapi.co/${requestIp.getClientIp(req)}/json`)).data})
 })
 
 
