@@ -104,10 +104,10 @@ app.get('/api/nimpool/:address', async function (req, res) {
   }
 })
 
-app.get('/api/in_eu', async function (req, res) {
-  res.send((await axios.get(`https://ipapi.co/${requestIp.getClientIp(req)}/in_eu`)).data === "True")
+app.get('/api/in_us', async function (req, res) {
+  const continent_code = (await axios.get(`https://ipapi.co/${requestIp.getClientIp(req)}/continent_code`)).data
+  res.send(continent_code === "NA" || continent_code === "SA")
 })
-
 
 process.on('unhandledRejection', error => consola.error(error))
 

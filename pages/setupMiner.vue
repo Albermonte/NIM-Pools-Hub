@@ -12,16 +12,16 @@ export default {
   layout: 'tutorial',
   async fetch({ store, params, $axios }) {
     let poolList = [...store.state.poolList];
-    const in_eu = await $axios.$get(`${window.location.origin}/api/in_eu`);
+    const in_us = await $axios.$get(`${window.location.origin}/api/in_us`);
     let region;
-    if (in_eu) {
-      region = "eu";
-    } else {
+    if (in_us) {
       region = "us";
+    } else {
+      region = "eu";
     }
     poolList.map(async (x, index) => {
       if (x.name === "nimpool") {
-        if (region === "us") x.url = "us.nimpool.io:8444";
+        if (region === "us") store.dispatch("poolList/UPDATE_POOLURL", { index, url: "us.nimpool.io:8444" });
         const status = (
           await $axios.$get(
             `${window.location.origin}/api/isOnline/${x.name}` + region

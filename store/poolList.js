@@ -51,12 +51,18 @@ export const state = () => (
 export const mutations = {
     updateStatus(state, { index, status, region }) {
         region ? state[index].displayName = `${state[index].displayName} (${region.toUpperCase()})` : null;
-        state[index].status = status
+        state[index].status = status;
+    },
+    updateUrl(state, { index, url }) {
+        state[index].url = url;
     }
 }
 
 export const actions = {
-    async UPDATE_POOLSTATUS({ commit }, { index, status, region }) {
+    UPDATE_POOLSTATUS({ commit }, { index, status, region }) {
         commit('updateStatus', { index, status, region })
+    },
+    UPDATE_POOLURL({ commit }, { index, url }) {
+        commit('updateUrl', { index, url })
     }
 }
