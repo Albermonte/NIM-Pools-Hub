@@ -89,7 +89,7 @@ app.get('/api/nimpool/:address', async function (req, res) {
   address_hashrate_array: [0]
   */
   let address_hashrate = 0;
-  
+
   try {
     res.send({
       hashrate: '',
@@ -101,6 +101,10 @@ app.get('/api/nimpool/:address', async function (req, res) {
   } catch (e) {
     res.send('Not found')
   }
+})
+
+app.get('/api/in_eu', async function (req, res) {
+  res.send({in_eu: (await axios.get(`https://ipapi.co/${req.ip}/in_eu`)).data})
 })
 
 
