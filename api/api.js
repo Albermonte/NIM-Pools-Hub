@@ -105,7 +105,7 @@ app.get('/api/nimpool/:address', async function (req, res) {
 })
 
 app.get('/api/in_eu', async function (req, res) {
-  res.send({in_eu: (await axios.get(`https://ipapi.co/${requestIp.getClientIp(req)}/json`)).data})
+  res.send({in_eu: (await axios.get(`https://ipapi.co/${requestIp.getClientIp(req)}/in_eu`)).data})
 })
 
 
