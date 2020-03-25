@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pt-4 pb-5 px-6">
+  <v-container fluid class="pt-7 pb-6 px-6">
     <material-table-card min-width="300" color="indigo" icon="mdi-format-list-bulleted-square" inline class="px-5">
       <template v-slot:after-heading>
         <v-row class="mt-n4">

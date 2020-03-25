@@ -3,7 +3,6 @@
     v-bind="$attrs"
     :style="styles"
     min-width="300"
-    min-height="125"
     max-width="640"
     v-on="$listeners"
   >

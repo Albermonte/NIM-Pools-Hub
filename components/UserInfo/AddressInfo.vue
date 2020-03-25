@@ -2,6 +2,7 @@
   <v-row class="ml-auto mr-auto pt-2 pb-1 px-3">
     <v-col class="py-0">
       <material-stats-card
+        min-height="138"
         color="green"
         icon="mdi-currency-usd"
         title="Balance"
@@ -13,15 +14,17 @@
     </v-col>
     <v-col class="py-0">
       <material-stats-card
+        min-height="138"
         color="red"
         icon="mdi-devices"
         title="Device Count"
-        :value="deviceCount.toString()"
+        :value="deviceCount"
         checkbox
       />
     </v-col>
     <v-col class="py-0">
       <material-stats-card
+        min-height="138"
         color="orange"
         icon="mdi-speedometer"
         title="Address Hashrate"

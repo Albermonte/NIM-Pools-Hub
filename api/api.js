@@ -82,25 +82,27 @@ const isSkypoolOnline = async retry => {
 
 // Address
 app.get('/api/nimpool/:address', async function (req, res) {
-  const address = req.params.address
-  const result = (await axios.get(`https://api.nimpool.io/user?address=${address}`, { timeout: 3000 })).data
-  /*
-  deviceList: [],
-  address_hashrate: '',
-  address_hashrate_array: [0]
-  */
-  let address_hashrate = 0;
-
   try {
+    const address = req.params.address
+    const { result } = (await axios.get(`https://api.nimpool.io/user?address=${address}`, { timeout: 9000 })).data
+    const deviceList = result.devices_new
+    /*
+    deviceList: [],
+    address_hashrate: '',
+    address_hashrate_array: [0]
+    */
+    let address_hashrate = 0;
+    deviceList.map(x => address_hashrate += x.hashes_per_second)
+
     res.send({
-      hashrate: '',
+      hashrate: address_hashrate,
       balance: result.balance,
       confirmed_balance: result.balanceWithoutPending,
       unconfirmed_balance: result.balance - result.balanceWithoutPending,
-      deviceList: result.devices_new
+      deviceList
     })
   } catch (e) {
-    res.send('Not found')
+    res.send('offline')
   }
 })
 

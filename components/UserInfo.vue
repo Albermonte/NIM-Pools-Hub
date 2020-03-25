@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import DeviceList from '~/components/UserInfo/DeviceList'
-import AddressInfo from '~/components/UserInfo/AddressInfo'
+import DeviceList from "~/components/UserInfo/DeviceList";
+import AddressInfo from "~/components/UserInfo/AddressInfo";
 
 export default {
   components: {
@@ -23,11 +23,11 @@ export default {
     AddressInfo
   },
   computed: {
-    toggleDevices () {
-      return this.$store.state.localStorage.showDevices
+    toggleDevices() {
+      return this.$store.state.localStorage.showDevices;
     }
   }
-}
+};
 </script>
 
 <style>

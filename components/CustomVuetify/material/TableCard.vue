@@ -2,11 +2,8 @@
   <v-card v-bind="$attrs" :class="classes" class="v-card--material pa-3">
     <div class="d-flex grow flex-wrap justify-space-between">
       <v-sheet
-        :class="{
-          'pa-3': !$slots.image
-        }"
         :color="color"
-        class="v-card--material__heading mb-n6 ml-n1"
+        class="pa-3 v-card--material__heading mb-n6 ml-n1 d-flex justify-center align-center"
         dark
       >
         <v-icon size="50" v-text="icon" />
@@ -67,7 +64,6 @@ export default {
       default: ''
     }
   },
-
   computed: {
     classes () {
       return {

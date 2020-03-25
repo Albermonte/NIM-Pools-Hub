@@ -28,7 +28,7 @@
                   link
                   style="max-height: 60px; margin: 10px 15px 8px !important; width: 88%;"
                   :href="`/${pool.name}`"
-                  :disabled="pool.status === 'offline'"
+                  :disabled="!(pool.status === 'online')"
                 >
                   <v-list-item-action>
                     <img
@@ -54,7 +54,7 @@
 
     <v-btn
       class="hidden-sm-and-up"
-      style="top: 50%; margin-left: -48px;"
+      style="top: 50%; margin-left: -50px;"
       :style="show ? 'z-index: 1': 'z-index:10'"
       color="pink"
       dark
@@ -63,10 +63,10 @@
       left
       @click="show = true"
     >
-      <v-icon class="ml-6">mdi-chevron-right</v-icon>
+      <v-icon class="ml-7">mdi-chevron-right</v-icon>
     </v-btn>
 
-    <v-app-bar clipped-left app color="blue darken-3" dark>
+    <v-app-bar clipped-left app color="blue darken-3" dark elevate-on-scroll style="z-index:15">
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4" @click="''">
         <nuxt-link to="/" class="white--text text-uppercase">{{ heading }}</nuxt-link>
       </v-toolbar-title>
@@ -86,8 +86,8 @@
         @click:clear="clearAddress"
       />
     </v-app-bar>
-    <v-content>
-      <v-container class="fill-height pb-0" fluid style="background-color: #fafafa">
+    <v-content >
+      <v-container class="fill-height pb-0 pr-0" :class="[$vuetify.breakpoint.xs ? 'pl-3' : 'pl-11 ml-1', $vuetify.breakpoint.sm || $vuetify.breakpoint.md ? 'pl-12 ml-2' : null ]" fluid style="background-color: #fafafa">
         <v-row align="center" justify="center" class="pb-0">
           <nuxt />
         </v-row>
@@ -171,7 +171,7 @@ export default {
       this.$store.commit("localStorage/updateAddress", "");
     },
     testData() {
-      this.address = "NQ47 TD6C UT1K X35M DLVC N7QN YK5N FXNY SP5N";
+      this.address = "NQ34 ARVA RXGF TRHS MBX5 SCAX CMP0 8TYY U1TL";
     },
     mouseover() {
       this.sidebarOpen = true;
@@ -180,34 +180,7 @@ export default {
       this.sidebarOpen = false;
     }
   },
-  async middleware({ store, params, $axios }) {
-    let poolList = [...store.state.poolList];
-    const in_us = await $axios.$get(`${window.location.origin}/api/in_us`);
-    let region;
-    if (in_us) {
-      region = "us";
-    } else {
-      region = "eu";
-    }
-    poolList.map(async (x, index) => {
-      if (x.name === "nimpool") {
-        if (region === "us") store.dispatch("poolList/UPDATE_POOLURL", { index, url: "us.nimpool.io:8444" });
-        const status = (await $axios.$get(
-          `${window.location.origin}/api/isOnline/${x.name}` + region
-        ))
-          ? "online"
-          : "offline";
-        store.dispatch("poolList/UPDATE_POOLSTATUS", { index, status });
-      } else {
-        const status = (await $axios.$get(
-          `${window.location.origin}/api/isOnline/${x.name}`
-        ))
-          ? "online"
-          : "offline";
-        store.dispatch("poolList/UPDATE_POOLSTATUS", { index, status });
-      }
-    });
-  },
+  middleware: 'updateInfo'
 };
 </script>
 
@@ -215,7 +188,7 @@ export default {
 .navbar {
   height: calc(100vh - 64px);
   margin-top: 64px;
-  position: absolute;
+  position: fixed;
   z-index: 10;
   display: flex;
   align-items: center;
@@ -224,7 +197,7 @@ export default {
 .navbar-mobile {
   height: calc(100vh - 56px);
   margin-top: 56px;
-  position: absolute;
+  position: fixed;
   z-index: 0;
   display: flex;
   align-items: center;

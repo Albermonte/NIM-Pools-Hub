@@ -6,7 +6,7 @@
       min-width="300"
       v-on="$listeners"
     >
-      <v-card slot="offset" :class="`elevation-${elevation}`" :color="color" class="pa-4" dark>
+      <v-card slot="offset" :class="`elevation-${elevation}`" :color="color" class="pa-4 d-flex justify-center align-center" dark width="75" height="75">
         <v-icon size="40">
           {{ icon }}
         </v-icon>
@@ -95,7 +95,7 @@ export default {
       default: undefined
     },
     value: {
-      type: String,
+      type: Number,
       default: undefined
     },
     smallValue: {
