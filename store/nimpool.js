@@ -16,31 +16,47 @@ export const mutations = {
     state.balance = value.balance
     state.confirmed_balance = value.confirmed_balance
     state.unconfirmed_balance = value.unconfirmed_balance
-    state.deviceList =  value.deviceList
-    state.address_hashrate =  value.address_hashrate
-    //state.address_hashrate_array =  (state.address_hashrate_array).push(value.address_hashrate)
+    state.deviceList = value.deviceList
+    state.address_hashrate = value.address_hashrate
+    state.address_hashrate_array.push(value.address_hashrate)
   },
   updatePoolInfo(state, value) {
-    state.hashrate = (value.hashrate / 1e6).toFixed(2) + ' MH/s'
+    state.hashrate = value.hashrate + ' MH/s'
     state.miners = value.miners
-    state.workers = value.workerCount
-    state.pool_fee = '1%'
+    state.workers = value.workers
+    state.pool_fee = value.pool_fee
   }
 }
 
 
 export const actions = {
-  async UPDATE_USER_INFO({ commit, state, rootState }) {
-    console.log('NIMPOOL')
+  async UPDATE_USER_INFO({ commit, rootState }) {
     const info = await this.$axios.$get(`${window.location.origin}/api/nimpool/${rootState.localStorage.address}`)
-    if(info === 'offline') return
+    if (info === 'offline') {
+      console.error('Nimpool not responding')
+      return
+    }
 
-    commit('updateUserInfo',{
-      balance: (info.balance / 1e5 ).toFixed(1),
-      confirmed_balance: (info.confirmed_balance / 1e5 ).toFixed(1),
-      unconfirmed_balance: (info.unconfirmed_balance / 1e5 ).toFixed(1),
+    commit('updateUserInfo', {
+      balance: Number((info.balance / 1e5).toFixed(1)),
+      confirmed_balance: Number((info.confirmed_balance / 1e5).toFixed(1)),
+      unconfirmed_balance: Number((info.unconfirmed_balance / 1e5).toFixed(1)),
       deviceList: info.deviceList,
       address_hashrate: Number((info.hashrate / 1e6).toFixed(2)),
+    })
+  },
+  async UPDATE_POOL_INFO({ commit }) {
+    const info = await this.$axios.$get(`${window.location.origin}/api/stats/nimpool`)
+    if (info === 'offline') {
+      console.error('Nimpool not responding')
+      return
+    }
+
+    commit('updatePoolInfo', {
+      hashrate: Number((info.hashrate/ 10e5).toFixed(1)),
+      miners: info.miners,
+      workers: info.workers,
+      pool_fee: info.pool_fee
     })
   }
 }

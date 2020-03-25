@@ -80,17 +80,26 @@ const isSkypoolOnline = async retry => {
   }
 }
 
+app.get('/api/stats/nimpool', async function (req, res) {
+  try {
+    const { result } = (await axios.get('https://api.nimpool.io/pool', { timeout: 9000 })).data
+    res.send({
+      hashrate: (result.work_per_second || 0) * Math.pow(2, 16),
+      miners: result.users_online,
+      workers: result.devices_online,
+      pool_fee: '1%'
+    })
+  } catch (e) {
+    res.send('offline')
+  }
+})
+
 // Address
 app.get('/api/nimpool/:address', async function (req, res) {
   try {
     const address = req.params.address
     const { result } = (await axios.get(`https://api.nimpool.io/user?address=${address}`, { timeout: 9000 })).data
     const deviceList = result.devices_new
-    /*
-    deviceList: [],
-    address_hashrate: '',
-    address_hashrate_array: [0]
-    */
     let address_hashrate = 0;
     deviceList.map(x => address_hashrate += x.hashes_per_second)
 
@@ -105,6 +114,7 @@ app.get('/api/nimpool/:address', async function (req, res) {
     res.send('offline')
   }
 })
+
 
 app.get('/api/in_us', async function (req, res) {
   const continent_code = (await axios.get(`https://ipapi.co/${requestIp.getClientIp(req)}/continent_code`)).data

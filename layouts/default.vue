@@ -171,7 +171,7 @@ export default {
       this.$store.commit("localStorage/updateAddress", "");
     },
     testData() {
-      this.address = "NQ34 ARVA RXGF TRHS MBX5 SCAX CMP0 8TYY U1TL";
+      this.address = "NQ66 V5JX 3G2A HAEM 8LV3 8LMU YPVY BSG7 8NNJ";
     },
     mouseover() {
       this.sidebarOpen = true;
