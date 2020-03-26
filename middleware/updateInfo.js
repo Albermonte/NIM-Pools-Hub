@@ -29,7 +29,7 @@ export default async function ({ store, $axios, route }) {
     const updatePoolInfo = () => store.dispatch(`${route.name}/UPDATE_POOL_INFO`)
     if (route.name !== 'index' && route.name !== null) {
         if (store.state.localStorage.address !== '') {
-            updateUserInfo()
+            setTimeout(updateUserInfo, 100)
             setInterval(updateUserInfo, 1 * 60 * 1000) // 1minute
         }
         updatePoolInfo()
