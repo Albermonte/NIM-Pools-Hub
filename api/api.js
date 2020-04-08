@@ -3,6 +3,7 @@ const axios = require('axios');
 const requestIp = require('request-ip');
 const app = express()
 
+
 // isOnline
 app.get('/api/isOnline/:pool', async function (req, res) {
   let pool = req.params.pool.toLowerCase()
@@ -115,11 +116,16 @@ app.get('/api/nimpool/:address', async function (req, res) {
   }
 })
 
-
+// Check if IP resides in America
 app.get('/api/in_us', async function (req, res) {
-  const continent_code = (await axios.get(`https://ipapi.co/${requestIp.getClientIp(req)}/continent_code`)).data
-  res.send(continent_code === "NA" || continent_code === "SA")
+  try {
+    const continent_code = (await axios.get(`https://ipapi.co/${requestIp.getClientIp(req)}/continent_code`)).data
+    res.send(continent_code === "NA" || continent_code === "SA")
+  } catch {
+    res.send(false)
+  }
 })
+
 
 process.on('unhandledRejection', error => consola.error(error))
 

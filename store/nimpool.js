@@ -33,8 +33,8 @@ export const actions = {
   async UPDATE_USER_INFO({ commit, rootState }) {
     const info = await this.$axios.$get(`${window.location.origin}/api/nimpool/${rootState.localStorage.address}`)
     if (info === 'offline') {
-      console.error('Nimpool not responding')
-      return
+      console.error('Nimpool USER INFO not responding ', new Date)
+      return 'offline'
     }
 
     commit('updateUserInfo', {
@@ -48,8 +48,8 @@ export const actions = {
   async UPDATE_POOL_INFO({ commit }) {
     const info = await this.$axios.$get(`${window.location.origin}/api/stats/nimpool`)
     if (info === 'offline') {
-      console.error('Nimpool not responding')
-      return
+      console.error('Nimpool POOL INFO not responding ', new Date)
+      return 'offline'
     }
 
     commit('updatePoolInfo', {
