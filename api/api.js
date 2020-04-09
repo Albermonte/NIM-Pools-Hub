@@ -3,6 +3,29 @@ const axios = require('axios');
 const requestIp = require('request-ip');
 const app = express()
 
+// Server IP
+
+app.get('/api/ip', function (req, res) {
+  try {
+      const http = require('http');
+      var options = {
+          host: 'ipv4bot.whatismyipaddress.com',
+          port: 80,
+          path: '/'
+      };
+      http.get(options, function (resp) {
+          console.log("status: " + resp.statusCode);
+          resp.on("data", async function (chunk) {
+              console.log("BODY: " + chunk);
+              res.send((await axios.get(`https://ipapi.co/${chunk}/json/`)).data);
+          });
+      }).on('error', function (e) {
+          console.log("error: " + e.message);
+      });
+  } catch (e) {
+      res.send(e);
+  }
+})
 
 // isOnline
 app.get('/api/isOnline/:pool', async function (req, res) {
