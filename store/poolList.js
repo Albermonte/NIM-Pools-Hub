@@ -10,6 +10,15 @@ export const state = () => (
             url: "eu.nimpool.io:8444"
         },
         {
+            icon: "/blankpool.png",
+            name: "blankpool",
+            displayName: "BlankPool",
+            message: "Adaptive fees",
+            status: "",
+            extras: ["Fees varies depending on the pool hashrate"],
+            url: "mine.blank.drawpad.org:8444"
+        },
+        {
             icon: "/icemining.png",
             name: "icemining",
             displayName: "Icemining",
@@ -55,6 +64,9 @@ export const mutations = {
     },
     updateUrl(state, { index, url }) {
         state[index].url = url;
+    },
+    updateFee(state, { index, pool_fee }) {
+        state[index].extras.unshift(`Pool fee: ${pool_fee}`);
     }
 }
 
@@ -64,5 +76,9 @@ export const actions = {
     },
     UPDATE_POOLURL({ commit }, { index, url }) {
         commit('updateUrl', { index, url })
+    },
+    async UPDATE_POOLFEE({ commit }, { index }) {
+        const { pool_fee } = await this.$axios.$get(`${window.location.origin}/api/stats/blankpool`)
+        commit('updateFee', { index, pool_fee })
     }
 }

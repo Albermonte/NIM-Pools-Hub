@@ -104,9 +104,21 @@ const isSkypoolOnline = async retry => {
   }
 }
 
+const isBlankpoolOnline = async retry => {
+  try {
+    const hashrate_array = (await axios.get('https://mine.blank.drawpad.org/api/pool/history', { timeout: 3000 })).data.hashrate
+    return Date.now() - hashrate_array[hashrate_array.length - 1].time < 1e7 // If last hashrate update was later than 3 hours consider the pool offline
+  } catch {
+    if (retry) return isBlankpoolOnline(false);
+    return false;
+  }
+}
+
+// Pool stats
+
 app.get('/api/stats/nimpool', async function (req, res) {
   try {
-    const { result } = (await axios.get('https://api.nimpool.io/pool', { timeout: 9000 })).data
+    const { result } = (await axios.get('https://api.nimpool.io/pool', { timeout: 3000 })).data
     res.send({
       hashrate: (result.work_per_second || 0) * Math.pow(2, 16),
       miners: result.users_online,
@@ -118,15 +130,49 @@ app.get('/api/stats/nimpool', async function (req, res) {
   }
 })
 
+app.get('/api/stats/blankpool', async function (req, res) {
+  try {
+    const stats = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
+    const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 3000 })).data.fees
+    res.send({
+      /* hashrate: (result.work_per_second || 0) * Math.pow(2, 16),
+      miners: result.users_online,
+      workers: result.devices_online, */
+      pool_fee
+    })
+  } catch (e) {
+    res.send('offline')
+  }
+})
+
 // Address
 app.get('/api/nimpool/:address', async function (req, res) {
   try {
     const address = req.params.address
-    const { result } = (await axios.get(`https://api.nimpool.io/user?address=${address}`, { timeout: 9000 })).data
+    const { result } = (await axios.get(`https://api.nimpool.io/user?address=${address}`, { timeout: 3000 })).data
     const deviceList = result.devices_new
     let address_hashrate = 0;
     deviceList.map(x => address_hashrate += x.hashes_per_second)
 
+    res.send({
+      hashrate: address_hashrate,
+      balance: result.balance,
+      confirmed_balance: result.balanceWithoutPending,
+      unconfirmed_balance: result.balance - result.balanceWithoutPending,
+      deviceList
+    })
+  } catch (e) {
+    res.send('offline')
+  }
+})
+
+app.get('/api/blankpool/:address', async function (req, res) {
+  try {
+    const address = req.params.address
+    const info = (await axios.get(`https://mine.blank.drawpad.org/api/miner/${address}`, { timeout: 3000 })).data
+    const deviceList = info.devices
+    let address_hashrate = info.hashrate;
+    
     res.send({
       hashrate: address_hashrate,
       balance: result.balance,

@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import Wizard from '~/components/CustomNimiq/StepperSetupMiner'
+import Wizard from "~/components/CustomNimiq/StepperSetupMiner";
 
 export default {
   components: {
     Wizard
   },
-  layout: 'tutorial',
+  layout: "tutorial",
   async fetch({ store, params, $axios }) {
     let poolList = [...store.state.poolList];
     const in_us = await $axios.$get(`${window.location.origin}/api/in_us`);
@@ -20,20 +20,25 @@ export default {
       region = "eu";
     }
     poolList.map(async (x, index) => {
+      if (x.name === "blankpool") {
+        store.dispatch("poolList/UPDATE_POOLFEE", { index });
+      }
       if (x.name === "nimpool") {
-        if (region === "us") store.dispatch("poolList/UPDATE_POOLURL", { index, url: "us.nimpool.io:8444" });
-        const status = (
-          await $axios.$get(
-            `${window.location.origin}/api/isOnline/${x.name}` + region
-          )
-        )
+        if (region === "us")
+          store.dispatch("poolList/UPDATE_POOLURL", {
+            index,
+            url: "us.nimpool.io:8444"
+          });
+        const status = (await $axios.$get(
+          `${window.location.origin}/api/isOnline/${x.name}` + region
+        ))
           ? "online"
           : "offline";
         store.dispatch("poolList/UPDATE_POOLSTATUS", { index, status, region });
       } else {
-        const status = (
-          await $axios.$get(`${window.location.origin}/api/isOnline/${x.name}`)
-        )
+        const status = (await $axios.$get(
+          `${window.location.origin}/api/isOnline/${x.name}`
+        ))
           ? "online"
           : "offline";
         store.dispatch("poolList/UPDATE_POOLSTATUS", { index, status });
@@ -41,5 +46,5 @@ export default {
     });
   },
   fetchOnServer: false
-}
+};
 </script>
