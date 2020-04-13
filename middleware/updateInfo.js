@@ -16,8 +16,6 @@ export default async function ({ store, $axios, route }) {
                 ? "online"
                 : "offline";
             store.dispatch("poolList/UPDATE_POOLSTATUS", { index, status });
-        } else if (x.name === "blankpool") {
-            store.dispatch("poolList/UPDATE_POOLFEE", { index });
         } else {
             const status = (await $axios.$get(
                 `${window.location.origin}/api/isOnline/${x.name}`
