@@ -106,8 +106,8 @@ const isSkypoolOnline = async retry => {
 
 const isBlankpoolOnline = async retry => {
   try {
-    const hashrate_array = (await axios.get('https://mine.blank.drawpad.org/api/pool/history', { timeout: 3000 })).data.hashrate
-    return Date.now() - hashrate_array[hashrate_array.length - 1].time < 1e7 // If last hashrate update was later than 3 hours consider the pool offline
+    const { clientCounts, averageHashrate} = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
+    return clientCounts.total > 0 || averageHashrate > 0;
   } catch {
     if (retry) return isBlankpoolOnline(false);
     return false;
@@ -133,12 +133,12 @@ app.get('/api/stats/nimpool', async function (req, res) {
 app.get('/api/stats/blankpool', async function (req, res) {
   try {
     const stats = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
-    const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 3000 })).data.fees
+    //const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 3000 })).data.fees
     res.send({
-      /* hashrate: (result.work_per_second || 0) * Math.pow(2, 16),
-      miners: result.users_online,
-      workers: result.devices_online, */
-      pool_fee
+      hashrate: stats.averageHashrate,
+      miners: stats.clientCounts.total,
+      workers: stats.clientCounts.total,
+      //pool_fee
     })
   } catch (e) {
     res.send('offline')
