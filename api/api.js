@@ -133,12 +133,12 @@ app.get('/api/stats/nimpool', async function (req, res) {
 app.get('/api/stats/blankpool', async function (req, res) {
   try {
     const stats = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
-    //const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 3000 })).data.fees
+    const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 3000 })).data.fees
     res.send({
       hashrate: stats.averageHashrate,
       miners: stats.clientCounts.total,
       workers: stats.clientCounts.total,
-      //pool_fee
+      pool_fee
     })
   } catch (e) {
     res.send('offline')
@@ -162,6 +162,7 @@ app.get('/api/nimpool/:address', async function (req, res) {
       deviceList
     })
   } catch (e) {
+    console.log(e)
     res.send('offline')
   }
 })
@@ -175,12 +176,13 @@ app.get('/api/blankpool/:address', async function (req, res) {
     
     res.send({
       hashrate: address_hashrate,
-      balance: result.balance,
-      confirmed_balance: result.balanceWithoutPending,
-      unconfirmed_balance: result.balance - result.balanceWithoutPending,
+      balance: info.balance.earned - info.balance.payedOut,
+      confirmed_balance: info.balance.owed,
+      unconfirmed_balance: info.balance.earned - info.balance.payedOut - info.balance.owed,
       deviceList
     })
   } catch (e) {
+    console.log(e)
     res.send('offline')
   }
 })

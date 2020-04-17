@@ -34,7 +34,7 @@ export default {
     this.destination = new WebSocket(this.dbAddress, 'echo-protocol')
     const vm = this
     this.destination.onopen = function () {
-      console.log(new Date() + ' Conection is open, ' + vm.dbAddress) // eslint-disable-line no-console
+      console.log((new Date).toUTCString()() + ' Conection is open, ' + vm.dbAddress) // eslint-disable-line no-console
       vm.destination.send('ping')
       vm.sendMessage()
       vm.getAddressStatistics()
