@@ -10,8 +10,8 @@
       v-on="$listeners"
       class="mx-auto"
     >
-      <!-- <img src="https://dummyimage.com/300x250/000000/0011ff&text=Ad+Here" /> -->
-      <div class="xc449bad4854773ff" data-zone="184f4142761b42faba0e717b3066f4b9" style="width:300px;height:250px;display: inline-block;margin: 0 auto"></div>
+      <img src="https://dummyimage.com/300x250/000000/0011ff&text=Ad+Here" />
+      <!-- <div class="xc449bad4854773ff" data-zone="184f4142761b42faba0e717b3066f4b9" style="width:300px;height:250px;display: inline-block;margin: 0 auto"></div> -->
     </v-card>
   </div>
 </template>

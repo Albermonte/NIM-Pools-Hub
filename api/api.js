@@ -118,8 +118,8 @@ const isBlankpoolOnline = async retry => {
 
 app.get('/api/stats/nimiq', async function (req, res) {
   try {
-    const stats = (await axios.get(`https://api.nimiqx.com/network-stats/?api_key=${process.env.nimiqx_api}`, { timeout: 3000 })).data
-    const { usd } = (await axios.get(`https://api.nimiqx.com/price/usd?api_key=${process.env.nimiqx_api}`, { timeout: 3000 })).data
+    const stats = (await axios.get(`https://api.nimiqx.com/network-stats/?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
+    const { usd } = (await axios.get(`https://api.nimiqx.com/price/usd?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
     res.send({
       hashrate: stats.hashrate,
       height: stats.height,
@@ -127,6 +127,7 @@ app.get('/api/stats/nimiq', async function (req, res) {
       price: usd
     })
   } catch (e) {
+    console.log(e)
     res.send('offline')
   }
 })
