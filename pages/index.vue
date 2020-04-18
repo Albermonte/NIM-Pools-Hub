@@ -1,17 +1,28 @@
 <template>
-  <v-layout>
-    <v-flex class="text-center">
-      <img src="/v.png" alt="Vuetify.js" class="mb-5" />
+  <v-layout style="margin-left: 3vw;">
+    <v-flex class="text-center d-flex justify-space-around align-center">
+      <AdPlaceholder />
       <blockquote class="blockquote">
-        &#8220;First, solve the problem. Then, write the code.&#8221;
+        &#8220;One place for all Nimiq's Pools.&#8221;
         <br />
-        <NuxtLink to="/urp">Go to /URP</NuxtLink>
+        <NuxtLink to="/">Coming Soon</NuxtLink>
         <footer>
           <small>
-            <em>&mdash;John Johnson</em>
+            <em>&mdash; Albermonte</em>
           </small>
         </footer>
       </blockquote>
+      <AdPlaceholder />
     </v-flex>
   </v-layout>
 </template>
+
+<script>
+import AdPlaceholder from "~/components/AdPlaceholder";
+
+export default {
+  components: {
+    AdPlaceholder
+  }
+};
+</script>

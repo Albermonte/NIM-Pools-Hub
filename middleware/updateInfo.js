@@ -27,11 +27,14 @@ export default async function ({ store, $axios, route }) {
     });
     const updateUserInfo = async () => { if (await store.dispatch(`${route.name}/UPDATE_USER_INFO`) === 'offline') setTimeout(updateUserInfo, 30 * 1000) }
     const updatePoolInfo = async () => { if (await store.dispatch(`${route.name}/UPDATE_POOL_INFO`) === 'offline') setTimeout(updatePoolInfo, 40 * 1000) }
+    const updateNimiqInfo = async () => { if (await store.dispatch('nimiq/UPDATE_NIMIQ_INFO') === 'offline') setTimeout(updateNimiqInfo, 10 * 1000) }
+    
     if (route.name !== 'index' && route.name !== null) {
         if (store.state.localStorage.address !== '') {
             updateUserInfo()
-            setInterval(updateUserInfo, 1 * 60 * 1000) // 1minute
+            setInterval(updateUserInfo, 10 * 60 * 1000) // 10 minute
         }
+        updateNimiqInfo()
         setTimeout(updatePoolInfo, 100)
         setInterval(updatePoolInfo, 15 * 60 * 1000) // 15 minutes
     }

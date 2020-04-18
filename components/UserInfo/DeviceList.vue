@@ -62,7 +62,7 @@ export default {
         value: 'deviceId'
       },
       { text: 'Hashrate', value: 'hashrate' },
-      { text: 'Last share', value: 'last_share' }
+      { text: 'Total Shares', value: 'total_shares' }
     ]
   }),
   computed: {

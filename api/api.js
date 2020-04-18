@@ -114,7 +114,25 @@ const isBlankpoolOnline = async retry => {
   }
 }
 
-// Pool stats
+// Nimiq Stats
+
+app.get('/api/stats/nimiq', async function (req, res) {
+  try {
+    const stats = (await axios.get(`https://api.nimiqx.com/network-stats/?api_key=${process.env.nimiqx_api}`, { timeout: 3000 })).data
+    const { usd } = (await axios.get(`https://api.nimiqx.com/price/usd?api_key=${process.env.nimiqx_api}`, { timeout: 3000 })).data
+    res.send({
+      hashrate: stats.hashrate,
+      height: stats.height,
+      nim_day_kh: stats.nim_day_kh,
+      price: usd
+    })
+  } catch (e) {
+    res.send('offline')
+  }
+})
+
+
+// Pool Stats
 
 app.get('/api/stats/nimpool', async function (req, res) {
   try {
@@ -137,7 +155,7 @@ app.get('/api/stats/blankpool', async function (req, res) {
     res.send({
       hashrate: stats.averageHashrate,
       miners: stats.clientCounts.total,
-      workers: stats.clientCounts.total,
+      blocksMined: stats.blocksMined.total,
       pool_fee
     })
   } catch (e) {
@@ -145,7 +163,7 @@ app.get('/api/stats/blankpool', async function (req, res) {
   }
 })
 
-// Address
+// Address Stats
 app.get('/api/nimpool/:address', async function (req, res) {
   try {
     const address = req.params.address

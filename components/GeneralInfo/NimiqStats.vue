@@ -2,10 +2,10 @@
   <div>
     <material-card class="card ml-auto mr-auto" min-width="300" color="blue darken-2" title="Nimiq Stats" elevation="none">
       <v-row v-for="item in items" :key="item.index" class="text-center">
-        <v-col class="ml-2" style="font-size: 1.0rem !important; color: #272727">
+        <v-col class="ml-2" style="font-size: 1.0rem !important; color: #272727" align-self="center">
           {{ item.name }}:
         </v-col>
-        <v-col class="pr-0" style="font-size: 1.0rem !important; color: #525252">
+        <v-col class="pr-0" style="font-size: 1.0rem !important; color: #525252" align-self="center">
           {{ item.value }}
         </v-col>
       </v-row>
