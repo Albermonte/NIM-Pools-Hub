@@ -114,6 +114,16 @@ const isBlankpoolOnline = async retry => {
   }
 }
 
+const isBalkanpoolOnline = async retry => {
+  try {
+    const { clientCounts, averageHashrate} = (await axios.get('https://pool.balkanminingpool.com/api/pool/stats', { timeout: 5000 })).data
+    return clientCounts.total > 0 || averageHashrate > 0;
+  } catch {
+    if (retry) return isBlankpoolOnline(false);
+    return false;
+  }
+}
+
 // Nimiq Stats
 
 app.get('/api/stats/nimiq', async function (req, res) {
@@ -164,6 +174,22 @@ app.get('/api/stats/blankpool', async function (req, res) {
   }
 })
 
+app.get('/api/stats/balkanpool', async function (req, res) {
+  try {
+    const stats = (await axios.get('https://pool.balkanminingpool.com/api/pool/stats', { timeout: 8000 })).data
+    const pool_fee = (await axios.get('https://pool.balkanminingpool.com/api/pool/config', { timeout: 9000 })).data.fees
+    res.send({
+      hashrate: stats.averageHashrate,
+      miners: stats.clientCounts.total,
+      blocksMined: stats.blocksMined.total,
+      pool_fee
+    })
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
 // Address Stats
 app.get('/api/nimpool/:address', async function (req, res) {
   try {
@@ -190,6 +216,26 @@ app.get('/api/blankpool/:address', async function (req, res) {
   try {
     const address = req.params.address
     const info = (await axios.get(`https://mine.blank.drawpad.org/api/miner/${address}`, { timeout: 3000 })).data
+    const deviceList = info.devices
+    let address_hashrate = info.hashrate;
+    
+    res.send({
+      hashrate: address_hashrate,
+      balance: info.balance.earned - info.balance.payedOut,
+      confirmed_balance: info.balance.owed,
+      unconfirmed_balance: info.balance.earned - info.balance.payedOut - info.balance.owed,
+      deviceList
+    })
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
+app.get('/api/balkanpool/:address', async function (req, res) {
+  try {
+    const address = req.params.address
+    const info = (await axios.get(`https://pool.balkanminingpool.com/api/miner/${address}`, { timeout: 9000 })).data
     const deviceList = info.devices
     let address_hashrate = info.hashrate;
     

@@ -37,6 +37,15 @@ export const state = () => (
             url: "siriuspool.net:8443"
         },
         {
+            icon: "/balkanpool.png",
+            name: "balkanpool",
+            displayName: "Balkan Mining Pool",
+            message: "Balkans based",
+            status: "",
+            extras: ["Slow API"],
+            url: "mine.blank.drawpad.org:8444"
+        },
+        {
             icon: "/skypool.png",
             name: "skypool",
             displayName: "Skypool",
@@ -66,6 +75,7 @@ export const mutations = {
         state[index].url = url;
     },
     updateFee(state, { index, pool_fee }) {
+        typeof(pool_fee) === 'undefined' ? pool_fee = '~1%' : null
         state[index].extras.unshift(`Pool fee: ${pool_fee}`);
     }
 }
@@ -77,8 +87,8 @@ export const actions = {
     UPDATE_POOLURL({ commit }, { index, url }) {
         commit('updateUrl', { index, url })
     },
-    async UPDATE_POOLFEE({ commit }, { index }) {
-        const { pool_fee } = await this.$axios.$get(`${window.location.origin}/api/stats/blankpool`)
+    async UPDATE_POOLFEE({ commit }, { index, name }) {
+        const { pool_fee } = await this.$axios.$get(`${window.location.origin}/api/stats/${name}`)
         commit('updateFee', { index, pool_fee })
     }
 }

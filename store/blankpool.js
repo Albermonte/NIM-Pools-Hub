@@ -9,7 +9,8 @@ export const state = () => ({
   unconfirmed_balance: 0,
   deviceList: [],
   address_hashrate: 0,
-  address_hashrate_array: [0]
+  address_hashrate_array: [0],
+  snackbarText: ''
 })
 
 export const mutations = {
@@ -26,7 +27,15 @@ export const mutations = {
     state.miners = value.miners
     state.workers = value.workers
     state.blocksMined = value.blocksMined,
-    state.pool_fee = value.pool_fee
+      state.pool_fee = value.pool_fee
+  },
+  userInfoError(state, value) {
+    state.snackbarText = ''
+    state.snackbarText = value
+  },
+  poolInfoError(state, value) {
+    state.snackbarText = ''
+    state.snackbarText = value
   }
 }
 
@@ -36,6 +45,7 @@ export const actions = {
     const info = await this.$axios.$get(`${window.location.origin}/api/blankpool/${rootState.localStorage.address}`)
     if (info === 'offline') {
       console.error('BlankPool USER_INFO not responding ', (new Date).toUTCString())
+      commit('userInfoError', 'Pool\'s User Stats API not working, retying in 30 seconds')
       return 'offline'
     }
 
@@ -46,14 +56,14 @@ export const actions = {
     })
 
     const deviceList = []
-    info.deviceList.map( x => {
-      deviceList.push({
-        deviceName: x.deviceID,
-        deviceId: x.deviceID,
-        hashrate: (x.stats1.hash / 1e3).toFixed(2) + ' kH/s',
-        total_shares: x.stats24.shares
+      info.deviceList.map(x => {
+        deviceList.push({
+          deviceName: x.deviceID,
+          deviceId: x.deviceID,
+          hashrate: (x.stats1.hash / 1e3).toFixed(2) + ' kH/s',
+          total_shares: x.stats24.shares
+        })
       })
-    })
 
     commit('updateUserInfo', {
       balance: Number((info.balance / 1e5).toFixed(1)),
@@ -68,6 +78,7 @@ export const actions = {
     const info = await this.$axios.$get(`${window.location.origin}/api/stats/blankpool`)
     if (info === 'offline') {
       console.error('BlankPool POOL_INFO not responding ', (new Date).toUTCString())
+      commit('poolInfoError', 'Pool\'s General Stats API not working, retying in 40 seconds')
       return 'offline'
     }
 

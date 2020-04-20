@@ -86,8 +86,13 @@
         @click:clear="clearAddress"
       />
     </v-app-bar>
-    <v-content >
-      <v-container class="fill-height pb-0 pr-0" :class="[$vuetify.breakpoint.xs ? 'pl-3' : 'pl-11 ml-1', $vuetify.breakpoint.sm || $vuetify.breakpoint.md ? 'pl-12 ml-2' : null ]" fluid style="background-color: #fafafa">
+    <v-content>
+      <v-container
+        class="fill-height pb-0 pr-0"
+        :class="[$vuetify.breakpoint.xs ? 'pl-3' : 'pl-11 ml-1', $vuetify.breakpoint.sm || $vuetify.breakpoint.md ? 'pl-12 ml-2' : null ]"
+        fluid
+        style="background-color: #fafafa"
+      >
         <v-row align="center" justify="center" class="pb-0">
           <nuxt />
         </v-row>
@@ -96,6 +101,10 @@
     <v-btn bottom color="pink" dark fab fixed right nuxt href="/setupMiner" @click="testData">
       <v-icon>mdi-help</v-icon>
     </v-btn>
+    <v-snackbar v-model="snackbar" color="red darken-3" class="text-uppercase font-weight-medium">
+      {{ snackbarText }}
+      <v-btn color="grey lighten-3" text @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -108,11 +117,21 @@ export default {
     mini: true,
     show: null,
     sidebarOpen: false,
-    heading: config.head.title
+    heading: config.head.title,
+    snackbar: false
   }),
   computed: {
     poolList() {
       return this.$store.state.poolList;
+    },
+    snackbarText() {
+      if (this.$route.name === "index" || this.$route.name === null) return false;
+      this.snackbar = eval(
+        "this.$store.state." + this.$route.name + ".snackbarText"
+      )
+        ? true
+        : false;
+      return eval("this.$store.state." + this.$route.name + ".snackbarText");
     }
   },
   mounted() {
@@ -180,7 +199,7 @@ export default {
       this.sidebarOpen = false;
     }
   },
-  middleware: 'updateInfo'
+  middleware: "updateInfo"
 };
 </script>
 

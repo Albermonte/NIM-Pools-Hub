@@ -1,4 +1,6 @@
-# nim-pools-hub
+# NIM POOLS HUB
+
+[![time tracker](https://wakatime.com/badge/github/Albermonte/nim-pools-hub.svg)](https://wakatime.com/badge/github/Albermonte/nim-pools-hub)
 
 > A place to start mining NIM
 

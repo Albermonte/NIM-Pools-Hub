@@ -20,8 +20,8 @@ export default {
       region = "eu";
     }
     poolList.map(async (x, index) => {
-      if (x.name === "blankpool") {
-        store.dispatch("poolList/UPDATE_POOLFEE", { index });
+      if (x.name === "blankpool" || x.name === "balkanpool") {
+        store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
       }
       if (x.name === "nimpool") {
         if (region === "us")

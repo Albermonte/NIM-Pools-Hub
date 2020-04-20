@@ -17,12 +17,8 @@
 </template>
 
 <script>
-import helperOffset from "~/components/CustomVuetify/helper/AppOffset";
 
 export default {
-  components: {
-    helperOffset
-  },
   inheritAttrs: false,
   props: {
     color: {
@@ -55,11 +51,6 @@ export default {
     }
   },
   computed: {
-    hasOffset() {
-      return (
-        this.$slots.header || this.$slots.offset || this.title || this.text
-      );
-    },
     styles() {
       if (!this.hasOffset) {
         return null;
