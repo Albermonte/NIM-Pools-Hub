@@ -51,18 +51,20 @@ export const actions = {
         const address_hashrate_array = []
 
         info.hashrate.map(x => {
-            address_hashrate_array.push(x.avgHR)
+            if (x.avgHR) address_hashrate_array.push(x.avgHR)
+            else address_hashrate_array.push(0)
         })
 
         const deviceList = []
-        info.deviceList.map(x => {
-            deviceList.push({
-                deviceName: x.deviceID,
-                deviceId: x.deviceID,
-                hashrate: (x.stats1.hash / 1e3).toFixed(2) + ' kH/s',
-                total_shares: x.stats24.shares
+        if (info.deviceList)
+            info.deviceList.map(x => {
+                deviceList.push({
+                    deviceName: x.deviceID,
+                    deviceId: x.deviceID,
+                    hashrate: (x.stats1.hash / 1e3).toFixed(2) + ' kH/s',
+                    total_shares: x.stats24.shares
+                })
             })
-        })
 
         commit('updateUserInfo', {
             balance: Number((info.balance / 1e5).toFixed(1)),

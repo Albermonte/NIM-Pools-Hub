@@ -68,7 +68,12 @@
 
     <v-app-bar clipped-left app color="blue darken-3" dark elevate-on-scroll style="z-index:15">
       <v-toolbar-title style="width: 300px" class="ml-0 pl-4" @click="''">
-        <nuxt-link to="/" class="white--text text-uppercase">{{ heading }}</nuxt-link>
+        <nuxt-link to="/" class="white--text text-uppercase d-flex align-center">
+          <v-avatar size="44">
+            <img :src="require('@/static/nimpoolshub.png')" alt="Logo" />
+          </v-avatar>
+          <span class="pl-2">{{ heading }}</span>
+        </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
       <v-text-field
@@ -98,9 +103,14 @@
         </v-row>
       </v-container>
     </v-content>
-    <v-btn bottom color="pink" dark fab fixed right nuxt href="/setupMiner" @click="testData">
-      <v-icon>mdi-help</v-icon>
-    </v-btn>
+    <v-layout row class="fab-container pb-4 pr-6">
+      <v-btn small fab href="https://discord.gg/4YHc7kd" class="my-auto mx-2">
+        <v-icon color="#7289da">mdi-discord</v-icon>
+      </v-btn>
+      <v-btn fab dark color="pink" nuxt href="/setupMiner" @click="testData" class="my-auto mx-1">
+        <v-icon>mdi-help</v-icon>
+      </v-btn>
+    </v-layout>
     <v-snackbar v-model="snackbar" color="red darken-3" class="text-uppercase font-weight-medium">
       {{ snackbarText }}
       <v-btn color="grey lighten-3" text @click="snackbar = false">Close</v-btn>
@@ -125,7 +135,8 @@ export default {
       return this.$store.state.poolList;
     },
     snackbarText() {
-      if (this.$route.name === "index" || this.$route.name === null) return false;
+      if (this.$route.name === "index" || this.$route.name === null)
+        return false;
       this.snackbar = eval(
         "this.$store.state." + this.$route.name + ".snackbarText"
       )
@@ -190,7 +201,7 @@ export default {
       this.$store.commit("localStorage/updateAddress", "");
     },
     testData() {
-      this.address = "NQ66 V5JX 3G2A HAEM 8LV3 8LMU YPVY BSG7 8NNJ";
+      //this.address = "NQ66 V5JX 3G2A HAEM 8LV3 8LMU YPVY BSG7 8NNJ";
     },
     mouseover() {
       this.sidebarOpen = true;
@@ -224,5 +235,11 @@ export default {
 
 .stay-on-top {
   z-index: 10 !important;
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
 }
 </style>

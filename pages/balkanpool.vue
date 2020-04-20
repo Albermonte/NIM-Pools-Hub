@@ -23,8 +23,8 @@ export default {
 
     // Watch until an address is stored to get statistics
     this.$store.watch(this.$store.getters["localStorage/getAddress"], () => {
-      this.getAddressStatistics();
-      this.getAddressDevices();
+      console.log('Address changed')
+      this.$store.dispatch(`${this.$route.name}/UPDATE_USER_INFO`)
       this.showUserInfo = this.$store.state.localStorage.address !== ""; // Hide if no address
     });
   },

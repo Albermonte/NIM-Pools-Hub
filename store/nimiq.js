@@ -11,7 +11,7 @@ export const mutations = {
     state.hashrate = value.hashrate
     state.height = '#' + value.height
     state.nim_day_kh = value.nim_day_kh + ' NIM'
-    state.price = value.price
+    state.price = value.price + ' $'
   },
   updateAddress(state, value) {
     state.address = value

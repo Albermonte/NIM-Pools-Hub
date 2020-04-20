@@ -52,10 +52,12 @@ export const actions = {
     const address_hashrate_array = []
 
     info.hashrate.map(x => {
-      address_hashrate_array.push(x.avgHR)
+      if (x.avgHR) address_hashrate_array.push(x.avgHR)
+      else address_hashrate_array.push(0)
     })
 
     const deviceList = []
+    if (info.deviceList)
       info.deviceList.map(x => {
         deviceList.push({
           deviceName: x.deviceID,
