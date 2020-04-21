@@ -112,7 +112,7 @@
       </v-btn>
     </v-layout>
     <v-snackbar v-model="snackbar" color="red darken-3" class="text-uppercase font-weight-medium">
-      {{ snackbarText }}
+      {{ snackbarText || 'Double check your address, it might be wrong' }}
       <v-btn color="grey lighten-3" text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
   </v-app>
@@ -193,7 +193,9 @@ export default {
       this.address = this.$store.state.localStorage.address.replace(
         /(.{4})/g,
         "$1 "
-      );
+      ).slice(0, -1);
+    }else if(this.address.replace(/ /g, "").length >= 36){
+      this.snackbar = true
     }
   },
   methods: {
