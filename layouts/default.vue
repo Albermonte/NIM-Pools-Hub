@@ -146,6 +146,12 @@ export default {
     }
   },
   mounted() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start();
+      window.addEventListener("load", function() {
+        //this.$nuxt.$loading.finish();
+      });
+    });
     this.address = this.$store.state.localStorage.address.replace(
       /(.{4})/g,
       "$1 "
@@ -190,12 +196,11 @@ export default {
         "localStorage/updateAddress",
         this.address.replace(/ /g, "")
       );
-      this.address = this.$store.state.localStorage.address.replace(
-        /(.{4})/g,
-        "$1 "
-      ).slice(0, -1);
-    }else if(this.address.replace(/ /g, "").length >= 36){
-      this.snackbar = true
+      this.address = this.$store.state.localStorage.address
+        .replace(/(.{4})/g, "$1 ")
+        .slice(0, -1);
+    } else if (this.address.replace(/ /g, "").length >= 36) {
+      this.snackbar = true;
     }
   },
   methods: {

@@ -20,6 +20,15 @@
         />
       </svg>
     </div>
+
+    <v-tooltip left>
+      <template v-slot:activator="{ on }">
+        <v-btn fab top right fixed small color="pink" @click="closeLoader" v-on="on">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </template>
+      <span style="z-index: 100;">If the page doesn't load, click here to close the loader</span>
+    </v-tooltip>
   </v-overlay>
 </template>
 
@@ -34,6 +43,9 @@ export default {
     },
     finish() {
       this.loading = false;
+    },
+    closeLoader() {
+      this.$nuxt.$loading.finish();
     }
   }
 };

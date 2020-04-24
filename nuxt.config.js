@@ -2,7 +2,6 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   mode: 'spa',
-  loading: '~/components/Loading/Loading',
   /*
   ** Headers of the page
   */
@@ -24,7 +23,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: '~/components/Loading/Loading',
   /*
   ** Global CSS
   */
