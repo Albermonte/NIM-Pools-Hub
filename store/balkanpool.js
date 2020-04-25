@@ -29,6 +29,14 @@ export const mutations = {
         state.blocksMined = value.blocksMined,
             state.pool_fee = value.pool_fee
     },
+    clearUserInfo(state) {
+        state.balance = 0
+        state.confirmed_balance = 0
+        state.unconfirmed_balance = 0
+        state.deviceList = []
+        state.address_hashrate = 0
+        state.address_hashrate_array = []
+    },
     userInfoError(state, value) {
         state.snackbarText = ''
         state.snackbarText = value
@@ -99,5 +107,8 @@ export const actions = {
             blocksMined: info.blocksMined,
             pool_fee: info.pool_fee
         })
+    },
+    CLEAR_USER_INFO({ commit }) {
+        commit('clearUserInfo')
     }
 }

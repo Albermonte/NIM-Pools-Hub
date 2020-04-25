@@ -54,7 +54,7 @@ export const state = () => (
             extras: ["Pool fee: ~1%", "Not using official protocol"],
             url: "hk1.nimiq.skypool.org:5000"
         },
-        {
+        /* {
             icon: "/urp.png",
             name: "urp",
             displayName: "URP Best",
@@ -62,7 +62,7 @@ export const state = () => (
             status: "",
             extras: [" Pool fee: 0.5%"],
             url: ""
-        }
+        } */
     ]
 )
 

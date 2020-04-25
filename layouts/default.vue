@@ -67,12 +67,21 @@
     </v-btn>
 
     <v-app-bar clipped-left app color="blue darken-3" dark elevate-on-scroll style="z-index:15">
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-4" @click="''">
-        <nuxt-link to="/" class="white--text text-uppercase d-flex align-center">
-          <v-avatar size="44">
-            <img :src="require('@/static/nimpoolshub.png')" alt="Logo" />
-          </v-avatar>
-          <span class="pl-2">{{ heading }}</span>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+        <nuxt-link to="/" class="white--text text-uppercase">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <div v-on="on" class="d-flex align-center">
+                <v-avatar size="44">
+                  <img src="/nimpoolshub.png" alt="Logo" />
+                </v-avatar>
+                <span class="pl-2">{{ pageName || heading }}</span>
+              </div>
+            </template>
+            <span
+              class="white--text text-center"
+            >{{ $route.name === 'index' ? 'You are already on the HOME page ;D'  : 'Go to the HOME page' }}</span>
+          </v-tooltip>
         </nuxt-link>
       </v-toolbar-title>
       <v-spacer />
@@ -98,12 +107,12 @@
         fluid
         style="background-color: #fafafa"
       >
-        <v-row align="center" justify="center" class="pb-0">
+        <v-row align="center" justify="center" class="pb-0" style="height: 100%">
           <nuxt />
         </v-row>
       </v-container>
     </v-content>
-    <v-layout row class="fab-container pb-4 pr-6">
+    <v-layout row class="fab-container pb-4 pr-6" style="z-index: 25;">
       <v-btn small fab href="https://discord.gg/4YHc7kd" class="my-auto mx-2">
         <v-icon color="#7289da">mdi-discord</v-icon>
       </v-btn>
@@ -124,6 +133,7 @@ import config from "~/nuxt.config";
 export default {
   data: () => ({
     address: "",
+    pageName: "",
     mini: true,
     show: null,
     sidebarOpen: false,
@@ -158,6 +168,15 @@ export default {
     );
   },
   updated() {
+    let poolList = [...this.$store.state.poolList];
+    poolList.map(x => {
+      if (x.name === this.$route.name) {
+        this.pageName = x.displayName;
+      } else if (this.$route.name === "index") {
+        this.pageName = "NIM POOLS HUB";
+      }
+    });
+
     if (this.address === null) {
       return;
     }

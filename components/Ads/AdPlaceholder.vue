@@ -3,10 +3,8 @@
     <v-card
       v-bind="$attrs"
       :style="styles"
-      min-width="300"
-      max-width="640"
-      min-height="250"
-      max-height="250"
+      width="300"
+      height="250"
       v-on="$listeners"
       class="mx-auto"
     >

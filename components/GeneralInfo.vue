@@ -1,30 +1,29 @@
 <template>
   <v-row class="pb-0">
     <v-col class="py-0">
-      <!-- <PoolLuck /> -->
-      <AdPlaceholder />
+      <PoolStats />
     </v-col>
     <v-col class="py-0">
       <NimiqStats />
     </v-col>
     <v-col class="py-0 pb-0">
-      <PoolStats />
+      <AdPlaceholder />
     </v-col>
   </v-row>
 </template>
 
 <script>
-import AdPlaceholder from '~/components/AdPlaceholder'
-import PoolLuck from '~/components/GeneralInfo/PoolLuck'
-import NimiqStats from '~/components/GeneralInfo/NimiqStats'
-import PoolStats from '~/components/GeneralInfo/PoolStats'
+import AdPlaceholder from "~/components/Ads/AdPlaceholder";
+//import PoolLuck from '~/components/GeneralInfo/PoolLuck'
+import NimiqStats from "~/components/GeneralInfo/NimiqStats";
+import PoolStats from "~/components/GeneralInfo/PoolStats";
 
 export default {
   components: {
     AdPlaceholder,
-    PoolLuck,
+    //PoolLuck,
     NimiqStats,
     PoolStats
   }
-}
+};
 </script>

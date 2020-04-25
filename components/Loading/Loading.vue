@@ -53,7 +53,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.timeout = true;
-    }, 5000);
+    }, 8000);
   },
   methods: {
     start() {

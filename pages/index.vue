@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import AdPlaceholder from "~/components/AdPlaceholder";
+import AdPlaceholder from "~/components/Ads/AdPlaceholder";
 
 export default {
   components: {
