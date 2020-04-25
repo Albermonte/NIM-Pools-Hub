@@ -156,11 +156,11 @@ export default {
     }
   },
   mounted() {
+    window.addEventListener("load", function() {
+      this.$nuxt.$loading.finish();
+    });
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
-      window.addEventListener("load", function() {
-        this.$nuxt.$loading.finish();
-      });
     });
 
     this.address = this.$store.state.localStorage.address.replace(

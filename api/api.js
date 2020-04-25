@@ -243,7 +243,7 @@ app.get('/api/balkanpool/:address', async function (req, res) {
       hashrate: address_hashrate,
       balance: info.balance.earned - info.balance.payedOut,
       confirmed_balance: info.balance.owed,
-      unconfirmed_balance: info.balance.earned - info.balance.payedOut - info.balance.owed,
+      unconfirmed_balance: info.balance.earned - info.balance.payedOut - info.balance.owed < 0 ? 0 : info.balance.earned - info.balance.payedOut - info.balance.owed,
       deviceList
     })
   } catch (e) {
