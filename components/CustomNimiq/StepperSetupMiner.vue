@@ -233,7 +233,7 @@ export default {
       snackbarText: "",
       timeout: 3000,
       dialog: false,
-      modalText: '',
+      modalText: "",
       page: 1,
       maxPage: 4,
       content: [
@@ -308,12 +308,12 @@ export default {
         "localStorage/updateAddress",
         this.address.replace(/ /g, "")
       );
-      if (this.address.length <= 43) {
-        this.address = this.$store.state.localStorage.address.replace(
-          /(.{4})/g,
-          "$1 "
-        );
-      }
+      this.address = this.$store.state.localStorage.address
+        .replace(/(.{4})/g, "$1 ")
+        .slice(0, -1);
+    } else if (this.address.replace(/ /g, "").length >= 36) {
+      this.snackbarText = 'Double check your address, it might be wrong'
+      this.snackbar = true;
     } else {
       this.validAddress = false;
     }
@@ -340,12 +340,14 @@ export default {
       this.snackbar = true;
     },
     downloadLinuxHandler() {
-      this.modalText = 'Open a terminal on the directory where <kbd>NIM_MinerSetup.sh</kbd> is located and run:<br><br> <code>chmod +x NIM_MinerSetup.sh</code>'
+      this.modalText =
+        "Open a terminal on the directory where <kbd>NIM_MinerSetup.sh</kbd> is located and run:<br><br> <code>chmod +x NIM_MinerSetup.sh</code>";
       this.dialog = true;
       downloadLinux(this.selectedGPU, this.address, this.selectedPool);
     },
     downloadWindowsHandler() {
-      this.modalText = 'Doble click on <kbd>NIM_MinerSetup.bat</kbd><br><br>If a warning message is prompted, click on <code>More information</code> and next, click on <code>Execute anyway</code>'
+      this.modalText =
+        "Doble click on <kbd>NIM_MinerSetup.bat</kbd><br><br>If a warning message is prompted, click on <code>More information</code> and next, click on <code>Execute anyway</code>";
       this.dialog = true;
       downloadWindows(this.selectedGPU, this.address, this.selectedPool);
     }

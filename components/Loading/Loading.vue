@@ -23,11 +23,23 @@
 
     <v-tooltip left>
       <template v-slot:activator="{ on }">
-        <v-btn fab top right fixed small color="pink" @click="closeLoader" v-on="on">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+        <v-slide-y-transition>
+          <v-btn
+            v-if="timeout"
+            fab
+            top
+            right
+            fixed
+            small
+            color="pink"
+            @click="closeLoader"
+            v-on="on"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-slide-y-transition>
       </template>
-      <span style="z-index: 100;">If the page doesn't load, click here to close the loader</span>
+      <span class="white--text text-center">If the page doesn't load, click here to close the loader</span>
     </v-tooltip>
   </v-overlay>
 </template>
@@ -35,8 +47,14 @@
 <script>
 export default {
   data: () => ({
-    loading: false
+    loading: false,
+    timeout: false
   }),
+  mounted() {
+    setTimeout(() => {
+      this.timeout = true;
+    }, 5000);
+  },
   methods: {
     start() {
       this.loading = true;

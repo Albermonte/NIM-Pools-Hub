@@ -149,25 +149,13 @@ export default {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
       window.addEventListener("load", function() {
-        //this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish();
       });
     });
     this.address = this.$store.state.localStorage.address.replace(
       /(.{4})/g,
       "$1 "
     );
-
-    /* const loading = setInterval(() => {
-      if (
-        typeof this.$store.state.urp.confirmed_balance !== "undefined" &&
-        this.overlay
-      ) {
-        clearInterval(loading);
-        setTimeout(() => {
-          this.overlay = false;
-        }, 1800);
-      }
-    }, 1000); */
   },
   updated() {
     if (this.address === null) {
