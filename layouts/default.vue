@@ -80,7 +80,7 @@
             </template>
             <span
               class="white--text text-center"
-            >{{ $route.name === 'index' ? 'You are already on the HOME page ;D'  : 'Go to the HOME page' }}</span>
+            >{{ $route.name === 'index' ? 'You are already on the HOME page ;D' : 'Go to the HOME page' }}</span>
           </v-tooltip>
         </nuxt-link>
       </v-toolbar-title>
@@ -162,6 +162,7 @@ export default {
         this.$nuxt.$loading.finish();
       });
     });
+
     this.address = this.$store.state.localStorage.address.replace(
       /(.{4})/g,
       "$1 "

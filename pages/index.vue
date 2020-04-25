@@ -1,7 +1,7 @@
 <template>
-  <v-layout style="margin-left: 3vw;">
-    <v-flex class="text-center d-flex justify-space-around align-center">
-      <AdPlaceholder />
+  <v-layout style="margin-left: 3vw; height: 100%">
+    <v-flex class="text-center d-flex flex-column justify-space-between align-center">
+      <AdLargePlaceholder />
       <blockquote class="blockquote">
         &#8220;One place for all Nimiq's Pools.&#8221;
         <br />
@@ -12,17 +12,17 @@
           </small>
         </footer>
       </blockquote>
-      <AdPlaceholder />
+      <AdLargePlaceholder />
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import AdPlaceholder from "~/components/Ads/AdPlaceholder";
+import AdLargePlaceholder from "~/components/Ads/AdLargePlaceholder";
 
 export default {
   components: {
-    AdPlaceholder
+    AdLargePlaceholder
   }
 };
 </script>
