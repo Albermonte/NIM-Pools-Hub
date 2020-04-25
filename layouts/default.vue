@@ -156,11 +156,16 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener("load", function() {
-      this.$nuxt.$loading.finish();
-    });
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
+      if (navigator.userAgent.indexOf("Chrome") !== -1)
+        setTimeout(() => {
+          this.$nuxt.$loading.finish();
+        }, 5000);
+      else
+        window.addEventListener("load", function() {
+          this.$nuxt.$loading.finish();
+        });
     });
 
     this.address = this.$store.state.localStorage.address.replace(

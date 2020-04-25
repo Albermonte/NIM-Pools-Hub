@@ -21,7 +21,7 @@
       </svg>
     </div>
 
-    <v-tooltip left>
+    <v-tooltip left class="white" color="blue-grey darken-3">
       <template v-slot:activator="{ on }">
         <v-slide-y-transition>
           <v-btn
@@ -39,7 +39,7 @@
           </v-btn>
         </v-slide-y-transition>
       </template>
-      <span class="white--text text-center">If the page doesn't load, click here to close the loader</span>
+      <span class="green--text text--accent-3 text-center">If the page doesn't load, click here to close the loader</span>
     </v-tooltip>
   </v-overlay>
 </template>
