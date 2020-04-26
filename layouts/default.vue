@@ -158,7 +158,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
-      if (navigator.userAgent.indexOf("Chrome") === -1)
+      if (navigator.userAgent.indexOf("Firefox") !== -1)
         window.addEventListener("load", function() {
           this.$nuxt.$loading.finish();
         });
