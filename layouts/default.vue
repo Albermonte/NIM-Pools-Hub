@@ -158,14 +158,14 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
-      if (navigator.userAgent.indexOf("Chrome") !== -1)
-        setTimeout(() => {
-          this.$nuxt.$loading.finish();
-        }, 5000);
-      else
+      if (navigator.userAgent.indexOf("Chrome") === -1)
         window.addEventListener("load", function() {
           this.$nuxt.$loading.finish();
         });
+      else
+        setTimeout(() => {
+          this.$nuxt.$loading.finish();
+        }, 5000);
     });
 
     this.address = this.$store.state.localStorage.address.replace(

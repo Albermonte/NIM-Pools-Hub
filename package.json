@@ -12,12 +12,12 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@nimiq/style": "^0.7.6",
-    "@nuxtjs/axios": "^5.3.6",
-    "@nuxtjs/vuetify": "^1.0.0",
+    "@nimiq/style": "^0.8.0",
+    "@nuxtjs/axios": "^5.10.1",
+    "@nuxtjs/vuetify": "^1.11.0",
     "axios": "^0.19.2",
     "express": "^4.17.1",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.12.2",
     "nuxt-vuex-localstorage": "^1.2.6",
     "request-ip": "^2.1.3"
   },
