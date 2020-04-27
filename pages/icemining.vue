@@ -4,7 +4,7 @@
       <!-- <AdLargePlaceholder /> -->
       <v-spacer />
       <v-spacer />
-      <v-card min-width="400">
+      <v-card :width="$vuetify.breakpoint.xs ? 320 : 400">
         <v-card-text>
           <div class="px-4 headline text--primary">Icemining doesn't support us</div>
           <p>Sad 😢</p>

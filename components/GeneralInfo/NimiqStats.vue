@@ -25,7 +25,7 @@ export default {
       return [
         { name: 'Global Hashrate', value: this.$store.state.nimiq.hashrate },
         { name: 'Blockchain Height', value: this.$store.state.nimiq.height },
-        { name: 'NIM / kH / DAY', value: this.$store.state.nimiq.nim_day_kh },
+        { name: '1 kH/s', value: this.$store.state.nimiq.nim_day_kh },
         { name: '1 NIM', value: this.$store.state.nimiq.price }
       ]
     }

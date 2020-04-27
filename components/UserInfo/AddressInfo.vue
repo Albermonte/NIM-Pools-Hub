@@ -5,9 +5,10 @@
         min-height="138"
         color="green"
         icon="mdi-currency-usd"
+        :currencyBtn="true"
         title="Balance"
         :value="balance"
-        small-value="NIM"
+        :small-value="currency"
         :sub-text-right="'Confirmed: ' + confirmedBalance"
         :sub-text-left="'Unconfirmed: ' + unconfirmedBalance"
       />
@@ -52,7 +53,8 @@ export default {
   },
   data: () => ({
     interval: '10 minutes',
-    time: ['10 minutes', '30 minutes', '1 hour', '3 hours', '24 hours']
+    time: ['10 minutes', '30 minutes', '1 hour', '3 hours', '24 hours'],
+    currency: 'NIM'
   }),
   computed: {
     balance () {

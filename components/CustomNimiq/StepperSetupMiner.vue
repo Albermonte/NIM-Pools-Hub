@@ -120,7 +120,7 @@
                   v-if="isButtonActive"
                   rounded
                   color="primary"
-                  @click="buttonClick"
+                  @click="selectedGPU ? buttonClick() : error('Error. Choose a GPU type')"
                 >{{ buttonText }}</v-btn>
               </v-scroll-y-reverse-transition>
             </div>
@@ -225,7 +225,7 @@ export default {
     return {
       address: "",
       selectedPool: null,
-      selectedGPU: "",
+      selectedGPU: null,
       isActive: false,
       isButtonActive: false,
       validAddress: false,

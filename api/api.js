@@ -7,23 +7,23 @@ const app = express()
 
 app.get('/api/ip', function (req, res) {
   try {
-      const http = require('http');
-      var options = {
-          host: 'ipv4bot.whatismyipaddress.com',
-          port: 80,
-          path: '/'
-      };
-      http.get(options, function (resp) {
-          console.log("status: " + resp.statusCode);
-          resp.on("data", async function (chunk) {
-              console.log("BODY: " + chunk);
-              res.send((await axios.get(`https://ipapi.co/${chunk}/json/`)).data);
-          });
-      }).on('error', function (e) {
-          console.log("error: " + e.message);
+    const http = require('http');
+    var options = {
+      host: 'ipv4bot.whatismyipaddress.com',
+      port: 80,
+      path: '/'
+    };
+    http.get(options, function (resp) {
+      console.log("status: " + resp.statusCode);
+      resp.on("data", async function (chunk) {
+        console.log("BODY: " + chunk);
+        res.send((await axios.get(`https://ipapi.co/${chunk}/json/`)).data);
       });
+    }).on('error', function (e) {
+      console.log("error: " + e.message);
+    });
   } catch (e) {
-      res.send(e);
+    res.send(e);
   }
 })
 
@@ -106,7 +106,7 @@ const isSkypoolOnline = async retry => {
 
 const isBlankpoolOnline = async retry => {
   try {
-    const { clientCounts, averageHashrate} = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
+    const { clientCounts, averageHashrate } = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
     return clientCounts.total > 0 || averageHashrate > 0;
   } catch {
     if (retry) return isBlankpoolOnline(false);
@@ -116,10 +116,10 @@ const isBlankpoolOnline = async retry => {
 
 const isBalkanpoolOnline = async retry => {
   try {
-    const { clientCounts, averageHashrate} = (await axios.get('https://pool.balkanminingpool.com/api/pool/stats', { timeout: 5000 })).data
+    const { clientCounts, averageHashrate } = (await axios.get('https://pool.balkanminingpool.com/api/pool/stats', { timeout: 5000 })).data
     return clientCounts.total > 0 || averageHashrate > 0;
   } catch {
-    if (retry) return isBlankpoolOnline(false);
+    if (retry) return isBalkanpoolOnline(false);
     return false;
   }
 }
@@ -190,6 +190,36 @@ app.get('/api/stats/balkanpool', async function (req, res) {
   }
 })
 
+app.get('/api/stats/siriuspool', async function (req, res) {
+  try {
+    const stats = (await axios.get('https://siriuspool.net/stats_refr.php', { timeout: 3000 })).data
+    res.send({
+      hashrate: stats.pool_hashrate,
+      miners: stats.connected_users,
+      blocksMined: stats.pool_blocks_mined,
+      pool_fee: '1%'
+    })
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
+app.get('/api/stats/skypool', async function (req, res) {
+  try {
+    const stats = (await axios.get('https://api.nimiq.skypool.xyz/api/v1/pool/poolProfile', { timeout: 3000 })).data.data
+    res.send({
+      hashrate: stats.hashrate,
+      miners: stats.addressNumber,
+      blocksMined: stats.pool_blocks_mined,
+      pool_fee: '1%'
+    })
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
 // Address Stats
 app.get('/api/nimpool/:address', async function (req, res) {
   try {
@@ -218,7 +248,7 @@ app.get('/api/blankpool/:address', async function (req, res) {
     const info = (await axios.get(`https://mine.blank.drawpad.org/api/miner/${address}`, { timeout: 3000 })).data
     const deviceList = info.devices
     let address_hashrate = info.hashrate;
-    
+
     res.send({
       hashrate: address_hashrate,
       balance: info.balance.earned - info.balance.payedOut,
@@ -238,12 +268,35 @@ app.get('/api/balkanpool/:address', async function (req, res) {
     const info = (await axios.get(`https://pool.balkanminingpool.com/api/miner/${address}`, { timeout: 9000 })).data
     const deviceList = info.devices
     let address_hashrate = info.hashrate;
-    
+
     res.send({
       hashrate: address_hashrate,
       balance: info.balance.earned - info.balance.payedOut,
       confirmed_balance: info.balance.owed,
       unconfirmed_balance: info.balance.earned - info.balance.payedOut - info.balance.owed < 0 ? 0 : info.balance.earned - info.balance.payedOut - info.balance.owed,
+      deviceList
+    })
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
+app.get('/api/siriuspool/:address', async function (req, res) {
+  try {
+    const address = req.params.address
+    const { id } = (await axios.get(`https://siriuspool.net/api/user/get_id/${address}`, { timeout: 3000 })).data
+    const { ballance, confirmed } = (await axios.get(`https://siriuspool.net/api/user/get_ballance/${id}`, { timeout: 3000 })).data
+    const deviceList = (await axios.get(`https://siriuspool.net/api/devices/${id}`, { timeout: 3000 })).data.devices
+
+    let address_hashrate = 0;
+    deviceList.map(x => address_hashrate += x.hashes_per_second)
+
+    res.send({
+      hashrate: address_hashrate,
+      balance: ballance,
+      confirmed_balance: confirmed,
+      unconfirmed_balance: ballance - confirmed < 0 ? 0 : ballance - confirmed,
       deviceList
     })
   } catch (e) {

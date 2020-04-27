@@ -6,18 +6,49 @@
       min-width="300"
       v-on="$listeners"
     >
-      <v-card slot="offset" :class="`elevation-${elevation}`" :color="color" class="pa-4 d-flex justify-center align-center" dark width="75" height="75">
-        <v-icon size="40">
-          {{ icon }}
-        </v-icon>
+      <v-card
+        slot="offset"
+        :class="`elevation-${elevation}`"
+        :color="color"
+        class="pa-4 d-flex justify-center align-center"
+        dark
+        width="75"
+        height="75"
+      >
+        <v-icon size="40">{{ icon }}</v-icon>
       </v-card>
       <div>
-        <p
+        <div
           class="category grey--text font-weight-light text-right"
           :style="subTextLeft || subTextRight || checkbox || graph ? 'font-size: 18px !important;' : 'font-size: 24px !important;'"
-          v-text="title"
-        />
+        >
+          <div class="d-flex justify-end align-center">
+            <div class="mt-n1 pr-1">
+              <v-btn
+                v-if="typeof(currencyBtn) !== 'undefined'"
+                icon
+                x-small
+                @click="activateUSD = !activateUSD"
+              >
+                <v-icon v-if="activateUSD">mdi-currency-usd-circle</v-icon>
+                <v-icon v-else>mdi-currency-usd-circle-outline</v-icon>
+              </v-btn>
+            </div>
+            <span>{{ title }}</span>
+          </div>
+        </div>
         <h3
+          v-if="activateUSD"
+          class="title font-weight-light pb-1 text-right"
+          :style="subTextLeft || subTextRight || checkbox || graph ? 'font-size: 1.5625rem !important' : 'font-size: 2.25rem !important'"
+          style="line-height: 1.5em !important; letter-spacing: 0 !important; color: #272727"
+        >
+          {{ (value * usdPrice).toFixed(2) }}
+          <small>$</small>
+        </h3>
+
+        <h3
+          v-else
           class="title font-weight-light pb-1 text-right"
           :style="subTextLeft || subTextRight || checkbox || graph ? 'font-size: 1.5625rem !important' : 'font-size: 2.25rem !important'"
           style="line-height: 1.5em !important; letter-spacing: 0 !important; color: #272727"
@@ -37,9 +68,7 @@
           <materialCheckbox />
         </div>
         <v-row v-else class="pt-3 pb-1 pl-5">
-          <v-icon v-show="subIcon" :color="subIconColor" size="20" class="mr-2">
-            {{ subIcon }}
-          </v-icon>
+          <v-icon v-show="subIcon" :color="subIconColor" size="20" class="mr-2">{{ subIcon }}</v-icon>
           <span :class="subTextColor" class="caption font-weight-light" v-text="subTextLeft" />
           <span
             :class="[subTextColor, subTextAlingRight ? 'ml-auto pr-5' : 'pr-5']"
@@ -53,9 +82,9 @@
 </template>
 
 <script>
-import materialCard from '~/components/CustomVuetify/material/AppCard'
-import materialChart from '~/components/CustomVuetify/material/AppChart'
-import materialCheckbox from '~/components/CustomVuetify/material/AppAlertCheckbox'
+import materialCard from "~/components/CustomVuetify/material/AppCard";
+import materialChart from "~/components/CustomVuetify/material/AppChart";
+import materialCheckbox from "~/components/CustomVuetify/material/AppAlertCheckbox";
 
 export default {
   components: {
@@ -90,6 +119,10 @@ export default {
       type: String,
       default: undefined
     },
+    currencyBtn: {
+      type: Boolean,
+      default: undefined
+    },
     title: {
       type: String,
       default: undefined
@@ -111,24 +144,30 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
-      subTextAlingRight: true
+      subTextAlingRight: true,
+      activateUSD: false
+    };
+  },
+  computed: {
+    usdPrice() {
+      return Number(this.$store.state.nimiq.price.slice(0, -2));
     }
   },
-  mounted () {
+  mounted() {
     if (this.subTextRight && this.subTextLeft) {
       this.subTextAlingRight =
-        this.subTextLeft.length + this.subTextRight.length < 42
+        this.subTextLeft.length + this.subTextRight.length < 42;
     }
   },
-  updated () {
+  updated() {
     if (this.subTextRight && this.subTextLeft) {
       this.subTextAlingRight =
-        this.subTextLeft.length + this.subTextRight.length < 42
+        this.subTextLeft.length + this.subTextRight.length < 42;
     }
   }
-}
+};
 </script>
 
 <style lang="scss">

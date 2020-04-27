@@ -69,7 +69,7 @@ export default {
 }
 
 .no-ad {
-  //background: url("https://picsum.photos/728/100");
+  background: url("https://picsum.photos/728/100");
 }
 .no-ad-sm {
   background: url("https://picsum.photos/320/110/");

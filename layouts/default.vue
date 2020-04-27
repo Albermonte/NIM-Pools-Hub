@@ -67,15 +67,15 @@
     </v-btn>
 
     <v-app-bar clipped-left app color="blue darken-3" dark elevate-on-scroll style="z-index:15">
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+      <v-toolbar-title style="width: 300px" class="ml-0 pr-4">
         <nuxt-link to="/" class="white--text text-uppercase">
-          <v-tooltip bottom>
+          <v-tooltip bottom class="pl-0">
             <template v-slot:activator="{ on }">
-              <div v-on="on" class="d-flex align-center">
-                <v-avatar size="44">
+              <div v-on="on" class="d-flex align-center"> 
+                <v-avatar :size="$vuetify.breakpoint.xs ? 35 : 44">
                   <img src="/nimpoolshub.png" alt="Logo" />
                 </v-avatar>
-                <span class="pl-2">{{ pageName || heading }}</span>
+                <span class="pl-2" :class="$vuetify.breakpoint.xs ? 'body-2' : ''">{{ pageName || heading }}</span>
               </div>
             </template>
             <span
