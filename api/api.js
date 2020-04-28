@@ -208,11 +208,13 @@ app.get('/api/stats/siriuspool', async function (req, res) {
 app.get('/api/stats/skypool', async function (req, res) {
   try {
     const stats = (await axios.get('https://api.nimiq.skypool.xyz/api/v1/pool/poolProfile', { timeout: 3000 })).data.data
+    const { blocks } = (await axios.get(`https://api.nimiqx.com/account/NQ48 8CKH BA24 2VR3 N249 N8MN J5XX 74DB 5XJ8?api_key=${process.env.nimiqx_api}`, { timeout: 7000 })).data
     res.send({
-      hashrate: stats.hashrate,
+      hashrate: parseHashrate(stats.hashrate),
       miners: stats.addressNumber,
-      blocksMined: stats.pool_blocks_mined,
-      pool_fee: '1%'
+      workers: null,
+      blocksMined: blocks,
+      pool_fee: '~1%'
     })
   } catch (e) {
     console.log(e)
@@ -305,6 +307,41 @@ app.get('/api/siriuspool/:address', async function (req, res) {
   }
 })
 
+app.get('/api/skypool/:address', async function (req, res) {
+  try {
+    const address = req.params.address
+    const { data } = (await axios.get(`https://api.nimiq.skypool.xyz/api/v1/pool/profile?address=${address}`, { timeout: 6000 })).data
+
+    const address_hashrate_array = [];
+    data.hashAndTimestamp.map(x => {
+      address_hashrate_array.push(parseHashrate(parseFloat(((x.accepts + x.expired) / (20 * 60)))))
+    })
+
+    const deviceList = []
+    data.workers.map((x, index) => {
+      deviceList.push({
+        deviceName: x.name,
+        deviceId: index,
+        hashrate: parseHashrate(parseFloat((x.totalAccepts + x.totalExpired) / (24 * 60 * 60)).toFixed(2)),
+        total_shares: 'Unknown'
+      })
+    })
+
+    res.send({
+      address_hashrate: address_hashrate_array[address_hashrate_array.length - 1],
+      address_hashrate_array,
+      balance: Number((data.balance / 1e5).toFixed(1)),
+      confirmed_balance: 0,
+      unconfirmed_balance: 0,
+      deviceList
+    })
+
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
 // Check if IP resides in America
 app.get('/api/in_us', async function (req, res) {
   try {
@@ -314,6 +351,21 @@ app.get('/api/in_us', async function (req, res) {
     res.send(false)
   }
 })
+
+// Parse Hasrate
+
+const parseHashrate = (number) => {
+  number = Number(number)
+  const hs_length = number.toFixed(0).toString().length
+  let hashrate = 0
+  if (hs_length <= 6) hashrate = Number((number / 1e3).toFixed(2)) + ' kH/s'
+  else if (hs_length > 6 && hs_length <= 9) hashrate = Number((number / 1e6).toFixed(2)) + ' MH/s'
+  else if (hs_length > 9 && hs_length <= 12) hashrate = Number((number / 1e9).toFixed(2)) + ' GH/s'
+  else if (hs_length > 12 && hs_length <= 15) hashrate = Number((number / 1e12).toFixed(2)) + ' TH/s'
+  else hashrate = Number((number).toFixed(2)) + ' H/s'
+
+  return hashrate
+}
 
 
 process.on('unhandledRejection', error => consola.error(error))

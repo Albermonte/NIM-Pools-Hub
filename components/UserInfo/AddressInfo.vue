@@ -30,7 +30,7 @@
         icon="mdi-speedometer"
         title="Address Hashrate"
         :value="adressHashrate"
-        small-value="MH/s"
+        :small-value="adressHashrateSmallValue"
         :graph="[1,2]"
       />
     </v-col>
@@ -45,50 +45,61 @@
 </style>
 
 <script>
-import materialStatsCard from '~/components/CustomVuetify/material/AppStatsCard'
+import materialStatsCard from "~/components/CustomVuetify/material/AppStatsCard";
 
 export default {
   components: {
     materialStatsCard
   },
   data: () => ({
-    interval: '10 minutes',
-    time: ['10 minutes', '30 minutes', '1 hour', '3 hours', '24 hours'],
-    currency: 'NIM'
+    interval: "10 minutes",
+    time: ["10 minutes", "30 minutes", "1 hour", "3 hours", "24 hours"],
+    currency: "NIM"
   }),
   computed: {
-    balance () {
+    balance() {
       // eslint-disable-next-line
-      return eval('this.$store.state.' + this.$route.name + '.balance')
+      return eval("this.$store.state." + this.$route.name + ".balance");
     },
-    confirmedBalance () {
+    confirmedBalance() {
       // eslint-disable-next-line
       return eval(
-        'this.$store.state.' + this.$route.name + '.confirmed_balance'
-      )
+        "this.$store.state." + this.$route.name + ".confirmed_balance"
+      );
     },
-    unconfirmedBalance () {
+    unconfirmedBalance() {
       // eslint-disable-next-line
       return eval(
-        'this.$store.state.' + this.$route.name + '.unconfirmed_balance'
-      )
+        "this.$store.state." + this.$route.name + ".unconfirmed_balance"
+      );
     },
-    adressHashrate () {
+    adressHashrate() {
+      // eslint-disable-next-line
+      let adressHashrate = eval(
+        "this.$store.state." + this.$route.name + ".address_hashrate"
+      );
+      if (adressHashrate !== 0)
+        return Number(adressHashrate.substr(0, adressHashrate.indexOf(" ")));
+      else return 0;
+    },
+    adressHashrateSmallValue() {
+      let adressHashrate = eval(
+        "this.$store.state." + this.$route.name + ".address_hashrate"
+      );
+      if (adressHashrate !== 0)
+        return adressHashrate.substr(adressHashrate.indexOf(" ") + 1);
+      else return 'kH/s';
+    },
+    deviceCount() {
       // eslint-disable-next-line
       return eval(
-        'this.$store.state.' + this.$route.name + '.address_hashrate'
-      )
-    },
-    deviceCount () {
-      // eslint-disable-next-line
-      return eval(
-        'this.$store.state.' + this.$route.name + '.deviceList.length'
-      )
+        "this.$store.state." + this.$route.name + ".deviceList.length"
+      );
     }
   },
-  updated () {
+  updated() {
     // const temp = window.localStorage.updateInterval
-    window.localStorage.setItem('updateInterval', this.interval)
+    window.localStorage.setItem("updateInterval", this.interval);
     /* setTimeout(() => {
       if (temp != window.localStorage.updateInterval) {
         console.log(
@@ -98,8 +109,8 @@ export default {
       }
     }, 1000); */
   },
-  mounted () {
-    this.interval = window.localStorage.updateInterval
+  mounted() {
+    this.interval = window.localStorage.updateInterval;
   }
-}
+};
 </script>

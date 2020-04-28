@@ -26,8 +26,8 @@ export const mutations = {
     state.hashrate = value.hashrate
     state.miners = value.miners
     state.workers = value.workers
-    state.blocksMined = value.blocksMined,
-      state.pool_fee = value.pool_fee
+    state.blocksMined = value.blocksMined
+    state.pool_fee = value.pool_fee
   },
   clearUserInfo(state) {
     state.balance = 0
