@@ -56,33 +56,7 @@ export const actions = {
       commit('userInfoError', 'Pool\'s User Stats API not working, retying in 30 seconds')
       return 'offline'
     }
-
-    const address_hashrate_array = []
-
-    info.hashrate.map(x => {
-      if (x.avgHR) address_hashrate_array.push(x.avgHR)
-      else address_hashrate_array.push(0)
-    })
-
-    const deviceList = []
-    if (info.deviceList)
-      info.deviceList.map(x => {
-        deviceList.push({
-          deviceName: x.deviceID,
-          deviceId: x.deviceID,
-          hashrate: (x.stats1.hash / 1e3).toFixed(2) + ' kH/s',
-          total_shares: x.stats24.shares
-        })
-      })
-
-    commit('updateUserInfo', {
-      balance: Number((info.balance / 1e5).toFixed(1)),
-      confirmed_balance: Number((info.confirmed_balance / 1e5).toFixed(1)),
-      unconfirmed_balance: Number((info.unconfirmed_balance / 1e5).toFixed(1)),
-      deviceList,
-      address_hashrate: Number((info.hashrate[info.hashrate.length - 1].avgHR / 1e6).toFixed(2)),
-      address_hashrate_array
-    })
+    commit('updateUserInfo', info)
   },
   async UPDATE_POOL_INFO({ commit }) {
     const info = await this.$axios.$get(`${window.location.origin}/api/stats/blankpool`)
@@ -91,23 +65,7 @@ export const actions = {
       commit('poolInfoError', 'Pool\'s General Stats API not working, retying in 40 seconds')
       return 'offline'
     }
-
-    const hs_length = info.hashrate.toFixed(0).toString().length
-    let hashrate = 0
-    if (hs_length <= 6) hashrate = Number((info.hashrate / 1e3).toFixed(3)) + ' KH/s'
-    else if (hs_length > 6 && hs_length <= 9) hashrate = Number((info.hashrate / 1e6).toFixed(1)) + ' MH/s'
-    else if (hs_length > 9 && hs_length <= 12) hashrate = Number((info.hashrate / 1e9).toFixed(1)) + ' GH/s'
-    else if (hs_length > 12 && hs_length <= 15) hashrate = Number((info.hashrate / 1e12).toFixed(1)) + ' TH/s'
-    else hashrate = Number((info.hashrate).toFixed(1)) + ' H/s'
-
-
-    commit('updatePoolInfo', {
-      hashrate,
-      miners: info.miners,
-      workers: null,
-      blocksMined: info.blocksMined,
-      pool_fee: info.pool_fee
-    })
+    commit('updatePoolInfo', info)
   },
   CLEAR_USER_INFO({ commit }) {
     commit('clearUserInfo')

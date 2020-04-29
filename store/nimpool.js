@@ -22,12 +22,12 @@ export const mutations = {
     state.address_hashrate_array.push(value.address_hashrate)
   },
   updatePoolInfo(state, value) {
-    state.hashrate = value.hashrate + ' MH/s'
+    state.hashrate = value.hashrate
     state.miners = value.miners
     state.workers = value.workers
     state.pool_fee = value.pool_fee
   },
-  clearUserInfo(state){
+  clearUserInfo(state) {
     state.balance = 0
     state.confirmed_balance = 0
     state.unconfirmed_balance = 0
@@ -53,26 +53,11 @@ export const actions = {
       console.error('Nimpool USER INFO not responding ', (new Date).toUTCString())
       commit('userInfoError', 'Pool\'s User Stats API not working, retying in 30 seconds')
       return 'offline'
+    } else if (info === 'Not found') {
+      commit('userInfoError', 'User not found on this pool, try again later')
+      return
     }
-
-    const deviceList = []
-    if (info.deviceList)
-      info.deviceList.map(x => {
-        deviceList.push({
-          deviceName: x.device_id,
-          deviceId: x.device_id,
-          hashrate: (x.hashes_per_second / 1e3).toFixed(2) + ' kH/s',
-          total_shares: x.shares
-        })
-      })
-
-    commit('updateUserInfo', {
-      balance: Number((info.balance / 1e5).toFixed(1)),
-      confirmed_balance: Number((info.confirmed_balance / 1e5).toFixed(1)),
-      unconfirmed_balance: Number((info.unconfirmed_balance / 1e5).toFixed(1)),
-      deviceList,
-      address_hashrate: Number((info.hashrate / 1e6).toFixed(2)),
-    })
+    commit('updateUserInfo', info)
   },
   async UPDATE_POOL_INFO({ commit }) {
     const info = await this.$axios.$get(`${window.location.origin}/api/stats/nimpool`)
@@ -81,13 +66,7 @@ export const actions = {
       commit('poolInfoError', 'Pool\'s General Stats API not working, retying in 40 seconds')
       return 'offline'
     }
-
-    commit('updatePoolInfo', {
-      hashrate: Number((info.hashrate / 10e5).toFixed(1)),
-      miners: info.miners,
-      workers: info.workers,
-      pool_fee: info.pool_fee
-    })
+    commit('updatePoolInfo', info)
   },
   CLEAR_USER_INFO({ commit }) {
     commit('clearUserInfo')

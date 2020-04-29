@@ -71,11 +71,14 @@
         <nuxt-link to="/" class="white--text text-uppercase">
           <v-tooltip bottom class="pl-0">
             <template v-slot:activator="{ on }">
-              <div v-on="on" class="d-flex align-center"> 
+              <div v-on="on" class="d-flex align-center">
                 <v-avatar :size="$vuetify.breakpoint.xs ? 35 : 44">
                   <img src="/nimpoolshub.png" alt="Logo" />
                 </v-avatar>
-                <span class="pl-2" :class="$vuetify.breakpoint.xs ? 'body-2' : ''">{{ pageName || heading }}</span>
+                <span
+                  class="pl-2"
+                  :class="$vuetify.breakpoint.xs ? 'body-2' : ''"
+                >{{ pageName || heading }}</span>
               </div>
             </template>
             <span
@@ -113,12 +116,31 @@
       </v-container>
     </v-content>
     <v-layout row class="fab-container pb-4 pr-6" style="z-index: 25;">
-      <v-btn small fab href="https://discord.gg/4YHc7kd" class="my-auto mx-2">
-        <v-icon color="#7289da">mdi-discord</v-icon>
-      </v-btn>
-      <v-btn fab dark color="pink" nuxt href="/setupMiner" @click="testData" class="my-auto mx-1">
-        <v-icon>mdi-help</v-icon>
-      </v-btn>
+      <v-tooltip top class="white" color="blue-grey darken-3">
+        <template v-slot:activator="{ on }">
+          <v-btn small fab v-on="on" href="https://discord.gg/4YHc7kd" class="my-auto mx-2">
+            <v-icon color="#7289da">mdi-discord</v-icon>
+          </v-btn>
+        </template>
+        <span class="green--text text--accent-3 text-center">Support and report bugs</span>
+      </v-tooltip>
+      <v-tooltip top class="white" color="blue-grey darken-3">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            fab
+            dark
+            color="pink"
+            nuxt
+            v-on="on"
+            href="/setupMiner"
+            @click="testData"
+            class="my-auto mx-1"
+          >
+            <v-icon>mdi-help</v-icon>
+          </v-btn>
+        </template>
+        <span class="green--text text--accent-3 text-center">Help / Tutorial</span>
+      </v-tooltip>
     </v-layout>
     <v-snackbar v-model="snackbar" color="red darken-3" class="text-uppercase font-weight-medium">
       {{ snackbarText || 'Double check your address, it might be wrong' }}

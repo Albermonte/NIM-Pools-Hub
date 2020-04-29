@@ -22,12 +22,17 @@ export default {
       const address_hashrate_array_values = [];
 
       address_hashrate_array.map(x => {
-        if (x !== 0)
+        if (x !== 0) {
+          if (address_hashrate_array_values.length < 2) {
+            address_hashrate_array_values.push(
+              Number(x.substr(0, x.indexOf(" "))) - 0.1
+            );
+          }
           address_hashrate_array_values.push(
             Number(x.substr(0, x.indexOf(" ")))
           );
+        }
       });
-
       return address_hashrate_array_values;
     }
   }

@@ -55,8 +55,10 @@ export const actions = {
             console.error('Skypool USER_INFO not responding ', (new Date).toUTCString())
             commit('userInfoError', 'Pool\'s User Stats API not working, retying in 30 seconds')
             return 'offline'
+        } else if (info === 'Not found') {
+            commit('userInfoError', 'User not found on this pool, try again later')
+            return
         }
-
         commit('updateUserInfo', info)
     },
     async UPDATE_POOL_INFO({ commit }) {
@@ -66,7 +68,6 @@ export const actions = {
             commit('poolInfoError', 'Pool\'s General Stats API not working, retying in 40 seconds')
             return 'offline'
         }
-
         commit('updatePoolInfo', info)
     },
     CLEAR_USER_INFO({ commit }) {

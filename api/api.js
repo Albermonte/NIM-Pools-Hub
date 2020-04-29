@@ -149,7 +149,7 @@ app.get('/api/stats/nimpool', async function (req, res) {
   try {
     const { result } = (await axios.get('https://api.nimpool.io/pool', { timeout: 3000 })).data
     res.send({
-      hashrate: (result.work_per_second || 0) * Math.pow(2, 16),
+      hashrate: parseHashrate((result.work_per_second || 0) * Math.pow(2, 16)),
       miners: result.users_online,
       workers: result.devices_online,
       pool_fee: '1%'
@@ -164,8 +164,9 @@ app.get('/api/stats/blankpool', async function (req, res) {
     const stats = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
     const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 3000 })).data.fees
     res.send({
-      hashrate: stats.averageHashrate,
+      hashrate: parseHashrate(stats.averageHashrate),
       miners: stats.clientCounts.total,
+      workers: null,
       blocksMined: stats.blocksMined.total,
       pool_fee
     })
@@ -179,8 +180,9 @@ app.get('/api/stats/balkanpool', async function (req, res) {
     const stats = (await axios.get('https://pool.balkanminingpool.com/api/pool/stats', { timeout: 8000 })).data
     const pool_fee = (await axios.get('https://pool.balkanminingpool.com/api/pool/config', { timeout: 9000 })).data.fees
     res.send({
-      hashrate: stats.averageHashrate,
+      hashrate: parseHashrate(stats.averageHashrate),
       miners: stats.clientCounts.total,
+      workers: null,
       blocksMined: stats.blocksMined.total,
       pool_fee
     })
@@ -194,8 +196,9 @@ app.get('/api/stats/siriuspool', async function (req, res) {
   try {
     const stats = (await axios.get('https://siriuspool.net/stats_refr.php', { timeout: 3000 })).data
     res.send({
-      hashrate: stats.pool_hashrate,
+      hashrate: parseHashrate(stats.pool_hashrate),
       miners: stats.connected_users,
+      workers: null,
       blocksMined: stats.pool_blocks_mined,
       pool_fee: '1%'
     })
@@ -227,15 +230,26 @@ app.get('/api/nimpool/:address', async function (req, res) {
   try {
     const address = req.params.address
     const { result } = (await axios.get(`https://api.nimpool.io/user?address=${address}`, { timeout: 3000 })).data
-    const deviceList = result.devices_new
+
     let address_hashrate = 0;
-    deviceList.map(x => address_hashrate += x.hashes_per_second)
+
+    const deviceList = []
+    if (result.devices_new)
+      result.devices_new.map(x => {
+        address_hashrate += x.hashes_per_second
+        deviceList.push({
+          deviceName: x.device_id,
+          deviceId: x.device_id,
+          hashrate: parseHashrate(x.hashes_per_second),
+          total_shares: x.shares
+        })
+      })
 
     res.send({
-      hashrate: address_hashrate,
-      balance: result.balance,
-      confirmed_balance: result.balanceWithoutPending,
-      unconfirmed_balance: result.balance - result.balanceWithoutPending,
+      address_hashrate: parseHashrate(address_hashrate),
+      balance: parseBalance(result.balance),
+      confirmed_balance: parseBalance(result.balanceWithoutPending),
+      unconfirmed_balance: parseBalance(result.balance - result.balanceWithoutPending),
       deviceList
     })
   } catch (e) {
@@ -248,14 +262,35 @@ app.get('/api/blankpool/:address', async function (req, res) {
   try {
     const address = req.params.address
     const info = (await axios.get(`https://mine.blank.drawpad.org/api/miner/${address}`, { timeout: 3000 })).data
-    const deviceList = info.devices
-    let address_hashrate = info.hashrate;
+
+    if (info.general === null) {
+      res.send('Not found')
+      return
+    }
+
+    const address_hashrate_array = []
+    info.hashrate.map(x => {
+      if (x.avgHR) address_hashrate_array.push(parseHashrate(x.avgHR))
+      else address_hashrate_array.push(parseHashrate(0))
+    })
+
+    const deviceList = []
+    if (info.devices)
+      info.devices.map(x => {
+        deviceList.push({
+          deviceName: x.deviceID,
+          deviceId: x.deviceID,
+          hashrate: parseHashrate(x.stats1.hash),
+          total_shares: x.stats24.shares
+        })
+      })
 
     res.send({
-      hashrate: address_hashrate,
-      balance: info.balance.earned - info.balance.payedOut,
-      confirmed_balance: info.balance.owed,
-      unconfirmed_balance: info.balance.earned - info.balance.payedOut - info.balance.owed,
+      address_hashrate: parseHashrate(info.hashrate[info.hashrate.length - 1].avgHR || 0),
+      address_hashrate_array,
+      balance: parseBalance(info.balance.owed),
+      confirmed_balance: parseBalance(info.balance.earned - info.balance.payedOut),
+      unconfirmed_balance: parseBalance(info.balance.earned - info.balance.payedOut - info.balance.owed) < 0 ? 0 : parseBalance(info.balance.earned - info.balance.payedOut - info.balance.owed),
       deviceList
     })
   } catch (e) {
@@ -268,14 +303,35 @@ app.get('/api/balkanpool/:address', async function (req, res) {
   try {
     const address = req.params.address
     const info = (await axios.get(`https://pool.balkanminingpool.com/api/miner/${address}`, { timeout: 9000 })).data
-    const deviceList = info.devices
-    let address_hashrate = info.hashrate;
+
+    if (info.general === null) {
+      res.send('Not found')
+      return
+    }
+
+    const address_hashrate_array = []
+    info.hashrate.map(x => {
+      if (x.avgHR) address_hashrate_array.push(parseHashrate(x.avgHR))
+      else address_hashrate_array.push(parseHashrate(0))
+    })
+
+    const deviceList = []
+    if (info.devices)
+      info.devices.map(x => {
+        deviceList.push({
+          deviceName: x.deviceID,
+          deviceId: x.deviceID,
+          hashrate: parseHashrate(x.stats1.hash),
+          total_shares: x.stats24.shares
+        })
+      })
 
     res.send({
-      hashrate: address_hashrate,
-      balance: info.balance.earned - info.balance.payedOut,
-      confirmed_balance: info.balance.owed,
-      unconfirmed_balance: info.balance.earned - info.balance.payedOut - info.balance.owed < 0 ? 0 : info.balance.earned - info.balance.payedOut - info.balance.owed,
+      address_hashrate: parseHashrate(info.hashrate[info.hashrate.length - 1].avgHR || 0),
+      address_hashrate_array,
+      balance: parseBalance(info.balance.owed),
+      confirmed_balance: parseBalance(info.balance.earned - info.balance.payedOut),
+      unconfirmed_balance: parseBalance(info.balance.earned - info.balance.payedOut - info.balance.owed) < 0 ? 0 : parseBalance(info.balance.earned - info.balance.payedOut - info.balance.owed),
       deviceList
     })
   } catch (e) {
@@ -289,28 +345,47 @@ app.get('/api/siriuspool/:address', async function (req, res) {
     const address = req.params.address
     const { id } = (await axios.get(`https://siriuspool.net/api/user/get_id/${address}`, { timeout: 3000 })).data
     const { ballance, confirmed } = (await axios.get(`https://siriuspool.net/api/user/get_ballance/${id}`, { timeout: 3000 })).data
-    const deviceList = (await axios.get(`https://siriuspool.net/api/devices/${id}`, { timeout: 3000 })).data.devices
+    const deviceListArray = (await axios.get(`https://siriuspool.net/api/devices/${id}`, { timeout: 3000 })).data.devices
 
     let address_hashrate = 0;
-    deviceList.map(x => address_hashrate += x.hashes_per_second)
+    const deviceList = []
+    if (deviceListArray)
+      deviceListArray.map(x => {
+        address_hashrate += x.hashes_per_second
+        deviceList.push({
+          deviceName: x.dev_name,
+          deviceId: x.device_id,
+          hashrate: parseHashrate(x.hashes_per_second),
+          total_shares: x.shares
+        })
+      })
 
     res.send({
-      hashrate: address_hashrate,
-      balance: ballance,
-      confirmed_balance: confirmed,
-      unconfirmed_balance: ballance - confirmed < 0 ? 0 : ballance - confirmed,
+      hashrate: parseHashrate(address_hashrate),
+      address_hashrate: parseHashrate(address_hashrate),
+      balance: parseBalance(ballance * 1e5), //Needs to be * 1e5 because it's on NIM and not Luna like all the rest 
+      confirmed_balance: parseBalance(confirmed * 1e5),
+      unconfirmed_balance: parseBalance(ballance * 1e5 - confirmed * 1e5) < 0 ? 0 : parseBalance(ballance * 1e5 - confirmed * 1e5),
       deviceList
     })
   } catch (e) {
-    console.log(e)
-    res.send('offline')
+    if (e.response.status === 404) {
+      res.send('Not found')
+    } else {
+      console.log(e)
+      res.send('offline')
+    }
   }
 })
 
 app.get('/api/skypool/:address', async function (req, res) {
   try {
     const address = req.params.address
-    const { data } = (await axios.get(`https://api.nimiq.skypool.xyz/api/v1/pool/profile?address=${address}`, { timeout: 6000 })).data
+    const { data, code } = (await axios.get(`https://api.nimiq.skypool.xyz/api/v1/pool/profile?address=${address}`, { timeout: 8000 })).data
+    if (code === -1) {
+      res.send('Not found')
+      return
+    }
 
     const address_hashrate_array = [];
     data.hashAndTimestamp.map(x => {
@@ -328,9 +403,9 @@ app.get('/api/skypool/:address', async function (req, res) {
     })
 
     res.send({
-      address_hashrate: address_hashrate_array[address_hashrate_array.length - 1],
+      address_hashrate: address_hashrate_array[address_hashrate_array.length - 1] || 0,
       address_hashrate_array,
-      balance: Number((data.balance / 1e5).toFixed(1)),
+      balance: parseBalance(data.balance),
       confirmed_balance: 0,
       unconfirmed_balance: 0,
       deviceList
@@ -365,6 +440,10 @@ const parseHashrate = (number) => {
   else hashrate = Number((number).toFixed(2)) + ' H/s'
 
   return hashrate
+}
+
+const parseBalance = (number) => {
+  return Number((parseFloat(number) / 1e5).toFixed(1))
 }
 
 
