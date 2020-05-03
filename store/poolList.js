@@ -7,6 +7,7 @@ export const state = () => (
             message: "Recommended",
             status: "",
             extras: [" Pool fee: 1%", "Non-profit"],
+            slogan: "Nimiq Pool Mining Done Right. Secure. Distributed. Non-profit.",
             url: "eu.nimpool.io:8444"
         },
         {
@@ -15,7 +16,8 @@ export const state = () => (
             displayName: "BlankPool",
             message: "Adaptive fees",
             status: "",
-            extras: ["Fees varies depending on the pool hashrate"],
+            extras: ["Fees varies depending on pool H/s"],
+            slogan: "Pool ran by Chugwig that uses an adaptive pool fee.",
             url: "mine.blank.drawpad.org:8444"
         },
         {
@@ -25,6 +27,7 @@ export const state = () => (
             message: "YIIMP based",
             status: "",
             extras: ["Pool fee: 1.25%", "Greatest Support"],
+            slogan: "icemining.ca 🇨🇦 ❄️ the cool pool",
             url: "nimiq.icemining.ca:2053"
         },
         {
@@ -34,6 +37,7 @@ export const state = () => (
             message: "Low Hashrate",
             status: "",
             extras: ["Pool fee: 1%", "Greek Pool"],
+            slogan: "First Greek Pool for Nimiq!",
             url: "siriuspool.net:8443"
         },
         {
@@ -43,6 +47,7 @@ export const state = () => (
             message: "Balkans based",
             status: "",
             extras: ["Slow API"],
+            slogan: "Nimiq Pool hosted by Balkan users",
             url: "mine.blank.drawpad.org:8444"
         },
         {
@@ -52,6 +57,7 @@ export const state = () => (
             message: "China based",
             status: "",
             extras: ["Pool fee: ~1%", "Not using official protocol"],
+            slogan: "Connect to unlimited value networks",
             url: "hk1.nimiq.skypool.org:5000"
         },
         /* {

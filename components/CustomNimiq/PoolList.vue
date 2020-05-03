@@ -16,7 +16,7 @@
             <v-item>
               <template v-slot="{ active, toggle }">
                 <v-col class="text-center">
-                  <v-tooltip color="var(--nimiq-blue)" top>
+                  <v-tooltip :disabled="!showMessage" color="var(--nimiq-blue)" top>
                     <template v-slot:activator="{ on }">
                       <v-card
                         max-width="250"
@@ -41,10 +41,12 @@
                           />
                         </v-card-text>
                         <v-card-actions
-                          class="px-3 d-flex justify-space-between"
+                          class="px-3 d-flex"
+                          :class="showMessage ? 'justify-space-between' : 'justify-center'"
                           style="width: 100%"
                         >
                           <v-chip
+                            v-if="showMessage"
                             outlined
                             small
                             :color="pool.message ==='Recommended' ? 'purple accent-3' : ''"
@@ -95,6 +97,12 @@
 
 <script>
 export default {
+  props: {
+    showMessage: {
+      type: Boolean,
+      default: true
+    }
+  },
   data: () => ({
     selectPool: 0,
     selectedPool: null,

@@ -1,6 +1,7 @@
 <template>
   <v-app style="background-color: #fafafa">
     <div
+      v-if="$route.name !== 'index'"
       :class="[$vuetify.breakpoint.xs ? 'navbar-mobile' : 'navbar', show ? 'stay-on-top' : '']"
       :style="[$vuetify.breakpoint.xs && (show || sidebarOpen) ? 'width: 100%' : 'width: 0', sidebarOpen ? 'width: 100%' : 'width: 35px']"
     >
@@ -53,6 +54,7 @@
     </div>
 
     <v-btn
+      v-if="$route.name !== 'index'"
       class="hidden-sm-and-up"
       style="top: 50%; margin-left: -50px;"
       :style="show ? 'z-index: 1': 'z-index:10'"
@@ -106,11 +108,11 @@
     <v-content>
       <v-container
         class="fill-height pb-0 pr-0"
-        :class="[$vuetify.breakpoint.xs ? 'pl-3' : 'pl-11 ml-1', $vuetify.breakpoint.sm || $vuetify.breakpoint.md ? 'pl-12 ml-2' : null ]"
+        :class="[$vuetify.breakpoint.xs ? 'pl-3' : 'pl-11 ml-1', $vuetify.breakpoint.sm || $vuetify.breakpoint.md ? 'pl-12 ml-2' : null, $route.name === 'index' && !$vuetify.breakpoint.xs ? 'pr-12' : 'pl-6']"
         fluid
         style="background-color: #fafafa"
       >
-        <v-row align="center" justify="center" class="pb-0" style="height: 100%">
+        <v-row align="center" justify="center" class="pb-0" style="height: 100%;">
           <nuxt />
         </v-row>
       </v-container>
