@@ -6,7 +6,7 @@
     max-width="640"
     v-on="$listeners"
   >
-    <helper-offset v-if="hasOffset" :inline="inline" :full-width="fullWidth" :offset="offset" style="z-index: 1;">
+    <helper-offset v-if="hasOffset" :inline="inline" :full-width="fullWidth" :offset="offset">
       <v-card
         v-if="!$slots.offset"
         :color="color"
@@ -23,7 +23,7 @@
       <slot v-else name="offset" />
     </helper-offset>
 
-    <v-card-text class="d-flex flex-column justify-center" style="z-index: 1;" :style="$vuetify.breakpoint.xs ? 'max-height: 250px;' : 'max-height: 215px;'">
+    <v-card-text class="d-flex flex-column justify-center" :style="$vuetify.breakpoint.xs ? 'max-height: 250px;' : 'max-height: 215px;'">
       <slot />
     </v-card-text>
 
