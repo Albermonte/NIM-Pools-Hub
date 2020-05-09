@@ -12,7 +12,7 @@
           <div class="mx-auto">
             <v-chip
               v-if="pool.status === 'online'"
-              text-color="green accent-4"
+              text-color="green accent-5"
               color="green lighten-5"
               class="font-weight-light"
               x-small
@@ -36,17 +36,26 @@
       </v-list-item>
       <v-list-item>
         <v-list-item-content class="pt-1 pb-0">
-          <v-list-item-subtitle>{{ pool.slogan }}</v-list-item-subtitle>
-          <!-- <v-list-item-title>{{ pool.message + ' ' + pool.extras.join(' ') }}</v-list-item-title> -->
+          <v-list-item-subtitle class="text-center">{{ pool.slogan }}</v-list-item-subtitle>
           <v-list-item-title>
-            <v-row class="pb-0">
-              <v-col class="py-0 d-flex flex-column align-center" style="max-width: 125px;">
-                <div class="pt-1 headline">{{ poolFee }}</div>
-                <div class="pt-1">Pool fee</div>
+            <v-row class="pb-0" justify="center">
+              <v-col class="py-0 pb-1 d-flex flex-column align-center justify-center" style="max-width: 125px; min-width: 125px;">
+                <div class="headline d-flex">
+                  <span class="font-weight-medium" style="font-size: 32px; height: 100%;">{{ poolFee.whole }}</span>
+                  <span v-if="poolFee.decimal" class="title font-weight-regular mr-1 d-flex align-end" style="height: 100%; margin-left: -2px">.{{ poolFee.decimal }}</span>
+                  <span class="d-flex align-end" style="height: 100%;">%</span>
+                  <!--  -->
+                </div>
+                <div
+                  class="mt-n1 text-uppercase overline font-weight-bold grey--text text--darken-1"
+                >Pool fee</div>
               </v-col>
-              <v-col class="pa-0 pt-1 d-flex flex-column justify-space-around" style="height: 70px;">
-                <div >{{pool.extras[1]}}</div>
-                <div class="pb-2">{{pool.message}}</div>
+              <v-col
+                class="pa-0 d-flex flex-column justify-center align-center"
+                style="height: 70px; max-width: max-content; max-width: 125px; min-width: 125px;"
+              >
+                <div class="py-1 text-center" style="max-width: max-content;">{{pool.extras[1]}}</div>
+                <div class="pb-1 text-center" style="max-width: max-content;">{{pool.message}}</div>
               </v-col>
             </v-row>
           </v-list-item-title>
@@ -86,7 +95,12 @@ export default {
   computed: {
     poolFee() {
       const fee = this.pool.extras[0];
-      return fee.substr(fee.indexOf(": ") + 2);
+      const percentage = fee.substr(fee.indexOf(": ") + 2);
+      const num = percentage.substr(0, percentage.indexOf("%")).split(".");
+      return {
+        whole: num[0],
+        decimal: num[1]
+      };
     }
   }
 };
@@ -102,5 +116,8 @@ export default {
 .v-list-item__title,
 .v-list-item__subtitle {
   white-space: pre-line;
+}
+.v-application .overline {
+  letter-spacing: 0.03em !important;
 }
 </style>
