@@ -26,9 +26,9 @@
               <template v-for="pool in poolList">
                 <v-list-item
                   :key="pool.displayName"
-                  link
+                  nuxt
                   style="max-height: 60px; margin: 10px 15px 8px !important; width: 88%;"
-                  :href="`/${pool.name}`"
+                  :to="`${pool.name}`"
                   :disabled="!(pool.status === 'online')"
                 >
                   <v-list-item-action>
@@ -97,11 +97,11 @@
         flat
         dense
         solo-inverted
-        color="grey darken-4"
         background-color="blue accent-2"
         hide-details
         append-icon="mdi-magnify"
         label="Enter here your address"
+        class="label"
         @click:clear="clearAddress"
       />
     </v-app-bar>
@@ -113,7 +113,14 @@
         style="background-color: #fafafa"
       >
         <v-row align="center" justify="center" class="pb-0" style="height: 100%;">
-          <nuxt />
+          <div v-show="splashScreenEnabled" class="splashScreen">
+            <h1>
+              <Loading />
+              Loading data...
+            </h1>
+          </div>
+          <div v-show="pageTransitionEnabled" class="pageTransScreen"></div>
+          <Nuxt />
         </v-row>
       </v-container>
     </v-content>
@@ -152,9 +159,15 @@
 </template>
 
 <script>
+import Loading from "~/components/Loading/Loading"
+
 import config from "~/nuxt.config";
+import { store as transitionsStore } from "~/store/transitions.js";
 
 export default {
+  components: {
+    Loading
+  },
   data: () => ({
     address: "",
     pageName: "",
@@ -165,6 +178,12 @@ export default {
     snackbar: false
   }),
   computed: {
+    pageTransitionEnabled() {
+      return transitionsStore.pageTransitionEnabled;
+    },
+    splashScreenEnabled() {
+      return transitionsStore.splashScreenEnabled;
+    },
     poolList() {
       return this.$store.state.poolList;
     },
@@ -180,7 +199,7 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(() => {
+    /* this.$nextTick(() => {
       this.$nuxt.$loading.start();
       if (navigator.userAgent.indexOf("Firefox") !== -1)
         window.addEventListener("load", function() {
@@ -190,7 +209,7 @@ export default {
         setTimeout(() => {
           this.$nuxt.$loading.finish();
         }, 5000);
-    });
+    }); */
 
     this.address = this.$store.state.localStorage.address.replace(
       /(.{4})/g,
@@ -259,6 +278,10 @@ export default {
 </script>
 
 <style scoped>
+.label >>> .v-label {
+    color: #FAFAFA !important;
+}
+
 .navbar {
   height: calc(100vh - 64px);
   margin-top: 64px;
@@ -285,5 +308,36 @@ export default {
   position: fixed;
   bottom: 0;
   right: 0;
+}
+
+.splashScreen {
+  background-color: #222;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+.splashScreen h1 {
+  color: #fff;
+  display: block;
+  transform: translateY(-300px);
+  opacity: 0;
+}
+
+.pageTransScreen {
+  background-color: #2E495E;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 999;
 }
 </style>

@@ -29,7 +29,10 @@
 <script>
 import AdLargePlaceholder from "~/components/Ads/AdLargePlaceholder";
 
+import pageTransition from "~/mixins/page-transitions.js";
+
 export default {
+  mixins: [pageTransition()],
   components: {
     AdLargePlaceholder
   },

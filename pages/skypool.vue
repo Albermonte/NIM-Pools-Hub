@@ -9,7 +9,10 @@
 import UserInfo from "~/components/UserInfo";
 import GeneralInfo from "~/components/GeneralInfo";
 
+import pageTransition from "~/mixins/page-transitions.js";
+
 export default {
+  mixins: [pageTransition()],
   components: {
     UserInfo,
     GeneralInfo

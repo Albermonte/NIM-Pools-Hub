@@ -6,8 +6,8 @@ export const state = () => (
             displayName: "Nimpool",
             message: "Recommended",
             status: "",
-            extras: [" Pool fee: 1%", "Non-profit"],
-            slogan: "Nimiq Pool Mining Done Right. Secure. Distributed. Non-profit.",
+            extras: [" Pool fee: 1.0%", "Non-profit"],
+            slogan: "Nimiq Pool Mining Done Right. Secure. Distributed.",
             url: "eu.nimpool.io:8444"
         },
         {
@@ -16,7 +16,7 @@ export const state = () => (
             displayName: "BlankPool",
             message: "Adaptive fees",
             status: "",
-            extras: ["Fees varies depending on pool H/s"],
+            extras: ["Fees depends on pool H/s"],
             slogan: "Pool ran by Chugwig that uses an adaptive pool fee.",
             url: "mine.blank.drawpad.org:8444"
         },
@@ -36,7 +36,7 @@ export const state = () => (
             displayName: "Siriuspool",
             message: "Low Hashrate",
             status: "",
-            extras: ["Pool fee: 1%", "Greek Pool"],
+            extras: ["Pool fee: 1.0%", "Greek Pool"],
             slogan: "First Greek Pool for Nimiq!",
             url: "siriuspool.net:8443"
         },
