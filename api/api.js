@@ -129,9 +129,19 @@ const isBalkanpoolOnline = async retry => {
 app.get('/api/stats/nimiq', async function (req, res) {
   try {
     const stats = (await axios.get(`https://api.nimiqx.com/network-stats/?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
+    const hs_year = (await axios.get(`https://api.nimiqx.com/hashrate/year?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
     const { usd } = (await axios.get(`https://api.nimiqx.com/price/usd?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
+
+    let top_hashrate = 0
+    hs_year.forEach(x => {
+      if (x.hashrate > top_hashrate) top_hashrate = x.hashrate
+    })
+
     res.send({
-      hashrate: stats.hashrate,
+      hashrate: parseHashrate(stats.hashrate),
+      top_hashrate: parseHashrate(top_hashrate),
+      hashrateComplete: stats.hashrate,
+      top_hashrateComplete: top_hashrate,
       height: stats.height,
       nim_day_kh: stats.nim_day_kh,
       price: usd

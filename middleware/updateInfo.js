@@ -7,7 +7,7 @@ export default async function ({ store, $axios, route }) {
     } else {
         region = "eu";
     }
-    poolList.map(async (x, index) => {
+    poolList.forEach(async (x, index) => {
         if (x.name === "nimpool") {
             if (region === "us") store.dispatch("poolList/UPDATE_POOLURL", { index, url: "us.nimpool.io:8444" });
             const status = (await $axios.$get(

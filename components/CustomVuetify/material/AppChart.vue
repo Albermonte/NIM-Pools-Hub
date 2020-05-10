@@ -21,7 +21,7 @@ export default {
 
       const address_hashrate_array_values = [];
 
-      address_hashrate_array.map(x => {
+      address_hashrate_array.forEach(x => {
         if (x !== 0) {
           if (address_hashrate_array_values.length < 2) {
             address_hashrate_array_values.push(

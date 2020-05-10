@@ -34,14 +34,20 @@ export default {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [{
-    src: '~/plugins/carousel.js',
-    ssr: false,
-  },
-  {
-    src: "~/plugins/anime.js",
-    ssr: false
-  },],
+  plugins: [
+    {
+      src: '~/plugins/carousel.js',
+      ssr: false,
+    },
+    {
+      src: "~/plugins/anime.js",
+      ssr: false
+    },
+    {
+      src: '~/plugins/gauge.js',
+      ssr: false
+    }
+  ],
   /*
   ** Nuxt.js dev-modules
   */

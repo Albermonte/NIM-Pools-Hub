@@ -71,7 +71,7 @@
     <v-app-bar clipped-left app color="blue darken-3" dark elevate-on-scroll style="z-index:15">
       <v-toolbar-title style="width: 300px" class="ml-0 pr-4">
         <nuxt-link to="/" class="white--text text-uppercase">
-          <v-tooltip bottom class="pl-0 white" color="blue-grey darken-3">
+          <v-tooltip :disabled="$vuetify.breakpoint.xs" bottom class="pl-0 white" color="blue-grey darken-3">
             <template v-slot:activator="{ on }">
               <div v-on="on" class="d-flex align-center">
                 <v-avatar :size="$vuetify.breakpoint.xs ? 35 : 44">
@@ -125,7 +125,7 @@
       </v-container>
     </v-content>
     <v-layout row class="fab-container pb-4 pr-6" style="z-index: 25;">
-      <v-tooltip top class="white" color="blue-grey darken-3">
+      <v-tooltip :disabled="$vuetify.breakpoint.xs" top class="white" color="blue-grey darken-3">
         <template v-slot:activator="{ on }">
           <v-btn small fab v-on="on" href="https://discord.gg/4YHc7kd" class="my-auto mx-2">
             <v-icon color="#7289da">mdi-discord</v-icon>
@@ -133,7 +133,7 @@
         </template>
         <span class="green--text text--accent-3 text-center">Support and report bugs</span>
       </v-tooltip>
-      <v-tooltip top class="white" color="blue-grey darken-3">
+      <v-tooltip :disabled="$vuetify.breakpoint.xs" top class="white" color="blue-grey darken-3">
         <template v-slot:activator="{ on }">
           <v-btn
             fab
@@ -218,7 +218,7 @@ export default {
   },
   updated() {
     let poolList = [...this.$store.state.poolList];
-    poolList.map(x => {
+    poolList.forEach(x => {
       if (x.name === this.$route.name) {
         this.pageName = x.displayName;
       } else if (this.$route.name === "index") {

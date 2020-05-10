@@ -19,7 +19,7 @@ export default {
     } else {
       region = "eu";
     }
-    poolList.map(async (x, index) => {
+    poolList.forEach(async (x, index) => {
       if (x.name === "blankpool" || x.name === "balkanpool") {
         store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
       }

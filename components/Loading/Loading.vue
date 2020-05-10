@@ -21,7 +21,7 @@
       </svg>
     </div>
 
-    <v-tooltip left class="white" color="blue-grey darken-3">
+    <v-tooltip :disabled="$vuetify.breakpoint.xs" left class="white" color="blue-grey darken-3">
       <template v-slot:activator="{ on }">
         <v-slide-y-transition>
           <v-btn
