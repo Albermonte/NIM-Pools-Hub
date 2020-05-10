@@ -34,9 +34,9 @@
             :scale-interval="0.1"
             class="mb-n3"
           >
-            <span class="overline text-uppercase" style="position: absolute; bottom: -1px; right: 7px">Top</span>
-            <span class="body-2 font-weight-light text-uppercase" style="position: absolute; bottom: -1px; right: 33.8%">{{ parsedNetworkHS }}</span>
             <span class="overline text-uppercase white--text" style="position: absolute; bottom: -1px; left: 17px">0</span>
+            <span class="body-2 font-weight-light text-uppercase" style="position: absolute; bottom: -1px; right: 33.8%">{{ parsedNetworkHS }}</span>
+            <span class="overline text-uppercase" style="position: absolute; bottom: -1px; right: 7px">Max</span>
           </VueSvgGauge>
           <span class="title grey--text text--darken-4 text-uppercase mt-n4">Network Hashrate</span>
         </div>
