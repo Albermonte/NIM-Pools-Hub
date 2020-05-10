@@ -8,10 +8,10 @@
             :start-angle="-90"
             :end-angle="90"
             :value="poolsOnline"
-            :separator-step="0"
+            :separator-step="1"
             :min="0"
             :max="poolList.length"
-            :gauge-color="[{ offset: 0, color: '#0582CA'}, { offset: 100, color: '#21BCA5'}]"
+            :gauge-color="'#21BCA5'"
             :scale-interval="0.1"
             class="mb-n3"
           />
