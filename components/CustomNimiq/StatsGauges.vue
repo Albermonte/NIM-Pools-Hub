@@ -1,5 +1,5 @@
 <template>
-  <v-container style="height: 170px">
+  <v-container style="height: 160px">
     <v-row style="height: 150px" class="pb-5">
       <!-- Pools Online -->
       <v-col style="height: 150px">
@@ -11,8 +11,8 @@
             :separator-step="1"
             :min="0"
             :max="poolList.length"
-            :gauge-color="'#21BCA5'"
-            :scale-interval="0.1"
+            gauge-color="#21BCA5"
+            :scale-interval="0"
             class="mb-n3"
           />
           <span

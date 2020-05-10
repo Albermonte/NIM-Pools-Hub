@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-5 pb-7 d-flex align-center" style="min-height: 284;">
+  <div class="pt-3 pb-4 d-flex align-center" style="min-height: 284;">
     <v-card
       v-bind="$attrs"
       :width="$vuetify.breakpoint.smAndDown ? '320' : '728'"
@@ -59,7 +59,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-card--material {
   &__header {
     &.v-card {

@@ -31,7 +31,7 @@ export const actions = {
       console.error('NimiqX API not responding ', (new Date).toUTCString())
       return 'offline'
     }
-
+    console.log('Updating Nimiq Info')
     vuexContext.commit('updateInfo', info)
   }
 }

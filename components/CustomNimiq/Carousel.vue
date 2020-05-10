@@ -1,5 +1,5 @@
 <template>
-<!-- Height + 22px for the button -->
+  <!-- Height + 22px for the button -->
   <carousel-3d
     :perspective="20"
     :space="280"
