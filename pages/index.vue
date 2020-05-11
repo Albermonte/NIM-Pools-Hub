@@ -2,8 +2,8 @@
   <v-layout style="height: 100%;">
     <v-flex class="text-center d-flex flex-column justify-space-between align-center">
       <AdLargePlaceholder />
-      <StatsGauges />
-      <Carousel />
+      <StatsGauges :currentPool="currentPool" style="max-width: 1200px" />
+      <Carousel @currentPool="changedPool" />
       <AdLargePlaceholder />
     </v-flex>
   </v-layout>
@@ -50,15 +50,31 @@ export default {
     Carousel,
     StatsGauges
   },
+  data() {
+    return {
+      currentPool: 0
+    };
+  },
+  methods: {
+    changedPool(e) {
+      this.currentPool = e;
+    }
+  },
   async fetch({ store, params, $axios }) {
     let poolList = [...store.state.poolList];
     poolList.forEach(async (x, index) => {
       if (x.name === "blankpool" || x.name === "balkanpool") {
         store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
       }
+      store.dispatch(`${x.name}/UPDATE_POOL_INFO`);
+      setInterval(() => {
+        store.dispatch(`${x.name}/UPDATE_POOL_INFO`);
+      }, 15 * 60 * 1000);
     });
     store.dispatch("nimiq/UPDATE_NIMIQ_INFO");
-    setInterval(() => {store.dispatch("nimiq/UPDATE_NIMIQ_INFO")}, 5 * 60 * 1000);
+    setInterval(() => {
+      store.dispatch("nimiq/UPDATE_NIMIQ_INFO");
+    }, 5 * 60 * 1000);
   },
   fetchOnServer: false
 };

@@ -1,5 +1,6 @@
 export const state = () => ({
     hashrate: 0,
+    hashrateComplete: 0,
     miners: 0,
     workers: 0,
     blocksMined: 0,
@@ -24,7 +25,8 @@ export const mutations = {
     },
     updatePoolInfo(state, value) {
         state.hashrate = value.hashrate
-        state.miners = value.miners
+      state.hashrateComplete = value.hashrateComplete
+      state.miners = value.miners
         state.workers = value.workers
         state.blocksMined = value.blocksMined
         state.pool_fee = value.pool_fee

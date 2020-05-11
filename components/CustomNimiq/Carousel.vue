@@ -1,7 +1,7 @@
 <template>
   <!-- Height + 22px for the button -->
   <carousel-3d
-    @after-slide-change="log"
+    @after-slide-change="selectedCard"
     :perspective="20"
     :space="280"
     :height="height+22"
@@ -34,8 +34,8 @@ export default {
     };
   },
   methods: {
-    log(e){
-      console.log(e) //Dale chica a esto para poner el hashrate de esta pool en las gauges
+    selectedCard(e){
+      this.$emit('currentPool',e)
     }
   },
   computed: {

@@ -160,6 +160,7 @@ app.get('/api/stats/nimpool', async function (req, res) {
     const { result } = (await axios.get('https://api.nimpool.io/pool', { timeout: 3000 })).data
     res.send({
       hashrate: parseHashrate((result.work_per_second || 0) * Math.pow(2, 16)),
+      hashrateComplete: Number(((result.work_per_second || 0) * Math.pow(2, 16)).toFixed(0)),
       miners: result.users_online,
       workers: result.devices_online,
       pool_fee: '1%'
@@ -175,6 +176,7 @@ app.get('/api/stats/blankpool', async function (req, res) {
     const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 3000 })).data.fees
     res.send({
       hashrate: parseHashrate(stats.averageHashrate),
+      hashrateComplete: Number(stats.averageHashrate.toFixed(0)),
       miners: stats.clientCounts.total,
       workers: null,
       blocksMined: stats.blocksMined.total,
@@ -191,6 +193,7 @@ app.get('/api/stats/balkanpool', async function (req, res) {
     const pool_fee = (await axios.get('https://pool.balkanminingpool.com/api/pool/config', { timeout: 9000 })).data.fees
     res.send({
       hashrate: parseHashrate(stats.averageHashrate),
+      hashrateComplete: Number(stats.averageHashrate.toFixed(0)),
       miners: stats.clientCounts.total,
       workers: null,
       blocksMined: stats.blocksMined.total,
@@ -207,6 +210,7 @@ app.get('/api/stats/siriuspool', async function (req, res) {
     const stats = (await axios.get('https://siriuspool.net/stats_refr.php', { timeout: 3000 })).data
     res.send({
       hashrate: parseHashrate(stats.pool_hashrate),
+      hashrateComplete: Number(stats.pool_hashrate.toFixed(0)),
       miners: stats.connected_users,
       workers: null,
       blocksMined: stats.pool_blocks_mined,
@@ -224,10 +228,29 @@ app.get('/api/stats/skypool', async function (req, res) {
     const { blocks } = (await axios.get(`https://api.nimiqx.com/account/NQ48 8CKH BA24 2VR3 N249 N8MN J5XX 74DB 5XJ8?api_key=${process.env.nimiqx_api}`, { timeout: 7000 })).data
     res.send({
       hashrate: parseHashrate(stats.hashrate),
+      hashrateComplete: Number(stats.hashrate.toFixed(0)),
       miners: stats.addressNumber,
       workers: null,
       blocksMined: blocks,
       pool_fee: '~1%'
+    })
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
+app.get('/api/stats/icemining', async function (req, res) {
+  try {
+    const { NIM } = (await axios.get('https://icemining.ca/api/currencies', { timeout: 3000 })).data
+    const { blocks } = (await axios.get(`https://api.nimiqx.com/account/NQ04 XEHA A84N FXQ4 DPPE 82PG QS63 TH1X XCHQ?api_key=${process.env.nimiqx_api}`, { timeout: 7000 })).data
+    res.send({
+      hashrate: parseHashrate(NIM.hashrate),
+      hashrateComplete: Number(NIM.hashrate.toFixed(0)),
+      miners: NIM.workers,
+      workers: null,
+      blocksMined: blocks,
+      pool_fee: '1.25%'
     })
   } catch (e) {
     console.log(e)

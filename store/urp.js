@@ -1,6 +1,7 @@
 export const state = () => ({
   luck: [],
-  hashrate: '',
+  hashrate: 0,
+  hashrateComplete: 0,
   miners: '',
   workers: '',
   pool_fee: '',
@@ -13,7 +14,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  updateInfo (state, value) {
+  updateInfo(state, value) {
     state.luck = []
     for (let i = 0; i < value.luck.hours.length; i++) {
       state.luck.push({ time: value.luck.hours[i], luck: (100 - value.luck.luck[i]).toFixed(0), blocks: value.luck.count[i] })
@@ -23,12 +24,12 @@ export const mutations = {
     state.workers = value.workerCount
     state.pool_fee = '0.5%'
   },
-  updateAddressStatisticsBalance (state, value) {
+  updateAddressStatisticsBalance(state, value) {
     state.confirmed_balance = (value.confirmed / 1e5).toFixed(1)
     state.unconfirmed_balance = ((value.unconfirmed - value.confirmed) / 1e5).toFixed(1)
     state.balance = (value.unconfirmed / 1e5).toFixed(1)
   },
-  updateAddressDevices (state, value) {
+  updateAddressDevices(state, value) {
     state.deviceList = []
     let hashrate = 0
 
