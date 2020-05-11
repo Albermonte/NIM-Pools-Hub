@@ -1,10 +1,12 @@
 <template>
   <v-sparkline
+    auto-draw
+    auto-line-width
     fill
     :value="value"
     :gradient="['#21bca5','#41a38e']"
     line-width="2"
-    height="1480"
+    height="1300"
     width="10000"
     smooth="300"
   />
