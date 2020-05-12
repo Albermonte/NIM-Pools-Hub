@@ -26,7 +26,7 @@
           <VueSvgGauge
             :start-angle="-90"
             :end-angle="90"
-            :value="currentPoolHS / 1e9"
+            :value="logCurrentPoolHS / 1e9"
             :separator-step="0"
             :min="0"
             :max="currentNetworkHS / 1e9"
@@ -49,7 +49,11 @@
                   style="position: absolute;"
                 >Warning! Hashrate too high Choose another pool</v-card>
               </v-scale-transition>
-              <span class="body-2 font-weight-light text-uppercase">{{ parsedCurrentPoolHS }}</span>
+              <span class="body-2 font-weight-light text-uppercase pb-1">{{ parsedCurrentPoolHS }}</span>
+              <span
+                class="text-uppercase"
+                style="position: absolute;bottom: -3px;font-size: 7.5px;"
+              >(Log Scale)</span>
             </div>
             <span
               class="overline text-uppercase"
@@ -124,6 +128,28 @@ export default {
             ".hashrateComplete"
         )
       );
+    },
+    logCurrentPoolHS() {
+      // Using logarithmic scale to represent better small hashrates
+      const vm = this;
+      let smallestHS = this.currentNetworkHS;
+      this.poolList.forEach(x => {
+        const hashrateComplete = eval(
+          "vm.$store.state." + x.name + ".hashrateComplete"
+        );
+        if (hashrateComplete <= 0) return;
+        if (hashrateComplete < smallestHS) smallestHS = hashrateComplete;
+      });
+      smallestHS = smallestHS - smallestHS / 2; // To prevent the smallestHS being 0 on the log scale
+
+      const higherHS = this.currentNetworkHS;
+
+      const m = this.currentNetworkHS;
+      const k = m / (Math.log10(higherHS) - Math.log10(smallestHS));
+
+      const value =
+        k * (Math.log10(this.currentPoolHS) - Math.log10(smallestHS));
+      return value;
     },
     parsedCurrentPoolHS() {
       return eval(
