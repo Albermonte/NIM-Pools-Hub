@@ -49,7 +49,22 @@
                   style="position: absolute;"
                 >Warning! Hashrate too high Choose another pool</v-card>
               </v-scale-transition>
-              <span class="body-2 font-weight-light text-uppercase pb-1">{{ parsedCurrentPoolHS }}</span>
+              <v-scroll-y-transition>
+                <!-- if condition just to toggle -->
+                <span
+                  v-if="currentPool % 2"
+                  class="body-2 font-weight-light text-uppercase pb-1"
+                  style="position:absolute"
+                >{{ parsedCurrentPoolHS }}</span>
+              </v-scroll-y-transition>
+              <v-scroll-y-transition>
+                <!-- if condition just to toggle -->
+                <span
+                  v-if="!(currentPool % 2)"
+                  class="body-2 font-weight-light text-uppercase pb-1"
+                  style="position:absolute"
+                >{{ parsedCurrentPoolHS }}</span>
+              </v-scroll-y-transition>
               <span
                 class="text-uppercase"
                 style="position: absolute;bottom: -3px;font-size: 7.5px;"
