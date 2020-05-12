@@ -49,7 +49,7 @@
                   style="position: absolute;"
                 >Warning! Hashrate too high Choose another pool</v-card>
               </v-scale-transition>
-              <v-scroll-y-transition>
+              <v-scroll-y-transition v-if="!$vuetify.breakpoint.xs">
                 <!-- if condition just to toggle -->
                 <span
                   v-if="currentPool % 2"
@@ -57,7 +57,7 @@
                   style="position:absolute"
                 >{{ parsedCurrentPoolHS }}</span>
               </v-scroll-y-transition>
-              <v-scroll-y-transition>
+              <v-scroll-y-transition v-if="!$vuetify.breakpoint.xs">
                 <!-- if condition just to toggle -->
                 <span
                   v-if="!(currentPool % 2)"
@@ -65,6 +65,10 @@
                   style="position:absolute"
                 >{{ parsedCurrentPoolHS }}</span>
               </v-scroll-y-transition>
+              <span
+                v-if="$vuetify.breakpoint.xs"
+                class="body-2 font-weight-light text-uppercase pb-1"
+              >{{ parsedCurrentPoolHS }}</span>
               <span
                 class="text-uppercase"
                 style="position: absolute;bottom: -3px;font-size: 7.5px;"
