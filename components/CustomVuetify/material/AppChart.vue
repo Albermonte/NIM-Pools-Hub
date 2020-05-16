@@ -21,10 +21,12 @@ export default {
         "this.$store.state." + this.$route.name + ".address_hashrate_array"
       );
 
+      if(typeof(address_hashrate_array) === "undefined") return [0]
+
       const address_hashrate_array_values = [];
 
       address_hashrate_array.forEach(x => {
-        if (x !== 0) {
+        if (x !== 0 && typeof(x) !== 'undefined') {
           if (address_hashrate_array_values.length < 2) {
             address_hashrate_array_values.push(
               Number(x.substr(0, x.indexOf(" "))) - 0.1
@@ -33,7 +35,7 @@ export default {
           address_hashrate_array_values.push(
             Number(x.substr(0, x.indexOf(" ")))
           );
-        }
+        } else return [0]
       });
       return address_hashrate_array_values;
     }

@@ -78,7 +78,7 @@ export default {
       let adressHashrate = eval(
         "this.$store.state." + this.$route.name + ".address_hashrate"
       );
-      if (adressHashrate !== 0)
+      if (adressHashrate !== 0 && typeof(adressHashrate) !== "undefined")
         return Number(adressHashrate.substr(0, adressHashrate.indexOf(" ")));
       else return 0;
     },
@@ -86,15 +86,19 @@ export default {
       let adressHashrate = eval(
         "this.$store.state." + this.$route.name + ".address_hashrate"
       );
-      if (adressHashrate !== 0)
+      if (adressHashrate !== 0 && typeof(adressHashrate) !== "undefined")
         return adressHashrate.substr(adressHashrate.indexOf(" ") + 1);
-      else return 'kH/s';
+      else return "kH/s";
     },
     deviceCount() {
       // eslint-disable-next-line
-      return eval(
-        "this.$store.state." + this.$route.name + ".deviceList.length"
-      );
+      try {
+        return eval(
+          "this.$store.state." + this.$route.name + ".deviceList.length"
+        );
+      }catch{
+        return 0
+      }
     }
   },
   updated() {

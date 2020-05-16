@@ -68,42 +68,76 @@
       <v-icon class="ml-7">mdi-chevron-right</v-icon>
     </v-btn>
 
-    <v-app-bar clipped-left app color="blue darken-3" dark elevate-on-scroll style="z-index:15">
-      <v-toolbar-title style="width: 300px" class="ml-0 pr-4">
-        <nuxt-link to="/" class="white--text text-uppercase">
-          <v-tooltip :disabled="$vuetify.breakpoint.xs" bottom class="pl-0 white" color="blue-grey darken-3">
-            <template v-slot:activator="{ on }">
-              <div v-on="on" class="d-flex align-center">
-                <v-avatar :size="$vuetify.breakpoint.xs ? 35 : 44">
-                  <img src="/nimpoolshub.png" alt="Logo" />
-                </v-avatar>
-                <span
-                  class="pl-2"
-                  :class="$vuetify.breakpoint.xs ? 'body-2' : ''"
-                >{{ pageName || heading }}</span>
-              </div>
-            </template>
+    <v-app-bar clipped-left app color="grey lighten-5" dark elevate-on-scroll style="z-index:15">
+      <v-toolbar-title style="width: 100%">
+        <div v-if="$route.name === 'index'" class="d-flex align-center" style="width: max-content;">
+          <v-avatar :size="$vuetify.breakpoint.xs ? 35 : 44">
+            <img src="/nimpoolshub.png" alt="Logo" />
+          </v-avatar>
+          <span
+            class="pl-2 black--text font-weight-medium text-uppercase"
+            :class="[$vuetify.breakpoint.xs ? 'body-2' : '',]"
+          >{{ pageName || heading }}</span>
+        </div>
+        <div v-else class="d-flex align-center">
+          <v-btn
+            text
+            color="grey darken-4"
+            absolute
+            class="ml-n3"
+            style="min-width: 50px;"
+            nuxt
+            href="/"
+          >
+            <v-icon>mdi-home</v-icon>
+          </v-btn>
+          <div class="d-flex justify-center ml-12 pl-8" style="width: 100%">
             <span
-              class="white--text text-center"
-            >{{ $route.name === 'index' ? 'You are already on the HOME page ;D' : 'Go to the HOME page' }}</span>
-          </v-tooltip>
-        </nuxt-link>
+              class="mx-auto black--text font-weight-medium text-uppercase"
+              :style="$vuetify.breakpoint.xs ? 'font-size: 18px;' : 'font-size: 20px;'"
+            >{{ pageName || heading }}</span>
+          </div>
+          <v-btn
+            v-if="!stateInputAddress"
+            text
+            color="grey darken-4"
+            absolute
+            right
+            class="mr-n4"
+            style="min-width: 50px;"
+            @click="showInputAddress(true)"
+            @mouseover="showInputAddress(true)"
+          >
+            <v-icon>mdi-wallet</v-icon>
+          </v-btn>
+        </div>
       </v-toolbar-title>
-      <v-spacer />
-      <v-text-field
-        v-model="address"
-        clearable
-        clear-icon="mdi-close"
-        flat
-        dense
-        solo-inverted
-        background-color="blue accent-2"
-        hide-details
-        append-icon="mdi-magnify"
-        label="Enter here your address"
-        class="label"
-        @click:clear="clearAddress"
-      />
+      <v-slide-x-reverse-transition>
+        <div
+          v-if="stateInputAddress"
+          @mouseleave="showInputAddress(false)"
+          style="position: absolute; right: 8px; top: 10px;"
+        >
+          <v-text-field
+            v-model="address"
+            clearable
+            clear-icon="mdi-close"
+            flat
+            dense
+            solo-inverted
+            background-color="grey lighten-2"
+            color="#0071C3"
+            hide-details
+            append-icon="mdi-wallet"
+            label="Enter here your address"
+            class="label input"
+            @click:clear="clearAddress"
+            :style="$vuetify.breakpoint.xs ? '' : 'width: 500px;'"
+            @focus="preventInputAddressClose = true"
+            @blur="preventInputAddressClose = false; showInputAddress(false)"
+          />
+        </div>
+      </v-slide-x-reverse-transition>
     </v-app-bar>
     <v-content>
       <v-container
@@ -114,8 +148,7 @@
       >
         <v-row align="center" justify="center" class="pb-0" style="height: 100%;">
           <div v-show="splashScreenEnabled" class="splashScreen">
-            <h1>
-              <Loading />
+            <h1 class="text-uppercase">
               Loading data...
             </h1>
           </div>
@@ -159,7 +192,7 @@
 </template>
 
 <script>
-import Loading from "~/components/Loading/Loading"
+import Loading from "~/components/Loading/Loading";
 
 import config from "~/nuxt.config";
 import { store as transitionsStore } from "~/store/transitions.js";
@@ -175,7 +208,9 @@ export default {
     show: null,
     sidebarOpen: false,
     heading: config.head.title,
-    snackbar: false
+    snackbar: false,
+    stateInputAddress: false,
+    preventInputAddressClose: false
   }),
   computed: {
     pageTransitionEnabled() {
@@ -199,22 +234,13 @@ export default {
     }
   },
   mounted() {
-    /* this.$nextTick(() => {
-      this.$nuxt.$loading.start();
-      if (navigator.userAgent.indexOf("Firefox") !== -1)
-        window.addEventListener("load", function() {
-          this.$nuxt.$loading.finish();
-        });
-      else
-        setTimeout(() => {
-          this.$nuxt.$loading.finish();
-        }, 5000);
-    }); */
-
     this.address = this.$store.state.localStorage.address.replace(
       /(.{4})/g,
       "$1 "
     );
+    this.$root.$on("updateFromAddressInput", e => {
+      this.address = e;
+    });
   },
   updated() {
     let poolList = [...this.$store.state.poolList];
@@ -271,15 +297,24 @@ export default {
     },
     mouseleave() {
       this.sidebarOpen = false;
+    },
+    showInputAddress(value) {
+      if (this.preventInputAddressClose) return;
+      this.stateInputAddress = value;
     }
   },
   middleware: "updateInfo"
 };
 </script>
 
-<style scoped>
-.label >>> .v-label {
-    color: #FAFAFA !important;
+<style>
+.v-text-field__slot .v-label {
+  color: var(--nimiq-blue-darkened) !important;
+}
+
+.theme--dark.v-input input,
+.theme--dark.v-input textarea {
+  color: var(--nimiq-blue-darkened);
 }
 
 .navbar {
@@ -317,7 +352,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 11;
+  z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -332,7 +367,7 @@ export default {
 }
 
 .pageTransScreen {
-  background-color: #2E495E;
+  background-color: #2e495e;
   position: fixed;
   height: 100%;
   width: 100%;

@@ -15,8 +15,16 @@ const enterSplashScreenTransition = [
   {
     targets: ".splashScreen h1",
     translateY: "0",
+    opacity: 0,
+    duration: 100,
+    delay: 1000,
+    easing: "easeOutExpo"
+  },
+  {
+    targets: ".splashScreen h1",
+    translateY: "0",
     opacity: 1,
-    duration: 1200,
+    duration: 1500,
     easing: "easeInExpo",
     direction: "alternate"
   },
@@ -24,8 +32,8 @@ const enterSplashScreenTransition = [
     targets: ".splashScreen h1",
     translateY: "0",
     opacity: 0,
-    duration: 800,
-    delay: 1000,
+    duration: 1000,
+    delay: 1500,
     easing: "easeOutExpo"
   },
   {

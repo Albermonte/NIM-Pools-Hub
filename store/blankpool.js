@@ -57,6 +57,9 @@ export const actions = {
       console.error('BlankPool USER_INFO not responding ', (new Date).toUTCString())
       commit('userInfoError', 'Pool\'s User Stats API not working, retying in 30 seconds')
       return 'offline'
+    } else if (info === 'Not found') {
+      commit('userInfoError', 'User not found on this pool, try again later')
+      return
     }
     commit('updateUserInfo', info)
   },

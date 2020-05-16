@@ -1,5 +1,5 @@
 export const state = () => ({
-  address: '',
+  address: undefined,
   showDevices: false
 })
 

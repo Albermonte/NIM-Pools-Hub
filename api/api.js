@@ -40,7 +40,7 @@ app.get('/api/isOnline/:pool', async function (req, res) {
 
 const isIceminingOnline = async retry => {
   try {
-    return (await axios.get('https://icemining.ca/api/currencies', { timeout: 3000 })).data.NIM.hashrate > 0;
+    return (await axios.get('https://icemining.ca/api/currencies', { timeout: 5000 })).data.NIM.hashrate > 0;
   } catch{
     if (retry) return isIceminingOnline(false);
     return false;
@@ -49,7 +49,7 @@ const isIceminingOnline = async retry => {
 
 const isUrpOnline = async retry => {
   try {
-    return (await axios.get('https://urp.best:2053/', { timeout: 3000 })).data.hashrate > 0;
+    return (await axios.get('https://urp.best:2053/', { timeout: 5000 })).data.hashrate > 0;
   } catch{
     if (retry) return isUrpOnline(false);
     return false;
@@ -58,7 +58,7 @@ const isUrpOnline = async retry => {
 
 const isNimpooleuOnline = async retry => {
   try {
-    const res = (await axios.get('https://api.nimpool.io/status', { timeout: 3000 })).data.result
+    const res = (await axios.get('https://api.nimpool.io/status', { timeout: 5000 })).data.result
     return res.eu.core;
   } catch {
     if (retry) return isNimpooleuOnline(false);
@@ -68,7 +68,7 @@ const isNimpooleuOnline = async retry => {
 
 const isNimpoolusOnline = async retry => {
   try {
-    const res = (await axios.get('https://api.nimpool.io/status', { timeout: 3000 })).data.result
+    const res = (await axios.get('https://api.nimpool.io/status', { timeout: 5000 })).data.result
     return res.us.core;
   } catch {
     if (retry) return isNimpoolusOnline(false);
@@ -78,7 +78,7 @@ const isNimpoolusOnline = async retry => {
 
 const isNimpoolapOnline = async retry => {
   try {
-    const res = (await axios.get('https://api.nimpool.io/status', { timeout: 3000 })).data.result
+    const res = (await axios.get('https://api.nimpool.io/status', { timeout: 5000 })).data.result
     return res.ap.core;
   } catch {
     if (retry) return isNimpoolapOnline(false);
@@ -88,7 +88,7 @@ const isNimpoolapOnline = async retry => {
 
 const isSiriuspoolOnline = async retry => {
   try {
-    return (await axios.get('https://siriuspool.net/stats_refr.php', { timeout: 3000 })).data.pool_hashrate > 0
+    return (await axios.get('https://siriuspool.net/stats_refr.php', { timeout: 5000 })).data.pool_hashrate > 0
   } catch {
     if (retry) return isSiriuspoolOnline(false);
     return false;
@@ -97,7 +97,7 @@ const isSiriuspoolOnline = async retry => {
 
 const isSkypoolOnline = async retry => {
   try {
-    return (await axios.get('https://api.nimiq.skypool.xyz/api/v1/pool/poolProfile', { timeout: 3000 })).data.data.hashrate > 0
+    return (await axios.get('https://api.nimiq.skypool.xyz/api/v1/pool/poolProfile', { timeout: 5000 })).data.data.hashrate > 0
   } catch {
     if (retry) return isSkypoolOnline(false);
     return false;
@@ -106,7 +106,7 @@ const isSkypoolOnline = async retry => {
 
 const isBlankpoolOnline = async retry => {
   try {
-    const { clientCounts, averageHashrate } = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
+    const { clientCounts, averageHashrate } = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 5000 })).data
     return clientCounts.total > 0 || averageHashrate > 0;
   } catch {
     if (retry) return isBlankpoolOnline(false);
@@ -157,7 +157,7 @@ app.get('/api/stats/nimiq', async function (req, res) {
 
 app.get('/api/stats/nimpool', async function (req, res) {
   try {
-    const { result } = (await axios.get('https://api.nimpool.io/pool', { timeout: 3000 })).data
+    const { result } = (await axios.get('https://api.nimpool.io/pool', { timeout: 5000 })).data
     res.send({
       hashrate: parseHashrate((result.work_per_second || 0) * Math.pow(2, 16)),
       hashrateComplete: Number(((result.work_per_second || 0) * Math.pow(2, 16)).toFixed(0)),
@@ -172,8 +172,8 @@ app.get('/api/stats/nimpool', async function (req, res) {
 
 app.get('/api/stats/blankpool', async function (req, res) {
   try {
-    const stats = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 3000 })).data
-    const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 3000 })).data.fees
+    const stats = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 5000 })).data
+    const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 5000 })).data.fees
     res.send({
       hashrate: parseHashrate(stats.averageHashrate),
       hashrateComplete: Number(stats.averageHashrate.toFixed(0)),
@@ -207,7 +207,7 @@ app.get('/api/stats/balkanpool', async function (req, res) {
 
 app.get('/api/stats/siriuspool', async function (req, res) {
   try {
-    const stats = (await axios.get('https://siriuspool.net/stats_refr.php', { timeout: 3000 })).data
+    const stats = (await axios.get('https://siriuspool.net/stats_refr.php', { timeout: 5000 })).data
     res.send({
       hashrate: parseHashrate(stats.pool_hashrate),
       hashrateComplete: Number(stats.pool_hashrate.toFixed(0)),
@@ -224,7 +224,7 @@ app.get('/api/stats/siriuspool', async function (req, res) {
 
 app.get('/api/stats/skypool', async function (req, res) {
   try {
-    const stats = (await axios.get('https://api.nimiq.skypool.xyz/api/v1/pool/poolProfile', { timeout: 3000 })).data.data
+    const stats = (await axios.get('https://api.nimiq.skypool.xyz/api/v1/pool/poolProfile', { timeout: 5000 })).data.data
     const { blocks } = (await axios.get(`https://api.nimiqx.com/account/NQ48 8CKH BA24 2VR3 N249 N8MN J5XX 74DB 5XJ8?api_key=${process.env.nimiqx_api}`, { timeout: 7000 })).data
     res.send({
       hashrate: parseHashrate(stats.hashrate),
@@ -242,7 +242,7 @@ app.get('/api/stats/skypool', async function (req, res) {
 
 app.get('/api/stats/icemining', async function (req, res) {
   try {
-    const { NIM } = (await axios.get('https://icemining.ca/api/currencies', { timeout: 3000 })).data
+    const { NIM } = (await axios.get('https://icemining.ca/api/currencies', { timeout: 5000 })).data
     const { blocks } = (await axios.get(`https://api.nimiqx.com/account/NQ04 XEHA A84N FXQ4 DPPE 82PG QS63 TH1X XCHQ?api_key=${process.env.nimiqx_api}`, { timeout: 7000 })).data
     res.send({
       hashrate: parseHashrate(NIM.hashrate),
@@ -262,7 +262,7 @@ app.get('/api/stats/icemining', async function (req, res) {
 app.get('/api/nimpool/:address', async function (req, res) {
   try {
     const address = req.params.address
-    const { result } = (await axios.get(`https://api.nimpool.io/user?address=${address}`, { timeout: 3000 })).data
+    const { result } = (await axios.get(`https://api.nimpool.io/user?address=${address}`, { timeout: 5000 })).data
 
     let address_hashrate = 0;
 
@@ -294,7 +294,7 @@ app.get('/api/nimpool/:address', async function (req, res) {
 app.get('/api/blankpool/:address', async function (req, res) {
   try {
     const address = req.params.address
-    const info = (await axios.get(`https://mine.blank.drawpad.org/api/miner/${address}`, { timeout: 3000 })).data
+    const info = (await axios.get(`https://mine.blank.drawpad.org/api/miner/${address}`, { timeout: 5000 })).data
 
     if (info.general === null) {
       res.send('Not found')
@@ -376,9 +376,9 @@ app.get('/api/balkanpool/:address', async function (req, res) {
 app.get('/api/siriuspool/:address', async function (req, res) {
   try {
     const address = req.params.address
-    const { id } = (await axios.get(`https://siriuspool.net/api/user/get_id/${address}`, { timeout: 3000 })).data
-    const { ballance, confirmed } = (await axios.get(`https://siriuspool.net/api/user/get_ballance/${id}`, { timeout: 3000 })).data
-    const deviceListArray = (await axios.get(`https://siriuspool.net/api/devices/${id}`, { timeout: 3000 })).data.devices
+    const { id } = (await axios.get(`https://siriuspool.net/api/user/get_id/${address}`, { timeout: 5000 })).data
+    const { ballance, confirmed } = (await axios.get(`https://siriuspool.net/api/user/get_ballance/${id}`, { timeout: 5000 })).data
+    const deviceListArray = (await axios.get(`https://siriuspool.net/api/devices/${id}`, { timeout: 5000 })).data.devices
 
     let address_hashrate = 0;
     const deviceList = []
@@ -476,6 +476,7 @@ const parseHashrate = (number) => {
 }
 
 const parseBalance = (number) => {
+  if(typeof(number) === 'undefined') return 0
   return Number((parseFloat(number) / 1e5).toFixed(1))
 }
 
