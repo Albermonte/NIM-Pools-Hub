@@ -110,9 +110,9 @@
           >
             <v-icon>mdi-home</v-icon>
           </v-btn>
-          <div class="d-flex justify-center ml-12 pl-8" style="width: 100%">
+          <div class="d-flex justify-center" :class="$vuetify.breakpoint.xs ? 'ml-2' : 'ml-12 pl-8'" style="width: 100%">
             <span
-              class="mx-auto black--text font-weight-medium text-uppercase"
+              class="black--text font-weight-medium text-uppercase"
               :style="$vuetify.breakpoint.xs ? 'font-size: 18px;' : 'font-size: 20px;'"
             >{{ pageName || heading }}</span>
           </div>
@@ -158,16 +158,16 @@
         </div>
       </v-slide-x-reverse-transition>
     </v-app-bar>
-    <v-content>
+    <v-content style="height: 100%;">
       <v-container
         class="fill-height pb-0 pr-0"
-        :class="[$vuetify.breakpoint.xs ? 'pl-3' : 'pl-11 ml-1', $vuetify.breakpoint.sm || $vuetify.breakpoint.md ? 'pl-12 ml-2' : null, $route.name === 'index' && !$vuetify.breakpoint.xs ? 'pr-12' : 'pl-6']"
+        :class="[$vuetify.breakpoint.xs ? 'ml-n2' : 'pl-11 ml-1', $vuetify.breakpoint.sm || $vuetify.breakpoint.md ? 'pl-12 ml-2' : null, $route.name === 'index' && !$vuetify.breakpoint.xs ? 'pr-12' : 'pl-6']"
         fluid
         style="background-color: #fafafa"
       >
         <v-row align="center" justify="center" class="pb-0" style="height: 100%;">
           <div v-show="splashScreenEnabled" class="splashScreen">
-            <h1 class="text-uppercase">Loading data...</h1>
+            <h1 class="text-uppercase text-center">Loading data...</h1>
           </div>
           <div v-show="pageTransitionEnabled" class="pageTransScreen"></div>
           <Nuxt />
@@ -252,10 +252,11 @@ export default {
     }
   },
   mounted() {
-    this.address = this.$store.state.localStorage.address.replace(
-      /(.{4})/g,
-      "$1 "
-    );
+    if (this.$store.state.localStorage.address)
+      this.address = this.$store.state.localStorage.address.replace(
+        /(.{4})/g,
+        "$1 "
+      );
     this.$root.$on("updateFromAddressInput", e => {
       this.address = e;
     });

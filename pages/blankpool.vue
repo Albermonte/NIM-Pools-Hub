@@ -11,7 +11,7 @@
 <script>
 import UserInfo from "~/components/UserInfo";
 import GeneralInfo from "~/components/GeneralInfo";
-import AddressInput from "~/components/AddressInput";
+import AddressInput from "~/components/CustomVuetify/AddressInput";
 
 import pageTransition from "~/mixins/page-transitions.js";
 
@@ -27,7 +27,7 @@ export default {
   }),
   mounted() {
     // If there's an address stored show the user info
-    this.showUserInfo = this.$store.state.localStorage.address !== "";
+    this.showUserInfo = this.$store.state.localStorage.address !== "" && typeof(this.$store.state.localStorage.address) !== 'undefined';
 
     // Watch until an address is stored to get statistics
     this.$store.watch(this.$store.getters["localStorage/getAddress"], () => {
