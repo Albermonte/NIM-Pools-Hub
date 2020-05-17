@@ -105,18 +105,25 @@ export default {
   },
   data: () => ({
     selectPool: 0,
-    selectedPool: null,
+    selectedPool: null
   }),
   computed: {
-    poolList () {
-      return this.$store.state.poolList
+    poolList() {
+      return this.$store.state.poolList;
     }
   },
   updated() {
     //console.log(this.poolList[this.selectedPool]); // eslint-disable-line no-console
     if (this.selectedPool !== undefined)
-      this.$root.$emit("poolURL", this.poolList[this.selectedPool].url);
-    else this.$root.$emit("poolURL", null);
+      this.$root.$emit("poolURL", {
+        url: this.poolList[this.selectedPool].url,
+        name: this.poolList[this.selectedPool].name
+      });
+    else
+      this.$root.$emit("poolURL", {
+        url: null,
+        name: ""
+      });
   }
 };
 </script>

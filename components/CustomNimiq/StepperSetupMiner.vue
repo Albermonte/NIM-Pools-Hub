@@ -181,7 +181,7 @@
                   v-if="isButtonActive"
                   rounded
                   color="primary"
-                  @click="buttonClick"
+                  @click="openDialog"
                 >{{ buttonText }}</v-btn>
               </v-scroll-y-reverse-transition>
             </div>
@@ -208,6 +208,16 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="dialogFinal" persistent max-width="550">
+      <v-card>
+        <v-card-title class="headline">Now execute the downloaded file</v-card-title>
+        <v-card-text>Once you have done it and have the miner executed wait a few minutes and then go to the dashboard and check your statistics. Happy mining.</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="purple darken-1" text :href="`/${selectedPoolName}`">Go to the Dashboard</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -225,6 +235,7 @@ export default {
     return {
       address: "",
       selectedPool: null,
+      selectedPoolName: "",
       selectedGPU: null,
       isActive: false,
       isButtonActive: false,
@@ -233,6 +244,7 @@ export default {
       snackbarText: "",
       timeout: 3000,
       dialog: false,
+      dialogFinal: false,
       modalText: "",
       page: 1,
       maxPage: 4,
@@ -257,7 +269,7 @@ export default {
         {
           title: "All Ready to Start Mining",
           text: "",
-          button: "Got it!"
+          button: "Finished!"
         }
       ]
     };
@@ -274,7 +286,10 @@ export default {
     }
   },
   mounted() {
-    this.$root.$on("poolURL", url => (this.selectedPool = url));
+    this.$root.$on("poolURL", ({ url, name }) => {
+      this.selectedPool = url;
+      this.selectedPoolName = name;
+    });
     this.address = this.$store.state.localStorage.address.replace(
       /(.{4})/g,
       "$1 "
@@ -312,7 +327,7 @@ export default {
         .replace(/(.{4})/g, "$1 ")
         .slice(0, -1);
     } else if (this.address.replace(/ /g, "").length >= 36) {
-      this.snackbarText = 'Double check your address, it might be wrong'
+      this.snackbarText = "Double check your address, it might be wrong";
       this.snackbar = true;
     } else {
       this.validAddress = false;
@@ -350,6 +365,9 @@ export default {
         "Doble click on <kbd>NIM_MinerSetup.bat</kbd><br><br>If a warning message is prompted, click on <code>More information</code> and next, click on <code>Execute anyway</code>";
       this.dialog = true;
       downloadWindows(this.selectedGPU, this.address, this.selectedPool);
+    },
+    openDialog() {
+      this.dialogFinal = true;
     }
   }
 };
