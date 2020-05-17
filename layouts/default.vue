@@ -78,6 +78,25 @@
             class="pl-2 black--text font-weight-medium text-uppercase"
             :class="[$vuetify.breakpoint.xs ? 'body-2' : '',]"
           >{{ pageName || heading }}</span>
+          <v-tooltip
+            :disabled="$vuetify.breakpoint.xs"
+            bottom
+            class="white"
+            color="blue-grey darken-3"
+          >
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-if="!stateInputAddress"
+                v-on="on"
+                text
+                color="grey darken-4"
+                absolute
+                right
+                href="/setupMiner"
+              >Setup Miner</v-btn>
+            </template>
+            <span class="green--text text--accent-3 text-center">Helper to setup your GPU Miner</span>
+          </v-tooltip>
         </div>
         <div v-else class="d-flex align-center">
           <v-btn
@@ -148,9 +167,7 @@
       >
         <v-row align="center" justify="center" class="pb-0" style="height: 100%;">
           <div v-show="splashScreenEnabled" class="splashScreen">
-            <h1 class="text-uppercase">
-              Loading data...
-            </h1>
+            <h1 class="text-uppercase">Loading data...</h1>
           </div>
           <div v-show="pageTransitionEnabled" class="pageTransScreen"></div>
           <Nuxt />
@@ -174,8 +191,7 @@
             color="pink"
             nuxt
             v-on="on"
-            href="/setupMiner"
-            @click="testData"
+            @click="openDialog = true"
             class="my-auto mx-1"
           >
             <v-icon>mdi-help</v-icon>
@@ -188,18 +204,19 @@
       {{ snackbarText || 'Double check your address, it might be wrong' }}
       <v-btn color="grey lighten-3" text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
+    <DialogHelper :open="openDialog" @closeDialog="openDialog = false" />
   </v-app>
 </template>
 
 <script>
-import Loading from "~/components/Loading/Loading";
-
 import config from "~/nuxt.config";
 import { store as transitionsStore } from "~/store/transitions.js";
 
+import DialogHelper from "~/components/CustomVuetify/DialogHelper";
+
 export default {
   components: {
-    Loading
+    DialogHelper
   },
   data: () => ({
     address: "",
@@ -210,7 +227,8 @@ export default {
     heading: config.head.title,
     snackbar: false,
     stateInputAddress: false,
-    preventInputAddressClose: false
+    preventInputAddressClose: false,
+    openDialog: false
   }),
   computed: {
     pageTransitionEnabled() {

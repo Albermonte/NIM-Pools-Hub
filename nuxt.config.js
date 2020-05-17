@@ -46,6 +46,10 @@ export default {
     {
       src: '~/plugins/gauge.js',
       ssr: false
+    },
+    {
+      src: '~/plugins/tour.js',
+      ssr: false
     }
   ],
   /*
