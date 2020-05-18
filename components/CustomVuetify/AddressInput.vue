@@ -12,22 +12,59 @@
       dark
       hide-details
       append-icon="mdi-wallet"
-      label="Enter here your address"
+      label="Enter here your address or double click here to open the Hub"
       class="label input"
       @click:clear="clearAddress"
       :style="$vuetify.breakpoint.xs ? 'width: 83vw;' : 'width: 500px;'"
+      @focus="inputFocused = true"
+      @blur="inputFocused = false"
+      @mousedown="openHub"
+      @input="inputText"
     />
   </div>
 </template>
 
+
 <script>
+import HubApi from "@nimiq/hub-api";
+
 export default {
   data: () => ({
-    address: ""
+    address: "",
+    inputFocused: false,
+    hubOpened: false,
+    textInputed: false
   }),
   methods: {
     clearAddress() {
       this.$store.commit("localStorage/updateAddress", "");
+    },
+    async openHub() {
+      console.log(
+        `inputFocused: ${this.inputFocused}, hubOpened: ${this.hubOpened}, textInputed: ${this.textInputed}`
+      );
+      if (!this.inputFocused || this.hubOpened || this.textInputed) return;
+      this.hubOpened = true;
+      setTimeout(() => {
+        this.hubOpened = false;
+      }, 100);
+
+      const hubApi = new HubApi("https://hub.nimiq.com");
+      const options = {
+        appName: "NIM Pools Hub"
+      };
+
+      try {
+        const addressInfo = await hubApi.chooseAddress(options);
+        this.address = addressInfo.address;
+      } catch (e) {
+        if (e === "Connection was closed") this.inputFocused = false;
+        else this.inputFocused = true;
+      }
+    },
+    inputText(e) {
+      if (e) this.textInputed = e.length > 0;
+      else this.textInputed = false;
     }
   },
   updated() {
