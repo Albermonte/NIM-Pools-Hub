@@ -12,7 +12,7 @@
       dark
       hide-details
       append-icon="mdi-wallet"
-      label="Enter here your address or double click here to open the Hub"
+      label="Enter your address or double click here to open the Hub"
       class="label input"
       @click:clear="clearAddress"
       :style="$vuetify.breakpoint.xs ? 'width: 83vw;' : 'width: 500px;'"
