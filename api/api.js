@@ -130,7 +130,7 @@ app.get('/api/stats/nimiq', async function (req, res) {
   try {
     const stats = (await axios.get(`https://api.nimiqx.com/network-stats/?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
     const hs_year = (await axios.get(`https://api.nimiqx.com/hashrate/year?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
-    const { usd, percent_change_24 } = (await axios.get(`https://api.nimiqx.com/price/usd?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
+    const { usd, percent_change_24h } = (await axios.get(`https://api.nimiqx.com/price/usd?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
 
     let top_hashrate = 0
     hs_year.forEach(x => {
@@ -145,7 +145,7 @@ app.get('/api/stats/nimiq', async function (req, res) {
       height: stats.height,
       nim_day_kh: stats.nim_day_kh,
       price: usd,
-      percent_change_24: percent_change_24.usd
+      percent_change_24h: percent_change_24h.usd
     })
   } catch (e) {
     console.log(e)
