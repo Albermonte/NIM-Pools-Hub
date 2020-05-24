@@ -11,7 +11,8 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
+      { name: "coinzilla", content: "68f93b0561b5bc347c7f1058143945c0" }
     ],
     script: [
       { src: 'https://combitly.com/main.js', async: true }
