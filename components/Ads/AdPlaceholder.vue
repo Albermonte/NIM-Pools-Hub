@@ -8,11 +8,10 @@
       v-on="$listeners"
       class="mx-auto no-ad"
     >
-      <div
-        class="xc449bad4854773ff"
-        data-zone="24924481971c457790d42da6106e1c69"
-        style="width:300px;height:250px;display: inline-block;margin: 0 auto"
-      ></div>
+      <ins
+        class="bmadblock-5ecbb4a693ee2899f2b675f0"
+        style="display:inline-block;width:300px;height:250px;"
+      ></ins>
     </v-card>
   </div>
 </template>

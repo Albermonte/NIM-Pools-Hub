@@ -8,18 +8,16 @@
       class="mx-auto"
       :class="$vuetify.breakpoint.smAndDow ? 'no-ad-sm' : 'no-ad'"
     >
-      <div
+      <ins
         v-if="$vuetify.breakpoint.smAndDown"
-        class="xc449bad4854773ff"
-        data-zone="ae3a4ace72154fcebcfbc43550d669d1"
-        style="width:320px;height:100px;display: inline-block;margin: 0 auto"
-      ></div>
-      <div
+        class="bmadblock-5ecbb30693ee28580bb674bb"
+        style="display:inline-block;width:320px;height:100px;"
+      ></ins>
+      <ins
         v-else
-        class="xc449bad4854773ff"
-        data-zone="596155b768cd4e339c066f94cbc84778"
-        style="width:728px;height:90px;display: inline-block;margin: 0 auto"
-      ></div>
+        class="bmadblock-5ecbb43593ee287b36b675b0"
+        style="display:inline-block;width:728px;height:90px;"
+      ></ins>
     </v-card>
   </div>
 </template>
