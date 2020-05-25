@@ -17,7 +17,9 @@ export default {
     script: [
       { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb30693ee28580bb674bb', async: true },
       { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb43593ee287b36b675b0', async: true },
-      { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb4a693ee2899f2b675f0', async: true }
+      { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb4a693ee2899f2b675f0', async: true },
+      { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb76793ee28ae0ab676f3', async: true },
+      { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb7ad93ee2861f0b6771b', async: true },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }

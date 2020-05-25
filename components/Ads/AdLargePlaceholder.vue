@@ -10,12 +10,12 @@
     >
       <ins
         v-if="$vuetify.breakpoint.smAndDown"
-        class="bmadblock-5ecbb30693ee28580bb674bb"
+        :class="placedTop ? 'bmadblock-5ecbb30693ee28580bb674bb' : 'bmadblock-5ecbb7ad93ee2861f0b6771b'"
         style="display:inline-block;width:320px;height:100px;"
       ></ins>
       <ins
         v-else
-        class="bmadblock-5ecbb43593ee287b36b675b0"
+        :class="placedTop ? 'bmadblock-5ecbb43593ee287b36b675b0' : 'bmadblock-5ecbb76793ee28ae0ab676f3'"
         style="display:inline-block;width:728px;height:90px;"
       ></ins>
     </v-card>
@@ -53,6 +53,10 @@ export default {
     text: {
       type: String,
       default: undefined
+    },
+    placedTop: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {

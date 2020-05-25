@@ -1,10 +1,10 @@
 <template>
   <v-layout style="height: 100%;">
     <v-flex class="text-center d-flex flex-column justify-space-between align-center">
-      <AdLargePlaceholder />
+      <AdLargePlaceholder :placedTop="true" />
       <StatsGauges :currentPool="currentPool" style="max-width: 1200px" />
       <Carousel @currentPool="changedPool" />
-      <AdLargePlaceholder />
+      <AdLargePlaceholder :placedTop="false" />
     </v-flex>
   </v-layout>
 </template>
