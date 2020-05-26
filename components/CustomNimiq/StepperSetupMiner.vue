@@ -290,10 +290,11 @@ export default {
       this.selectedPool = url;
       this.selectedPoolName = name;
     });
-    this.address = this.$store.state.localStorage.address.replace(
-      /(.{4})/g,
-      "$1 "
-    );
+    if (typeof this.$store.state.localStorage.address !== "undefined")
+      this.address = this.$store.state.localStorage.address.replace(
+        /(.{4})/g,
+        "$1 "
+      );
     this.isActive = true;
     setTimeout(() => (this.isButtonActive = true), 500);
   },
