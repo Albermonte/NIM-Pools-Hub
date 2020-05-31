@@ -63,10 +63,8 @@ export default {
   async fetch({ store, params, $axios }) {
     let poolList = [...store.state.poolList];
     poolList.forEach(async (x, index) => {
-      if (x.name === "blankpool" || x.name === "balkanpool") {
-        store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
-      }
-      store.dispatch(`${x.name}/UPDATE_POOL_INFO`);
+      await store.dispatch(`${x.name}/UPDATE_POOL_INFO`);
+      await store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
       setInterval(() => {
         store.dispatch(`${x.name}/UPDATE_POOL_INFO`);
       }, 15 * 60 * 1000);

@@ -119,7 +119,10 @@
               class="black--text font-weight-medium text-uppercase"
               :style="$vuetify.breakpoint.xs ? 'font-size: 18px;' : 'font-size: 20px;'"
             >{{ pageName || heading }}</span>
-            <div style="position: absolute; top: 12.5px; right: 55px" v-if="addressBalance">
+            <div
+              v-if="addressBalance && !$vuetify.breakpoint.xs"
+              style="position: absolute; top: 12.5px; right: 55px"
+            >
               <v-tooltip bottom>
                 <template v-slot:activator="{ on }">
                   <div v-on="on">

@@ -71,6 +71,7 @@ export const actions = {
       return 'offline'
     }
     commit('updatePoolInfo', info)
+    return
   },
   CLEAR_USER_INFO({ commit }) {
     commit('clearUserInfo')

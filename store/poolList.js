@@ -6,7 +6,7 @@ export const state = () => (
             displayName: "Nimpool",
             message: "Recommended",
             status: "",
-            extras: [" Pool fee: 1.0%", "Non-profit"],
+            extras: ["Non-profit"],
             slogan: "Nimiq Pool Mining Done Right. Secure. Distributed.",
             url: "eu.nimpool.io:8444"
         },
@@ -26,7 +26,7 @@ export const state = () => (
             displayName: "Icemining",
             message: "YIIMP based",
             status: "",
-            extras: ["Pool fee: 1.25%", "Greatest Support"],
+            extras: ["Greatest Support"],
             slogan: "icemining.ca 🇨🇦 ❄️ the cool pool",
             url: "nimiq.icemining.ca:2053"
         },
@@ -36,7 +36,7 @@ export const state = () => (
             displayName: "Siriuspool",
             message: "Low Hashrate",
             status: "",
-            extras: ["Pool fee: 1.0%", "Greek Pool"],
+            extras: ["Greek Pool"],
             slogan: "First Greek Pool for Nimiq!",
             url: "siriuspool.net:8443"
         },
@@ -56,9 +56,19 @@ export const state = () => (
             displayName: "Skypool",
             message: "China based",
             status: "",
-            extras: ["Pool fee: ~1%", "Not using official protocol"],
+            extras: ["Not using official protocol"],
             slogan: "Connect to unlimited value networks",
             url: "hk1.nimiq.skypool.org:5000"
+        },
+        {
+            icon: "/nimiqWatch.png",
+            name: "nimiqwatch",
+            displayName: "Nimiq.Watch",
+            message: "Low fee",
+            status: "",
+            extras: ["Pool run by Sören (Team Nimiq)"],
+            slogan: "Nimiq Mining you can trust.",
+            url: "pool.nimiq.watch:8443"
         },
         /* {
             icon: "/urp.png",
@@ -81,7 +91,6 @@ export const mutations = {
         state[index].url = url;
     },
     updateFee(state, { index, pool_fee }) {
-        typeof(pool_fee) === 'undefined' ? pool_fee = '~1%' : null
         state[index].extras.unshift(`Pool fee: ${pool_fee}`);
     }
 }

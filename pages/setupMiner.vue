@@ -20,9 +20,6 @@ export default {
       region = "eu";
     }
     poolList.forEach(async (x, index) => {
-      if (x.name === "blankpool" || x.name === "balkanpool") {
-        store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
-      }
       if (x.name === "nimpool") {
         if (region === "us")
           store.dispatch("poolList/UPDATE_POOLURL", {
@@ -43,6 +40,9 @@ export default {
           : "offline";
         store.dispatch("poolList/UPDATE_POOLSTATUS", { index, status });
       }
+
+      await store.dispatch(`${x.name}/UPDATE_POOL_INFO`);
+      await store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
     });
   },
   fetchOnServer: false

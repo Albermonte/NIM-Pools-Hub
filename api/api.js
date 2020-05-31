@@ -180,10 +180,10 @@ app.get('/api/stats/nimpool', async function (req, res) {
       hashrateComplete: Number(((result.work_per_second || 0) * Math.pow(2, 16)).toFixed(0)),
       miners: result.users_online,
       workers: result.devices_online,
-      pool_fee: '1%'
+      pool_fee: '1.0%'
     })
   } catch (e) {
-    res.send('offline')
+    res.send({ result: 'offline', pool_fee: '1.0%' })
   }
 })
 
@@ -191,11 +191,13 @@ app.get('/api/stats/blankpool', async function (req, res) {
   try {
     const stats = (await axios.get('https://mine.blank.drawpad.org/api/pool/stats', { timeout: 5000 })).data
     const pool_fee = (await axios.get('https://mine.blank.drawpad.org/api/pool/config', { timeout: 5000 })).data.fees
+    const workers = (await axios.get('https://mine.blank.drawpad.org/api/list/devices', { timeout: 5000 })).data
+
     res.send({
       hashrate: parseHashrate(stats.averageHashrate),
       hashrateComplete: Number(stats.averageHashrate.toFixed(0)),
       miners: stats.clientCounts.total,
-      workers: null,
+      workers: workers.length,
       blocksMined: stats.blocksMined.total,
       pool_fee
     })
@@ -208,11 +210,13 @@ app.get('/api/stats/balkanpool', async function (req, res) {
   try {
     const stats = (await axios.get('https://pool.balkanminingpool.com/api/pool/stats', { timeout: 8000 })).data
     const pool_fee = (await axios.get('https://pool.balkanminingpool.com/api/pool/config', { timeout: 9000 })).data.fees
+    const workers = (await axios.get('https://pool.balkanminingpool.com/api/list/devices', { timeout: 5000 })).data
+
     res.send({
       hashrate: parseHashrate(stats.averageHashrate),
       hashrateComplete: Number(stats.averageHashrate.toFixed(0)),
       miners: stats.clientCounts.total,
-      workers: null,
+      workers: workers.length,
       blocksMined: stats.blocksMined.total,
       pool_fee
     })
@@ -231,7 +235,7 @@ app.get('/api/stats/siriuspool', async function (req, res) {
       miners: stats.connected_users,
       workers: null,
       blocksMined: stats.pool_blocks_mined,
-      pool_fee: '1%'
+      pool_fee: '1.0%'
     })
   } catch (e) {
     console.log(e)
@@ -275,6 +279,25 @@ app.get('/api/stats/icemining', async function (req, res) {
   }
 })
 
+app.get('/api/stats/nimiqwatch', async function (req, res) {
+  try {
+    const data = (await axios.get('https://pool.nimiq.watch/api/stats.json', { timeout: 5000 })).data
+    const { fee } = (await axios.get('https://pool.nimiq.watch/api/pool.json', { timeout: 5000 })).data
+
+    res.send({
+      hashrate: parseHashrate(data.hashrate),
+      hashrateComplete: Number(data.hashrate.toFixed(0)),
+      miners: data.user_count,
+      workers: data.device_count,
+      blocksMined: data.block_count,
+      pool_fee: (fee < 1 ? parseFloat(fee).toFixed(2) : fee) + '%'
+    })
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
 // Address Stats
 app.get('/api/nimpool/:address', async function (req, res) {
   try {
@@ -285,7 +308,7 @@ app.get('/api/nimpool/:address', async function (req, res) {
 
     const deviceList = []
     if (result.devices_new)
-      result.devices_new.map(x => {
+      result.devices_new.forEach(x => {
         address_hashrate += x.hashes_per_second
         deviceList.push({
           deviceName: x.device_id,
@@ -319,14 +342,14 @@ app.get('/api/blankpool/:address', async function (req, res) {
     }
 
     const address_hashrate_array = []
-    info.hashrate.map(x => {
+    info.hashrate.forEach(x => {
       if (x.avgHR) address_hashrate_array.push(parseHashrate(x.avgHR))
       else address_hashrate_array.push(parseHashrate(0))
     })
 
     const deviceList = []
     if (info.devices)
-      info.devices.map(x => {
+      info.devices.forEach(x => {
         deviceList.push({
           deviceName: x.deviceID,
           deviceId: x.deviceID,
@@ -360,14 +383,14 @@ app.get('/api/balkanpool/:address', async function (req, res) {
     }
 
     const address_hashrate_array = []
-    info.hashrate.map(x => {
+    info.hashrate.forEach(x => {
       if (x.avgHR) address_hashrate_array.push(parseHashrate(x.avgHR))
       else address_hashrate_array.push(parseHashrate(0))
     })
 
     const deviceList = []
     if (info.devices)
-      info.devices.map(x => {
+      info.devices.forEach(x => {
         deviceList.push({
           deviceName: x.deviceID,
           deviceId: x.deviceID,
@@ -400,7 +423,7 @@ app.get('/api/siriuspool/:address', async function (req, res) {
     let address_hashrate = 0;
     const deviceList = []
     if (deviceListArray)
-      deviceListArray.map(x => {
+      deviceListArray.forEach(x => {
         address_hashrate += x.hashes_per_second
         deviceList.push({
           deviceName: x.dev_name,
@@ -438,12 +461,12 @@ app.get('/api/skypool/:address', async function (req, res) {
     }
 
     const address_hashrate_array = [];
-    data.hashAndTimestamp.map(x => {
+    data.hashAndTimestamp.forEach(x => {
       address_hashrate_array.push(parseHashrate(parseFloat(((x.accepts + x.expired) / (20 * 60)))))
     })
 
     const deviceList = []
-    data.workers.map((x, index) => {
+    data.workers.forEach((x, index) => {
       deviceList.push({
         deviceName: x.name,
         deviceId: index,
@@ -457,6 +480,45 @@ app.get('/api/skypool/:address', async function (req, res) {
       address_hashrate_array,
       balance: parseBalance(data.balance),
       confirmed_balance: 0,
+      unconfirmed_balance: 0,
+      deviceList
+    })
+
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
+app.get('/api/nimiqwatch/:address', async function (req, res) {
+  try {
+    const address = req.params.address
+    const { id } = (await axios.get(`https://pool.nimiq.watch/api/user/${address}.json`, { timeout: 5000 })).data
+
+    if (id === null) {
+      res.send('Not found')
+      return
+    }
+
+    const devices = (await axios.get(`https://pool.nimiq.watch/api/user/${id}/devices.json`, { timeout: 5000 })).data
+    const { confirmed } = (await axios.get(`https://pool.nimiq.watch/api/user/${id}/balance.json`, { timeout: 5000 })).data
+
+    const deviceList = []
+    let address_hashrate = 0;
+    devices.forEach(x => {
+      address_hashrate += x.hashrate;
+      deviceList.push({
+        deviceName: x.id,
+        deviceId: x.id,
+        hashrate: parseHashrate(hashrate),
+        total_shares: 'Unknown'
+      })
+    })
+
+    res.send({
+      address_hashrate: parseHashrate(address_hashrate),
+      balance: parseBalance(data.confirmed),
+      confirmed_balance: parseBalance(data.confirmed),
       unconfirmed_balance: 0,
       deviceList
     })

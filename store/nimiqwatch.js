@@ -52,9 +52,9 @@ export const mutations = {
 
 export const actions = {
     async UPDATE_USER_INFO({ commit, rootState }) {
-        const info = await this.$axios.$get(`${window.location.origin}/api/siriuspool/${rootState.localStorage.address.replace(/(.{4})/g, "$1 ").slice(0, -1)}`)
+        const info = await this.$axios.$get(`${window.location.origin}/api/nimiqwatch/${rootState.localStorage.address}`)
         if (info === 'offline') {
-            console.error('Siriuspool USER_INFO not responding ', (new Date).toUTCString())
+            console.error('Nimiq.Watch Pool USER_INFO not responding ', (new Date).toUTCString())
             commit('userInfoError', 'Pool\'s User Stats API not working, retying in 30 seconds')
             return 'offline'
         } else if (info === 'Not found') {
@@ -64,9 +64,9 @@ export const actions = {
         commit('updateUserInfo', info)
     },
     async UPDATE_POOL_INFO({ commit }) {
-        const info = await this.$axios.$get(`${window.location.origin}/api/stats/siriuspool`)
+        const info = await this.$axios.$get(`${window.location.origin}/api/stats/nimiqwatch`)
         if (info === 'offline') {
-            console.error('Siriuspool POOL_INFO not responding ', (new Date).toUTCString())
+            console.error('Nimiq.Watch Pool POOL_INFO not responding ', (new Date).toUTCString())
             commit('poolInfoError', 'Pool\'s General Stats API not working, retying in 40 seconds')
             return 'offline'
         }

@@ -3,7 +3,7 @@ export const state = () => ({
   hashrateComplete: 0,
   miners: 0,
   workers: 0,
-  pool_fee: '0',
+  pool_fee: '1.0',
   balance: 0,
   confirmed_balance: 0,
   unconfirmed_balance: 0,
@@ -63,12 +63,14 @@ export const actions = {
   },
   async UPDATE_POOL_INFO({ commit }) {
     const info = await this.$axios.$get(`${window.location.origin}/api/stats/nimpool`)
-    if (info === 'offline') {
+    if (info.result === 'offline') {
+      commit('updatePoolInfo', { pool_fee: info.pool_fee })
       console.error('Nimpool POOL INFO not responding ', (new Date).toUTCString())
       commit('poolInfoError', 'Pool\'s General Stats API not working, retying in 40 seconds')
       return 'offline'
     }
     commit('updatePoolInfo', info)
+    return
   },
   CLEAR_USER_INFO({ commit }) {
     commit('clearUserInfo')
