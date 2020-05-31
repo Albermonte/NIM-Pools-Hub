@@ -8,15 +8,19 @@
       v-on="$listeners"
       class="mx-auto no-ad"
     >
-      <ins
-        class="bmadblock-5ecbb4a693ee2899f2b675f0"
-        style="display:inline-block;width:300px;height:250px;"
-      ></ins>
+      <adsbygoogle
+        v-if="!dev"
+        data-ad-slot="1192550870"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
     </v-card>
   </div>
 </template>
 
 <script>
+import config from "~/nuxt.config";
+
 export default {
   inheritAttrs: false,
   props: {
@@ -48,6 +52,11 @@ export default {
       type: String,
       default: undefined
     }
+  },
+  data() {
+    return {
+      dev: config.dev
+    };
   },
   computed: {
     styles() {

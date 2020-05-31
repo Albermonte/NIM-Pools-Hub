@@ -1,6 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  dev: (process.env.NODE_ENV !== 'production'),
   mode: 'spa',
   /*
   ** Headers of the page
@@ -12,14 +13,13 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
-      { name: "coinzilla", content: "68f93b0561b5bc347c7f1058143945c0" }
     ],
     script: [
-      { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb30693ee28580bb674bb', async: true },
+      /* { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb30693ee28580bb674bb', async: true },
       { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb43593ee287b36b675b0', async: true },
       { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb4a693ee2899f2b675f0', async: true },
       { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb76793ee28ae0ab676f3', async: true },
-      { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb7ad93ee2861f0b6771b', async: true },
+      { src: 'https://ad.bitmedia.io/js/adbybm.js/5ecbb7ad93ee2861f0b6771b', async: true }, */
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -65,7 +65,10 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    'nuxt-vuex-localstorage'
+    'nuxt-vuex-localstorage',
+    ['@nuxtjs/google-adsense', {
+      id: 'ca-pub-6521406599691829',
+    }],
   ],
   /*
   ** Axios module configuration

@@ -8,21 +8,19 @@
       class="mx-auto"
       :class="$vuetify.breakpoint.smAndDow ? 'no-ad-sm' : 'no-ad'"
     >
-      <ins
-        v-if="$vuetify.breakpoint.smAndDown"
-        :class="placedTop ? 'bmadblock-5ecbb30693ee28580bb674bb' : 'bmadblock-5ecbb7ad93ee2861f0b6771b'"
-        style="display:inline-block;width:320px;height:100px;"
-      ></ins>
-      <ins
-        v-else
-        :class="placedTop ? 'bmadblock-5ecbb43593ee287b36b675b0' : 'bmadblock-5ecbb76793ee28ae0ab676f3'"
-        style="display:inline-block;width:728px;height:90px;"
-      ></ins>
+      <adsbygoogle
+        v-if="!dev"
+        data-ad-slot="8810901032"
+        data-ad-format="horizontal"
+        data-full-width-responsive="true"
+      />
     </v-card>
   </div>
 </template>
 
 <script>
+import config from "~/nuxt.config";
+
 export default {
   inheritAttrs: false,
   props: {
@@ -58,6 +56,11 @@ export default {
       type: Boolean,
       default: true
     }
+  },
+  data() {
+    return {
+      dev: config.dev
+    };
   },
   computed: {
     styles() {
