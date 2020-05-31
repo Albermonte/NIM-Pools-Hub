@@ -8,12 +8,22 @@
       class="mx-auto"
       :class="$vuetify.breakpoint.smAndDow ? 'no-ad-sm' : 'no-ad'"
     >
-      <adsbygoogle
+      <!-- <adsbygoogle
         v-if="!dev"
         data-ad-slot="8810901032"
         data-ad-format="horizontal"
         data-full-width-responsive="true"
-      />
+      />-->
+      <ins
+        v-if="$vuetify.breakpoint.smAndDown"
+        class="bmadblock-5ecbb30693ee28580bb674bb"
+        style="display:inline-block;width:320px;height:100px;"
+      ></ins>
+      <ins
+        v-else
+        class="bmadblock-5ecbb43593ee287b36b675b0"
+        style="display:inline-block;width:728px;height:90px;"
+      ></ins>
     </v-card>
   </div>
 </template>

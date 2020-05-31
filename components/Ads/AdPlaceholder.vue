@@ -8,12 +8,16 @@
       v-on="$listeners"
       class="mx-auto no-ad"
     >
-      <adsbygoogle
+      <!-- <adsbygoogle
         v-if="!dev"
         data-ad-slot="1192550870"
         data-ad-format="auto"
         data-full-width-responsive="true"
-      />
+      />-->
+      <ins
+        class="bmadblock-5ecbb4a693ee2899f2b675f0"
+        style="display:inline-block;width:300px;height:250px;"
+      ></ins>
     </v-card>
   </div>
 </template>
