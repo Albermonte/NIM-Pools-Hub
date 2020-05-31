@@ -110,25 +110,49 @@
           >
             <v-icon>mdi-home</v-icon>
           </v-btn>
-          <div class="d-flex justify-center" :class="$vuetify.breakpoint.xs ? 'ml-2' : 'ml-12 pl-8'" style="width: 100%">
+          <div
+            class="d-flex justify-center"
+            :class="$vuetify.breakpoint.xs ? 'ml-2' : 'ml-12 pl-8'"
+            style="width: 100%"
+          >
             <span
               class="black--text font-weight-medium text-uppercase"
               :style="$vuetify.breakpoint.xs ? 'font-size: 18px;' : 'font-size: 20px;'"
             >{{ pageName || heading }}</span>
+            <div style="position: absolute; top: 12.5px; right: 55px" v-if="addressBalance">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on }">
+                  <div v-on="on">
+                    <span
+                      class="black--text text-uppercase font-weight-medium"
+                      style="font-size: 18px;"
+                    >{{addressBalance}}</span>
+                    <span
+                      class="black--text text-uppercase font-weight-regular"
+                      style="font-size: 13px;"
+                    >{{' '}}NIM</span>
+                  </div>
+                </template>
+                <span
+                  class="white--text"
+                >This is your address balance, it will be updated every 15 minutes</span>
+              </v-tooltip>
+            </div>
           </div>
-          <v-btn
-            v-if="!stateInputAddress"
-            text
-            color="grey darken-4"
-            absolute
-            right
-            class="mr-n4"
-            style="min-width: 50px;"
-            @click="showInputAddress(true)"
-            @mouseover="showInputAddress(true)"
-          >
-            <v-icon>mdi-wallet</v-icon>
-          </v-btn>
+          <div style="position: absolute; right: 18px; top: 11px;">
+            <v-btn
+              v-if="!stateInputAddress"
+              text
+              color="grey darken-4"
+              right
+              class="mr-n4"
+              style="min-width: 50px;"
+              @click="showInputAddress(true)"
+              @mouseover="showInputAddress(true)"
+            >
+              <v-icon>mdi-wallet</v-icon>
+            </v-btn>
+          </div>
         </div>
       </v-toolbar-title>
       <v-slide-x-reverse-transition>
@@ -249,6 +273,9 @@ export default {
         ? true
         : false;
       return eval("this.$store.state." + this.$route.name + ".snackbarText");
+    },
+    addressBalance() {
+      return this.$store.state.nimiq.balance;
     }
   },
   mounted() {

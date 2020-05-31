@@ -153,6 +153,22 @@ app.get('/api/stats/nimiq', async function (req, res) {
   }
 })
 
+app.get('/api/balance/:address', async function (req, res) {
+  try {
+    const address = req.params.address
+    const { balance } = (await axios.get(`https://api.nimiqx.com/account/${address}?api_key=${process.env.nimiqx_api}`, { timeout: 9000 })).data
+
+    res.send({
+      balance: parseBalance(balance)
+    })
+  } catch (e) {
+    console.log('Address balance')
+    console.log(e)
+    res.send({ balance: 0 })
+  }
+})
+
+
 
 // Pool Stats
 

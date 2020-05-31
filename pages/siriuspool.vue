@@ -33,6 +33,7 @@ export default {
     this.$store.watch(this.$store.getters["localStorage/getAddress"], () => {
       console.log("Address changed");
       this.$store.dispatch(`${this.$route.name}/UPDATE_USER_INFO`);
+      this.$store.dispatch("nimiq/UPDATE_NIMIQ_INFO");
       this.showUserInfo = this.$store.state.localStorage.address !== ""; // Hide if no address
     });
   },

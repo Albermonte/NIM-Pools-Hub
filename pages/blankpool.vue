@@ -27,12 +27,15 @@ export default {
   }),
   mounted() {
     // If there's an address stored show the user info
-    this.showUserInfo = this.$store.state.localStorage.address !== "" && typeof(this.$store.state.localStorage.address) !== 'undefined';
+    this.showUserInfo =
+      this.$store.state.localStorage.address !== "" &&
+      typeof this.$store.state.localStorage.address !== "undefined";
 
     // Watch until an address is stored to get statistics
     this.$store.watch(this.$store.getters["localStorage/getAddress"], () => {
       console.log("Address changed");
       this.$store.dispatch(`${this.$route.name}/UPDATE_USER_INFO`);
+      this.$store.dispatch("nimiq/UPDATE_NIMIQ_INFO");
       this.showUserInfo = this.$store.state.localStorage.address !== ""; // Hide if no address
     });
   },
