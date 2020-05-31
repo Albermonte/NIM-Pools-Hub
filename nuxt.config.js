@@ -52,6 +52,10 @@ export default {
     {
       src: '~/plugins/gauge.js',
       ssr: false
+    },
+    {
+      src: '~/plugins/notifications.js',
+      ssr: false
     }
   ],
   /*
