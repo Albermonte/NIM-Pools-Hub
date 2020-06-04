@@ -3,7 +3,7 @@
     <v-list class="pt-3 pb-1">
       <v-list-item>
         <v-list-item-avatar size="50">
-          <v-img :src="`/${pool.name}.png`"></v-img>
+          <v-img :src="pool.icon"></v-img>
         </v-list-item-avatar>
         <v-col class="pa-0" cols="6">
           <div class="headline">{{ pool.displayName}}</div>
