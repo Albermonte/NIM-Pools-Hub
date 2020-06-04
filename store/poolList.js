@@ -61,7 +61,7 @@ export const state = () => (
             url: "hk1.nimiq.skypool.org:5000"
         },
         {
-            icon: "/nimiqwatch.png",
+            icon: "/nimiqwatchpool.png",
             name: "nimiqwatch",
             displayName: "Nimiq.Watch",
             message: "Low fee",
