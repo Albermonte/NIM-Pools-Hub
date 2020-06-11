@@ -1,7 +1,8 @@
 <template>
   <v-layout style="height: 100%;">
     <v-flex class="text-center d-flex flex-column justify-space-between align-center">
-      <AdLargePlaceholder :placedTop="true" />
+      <!-- <AdLargePlaceholder :placedTop="true" /> -->
+      <v-spaces />
       <StatsGauges :currentPool="currentPool" style="max-width: 1200px" />
       <Carousel @currentPool="changedPool" />
       <AdLargePlaceholder :placedTop="false" />
