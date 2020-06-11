@@ -21,7 +21,7 @@ export const mutations = {
     state.unconfirmed_balance = value.unconfirmed_balance
     state.deviceList = value.deviceList
     state.address_hashrate = value.address_hashrate
-    state.address_hashrate_array = value.address_hashrate_array
+    state.address_hashrate_array.push(value.address_hashrate)
   },
   updatePoolInfo(state, value) {
     state.hashrate = value.hashrate
@@ -52,16 +52,16 @@ export const mutations = {
 
 export const actions = {
   async UPDATE_USER_INFO({ commit, rootState }) {
-    /* const info = await this.$axios.$get(`${window.location.origin}/api/blankpool/${rootState.localStorage.address}`)
+    const info = await this.$axios.$get(`${window.location.origin}/api/icemining/${rootState.localStorage.address}`)
     if (info === 'offline') {
-      console.error('BlankPool USER_INFO not responding ', (new Date).toUTCString())
+      console.error('Icemining USER_INFO not responding ', (new Date).toUTCString())
       commit('userInfoError', 'Pool\'s User Stats API not working, retying in 30 seconds')
       return 'offline'
-    }else if (info === 'Not found') {
-          commit('userInfoError', 'User not found on this pool, try again later')
-          return
-      }
-    commit('updateUserInfo', info) */
+    } else if (info === 'Not found') {
+      commit('userInfoError', 'User not found on this pool, try again later')
+      return
+    }
+    commit('updateUserInfo', info)
   },
   async UPDATE_POOL_INFO({ commit }) {
     const info = await this.$axios.$get(`${window.location.origin}/api/stats/icemining`)

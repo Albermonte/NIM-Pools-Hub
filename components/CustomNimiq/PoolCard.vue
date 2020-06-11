@@ -39,10 +39,20 @@
           <v-list-item-subtitle class="text-center">{{ pool.slogan }}</v-list-item-subtitle>
           <v-list-item-title>
             <v-row class="pb-0" justify="center">
-              <v-col class="py-0 pb-1 d-flex flex-column align-center justify-center" style="max-width: 125px; min-width: 125px;">
+              <v-col
+                class="py-0 pb-1 d-flex flex-column align-center justify-center"
+                style="max-width: 125px; min-width: 125px;"
+              >
                 <div class="headline d-flex">
-                  <span class="font-weight-medium" style="font-size: 32px; height: 100%;">{{ poolFee.whole }}</span>
-                  <span v-if="poolFee.decimal" class="title font-weight-regular mr-1 d-flex align-end" style="height: 100%; margin-left: -2px">.{{ poolFee.decimal }}</span>
+                  <span
+                    class="font-weight-medium"
+                    style="font-size: 32px; height: 100%;"
+                  >{{ poolFee.whole }}</span>
+                  <span
+                    v-if="poolFee.decimal"
+                    class="title font-weight-regular mr-1 d-flex align-end"
+                    style="height: 100%; margin-left: -2px"
+                  >.{{ poolFee.decimal }}</span>
                   <span class="d-flex align-end" style="height: 100%;">%</span>
                   <!--  -->
                 </div>

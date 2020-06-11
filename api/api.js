@@ -510,16 +510,54 @@ app.get('/api/nimiqwatch/:address', async function (req, res) {
       deviceList.push({
         deviceName: x.id,
         deviceId: x.id,
-        hashrate: parseHashrate(hashrate),
+        hashrate: parseHashrate(x.hashrate),
         total_shares: 'Unknown'
       })
     })
 
     res.send({
       address_hashrate: parseHashrate(address_hashrate),
-      balance: parseBalance(data.confirmed),
-      confirmed_balance: parseBalance(data.confirmed),
+      balance: parseBalance(confirmed),
+      confirmed_balance: parseBalance(confirmed),
       unconfirmed_balance: 0,
+      deviceList
+    })
+
+  } catch (e) {
+    console.log(e)
+    res.send('offline')
+  }
+})
+
+app.get('/api/icemining/:address', async function (req, res) {
+  try {
+    const address = req.params.address
+    const data = (await axios.get(`https://icemining.ca/api/wallet/${address}`, { timeout: 5000 })).data
+
+    if (data === "wallet not found") {
+      res.send('Not found')
+      return
+    }
+
+    const devices = data.workers;
+
+    const deviceList = []
+    let address_hashrate = 0;
+    devices.forEach(x => {
+      address_hashrate += x.hashrate;
+      deviceList.push({
+        deviceName: x.worker,
+        deviceId: data.userid,
+        hashrate: parseHashrate(x.hashrate),
+        total_shares: x.shares_per_min + ' per minute'
+      })
+    })
+
+    res.send({
+      address_hashrate: parseHashrate(address_hashrate),
+      balance: parseBalance((data.balance + data.unsold)*1e5),
+      confirmed_balance: parseBalance(data.balance*1e5),
+      unconfirmed_balance: parseBalance(data.unsold*1e5),
       deviceList
     })
 

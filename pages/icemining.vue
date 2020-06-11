@@ -1,45 +1,44 @@
 <template>
-  <v-layout style="margin-left: 3vw; height: 100%">
-    <v-flex class="text-center d-flex flex-column justify-space-between align-center">
-      <!-- <AdLargePlaceholder /> -->
-      <v-spacer />
-      <v-spacer />
-      <v-card :width="$vuetify.breakpoint.xs ? 320 : 400">
-        <v-card-text>
-          <div class="px-4 headline text--primary">Icemining doesn't support us</div>
-          <p>Sad 😢</p>
-          <div class="text--primary">
-            To check your statistics you have to go to their site
-            <br />
-            <br />You can also contact them 
-            <br />asking to fix their API to help us 🙌
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn text color="deep-purple accent-4" @click="goToPool">Go to their site</v-btn>
-        </v-card-actions>
-      </v-card>
-      <v-spacer />
-      <AdLargePlaceholder />
-    </v-flex>
+  <v-layout column justify-center align-center style="margin-left: 3vw;">
+    <v-scroll-y-transition leave-absolute>
+      <UserInfo v-if="showUserInfo" class="container container--fluid py-0 my-n2" />
+      <AddressInput v-else />
+    </v-scroll-y-transition>
+    <GeneralInfo class="container container--fluid py-0 my-n2 pb-0" />
   </v-layout>
 </template>
 
 <script>
-import AdLargePlaceholder from "~/components/Ads/AdLargePlaceholder";
+import UserInfo from "~/components/UserInfo";
+import GeneralInfo from "~/components/GeneralInfo";
+import AddressInput from "~/components/CustomVuetify/AddressInput";
 
 import pageTransition from "~/mixins/page-transitions.js";
 
 export default {
   mixins: [pageTransition()],
   components: {
-    AdLargePlaceholder
+    UserInfo,
+    GeneralInfo,
+    AddressInput
   },
-  methods: {
-      goToPool(){
-          window.location.href = `https://icemining.ca/?address=${this.$store.state.localStorage.address}`
-      }
-  }
+  data: () => ({
+    showUserInfo: false
+  }),
+  mounted() {
+    // If there's an address stored show the user info
+    this.showUserInfo =
+      this.$store.state.localStorage.address !== "" &&
+      typeof this.$store.state.localStorage.address !== "undefined";
+
+    // Watch until an address is stored to get statistics
+    this.$store.watch(this.$store.getters["localStorage/getAddress"], () => {
+      console.log("Address changed");
+      this.$store.dispatch(`${this.$route.name}/UPDATE_USER_INFO`);
+      this.$store.dispatch("nimiq/UPDATE_NIMIQ_INFO");
+      this.showUserInfo = this.$store.state.localStorage.address !== ""; // Hide if no address
+    });
+  },
+  methods: {}
 };
 </script>
