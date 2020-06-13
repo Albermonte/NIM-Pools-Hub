@@ -1,4 +1,4 @@
-/* if (!("Notification" in window)) {
+if (!("Notification" in window)) {
     console.warn('No Notification API')
 }
 // Let's check whether notification permissions have already been granted
@@ -22,4 +22,4 @@ else if (Notification.permission !== 'denied') {
             }
         }
     });
-} */
+}

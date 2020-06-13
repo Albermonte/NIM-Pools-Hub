@@ -27,6 +27,7 @@ export const mutations = {
 
 export const actions = {
   async UPDATE_NIMIQ_INFO(vuexContext, context) {
+    console.log('Updating Nimiq Info')
     let addressBalance = 0
     const address = vuexContext.rootGetters["localStorage/getAddress"]()
     if (address) {
@@ -36,6 +37,25 @@ export const actions = {
         let parts = addressBalance.toString().split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         addressBalance = parts.join(".");
+        console.log('previousBalance: ' + vuexContext.state.balance)
+        if (vuexContext.state.balance) {
+          const previousBalance = Number(vuexContext.state.balance.replace(' ', ''));
+          const newBalance = Number(addressBalance.replace(' ', ''));
+          console.log(`previous balance: ${previousBalance}`)
+          console.log(`new balance: ${newBalance}`)
+          if (previousBalance < newBalance) {
+            const options = {
+              body: `You have a new payout of ${(newBalance - previousBalance).toFixed(1)} NIM`,
+              icon: '/nimpoolshub.png'
+            }
+            try {
+              console.log('Displaying notification')
+              var notification = new Notification('NIM Pools Hub', options);
+            } catch (err) {
+              console.log('Notification API error: ' + err);
+            }
+          }
+        }
       }
     }
     const info = await this.$axios.$get(`${window.location.origin}/api/stats/nimiq`)
