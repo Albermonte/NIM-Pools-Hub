@@ -48,7 +48,7 @@ export const state = () => (
             status: "",
             extras: ["Slow API"],
             slogan: "Nimiq Pool hosted by Balkan users",
-            url: "mine.blank.drawpad.org:8444"
+            url: "pool.balkanminingpool.com:8444"
         },
         {
             icon: "/skypool.png",
