@@ -1,10 +1,13 @@
-export const downloadWindows = (gpu, address, poolURL) => {
+import Axios from "axios";
+
+export const downloadWindows = async (gpu, address, poolURL) => {
+    const { download_url } = (await Axios.get(`${window.location.origin}/api/gpu_windows`)).data;
     const text = `:: Script Made By Albermonte
 @echo off
 mkdir NimiqMiner
 cd NimiqMiner
 powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-WebRequest http://stahlworks.com/dev/unzip.exe -OutFile unzip.exe"
-powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-WebRequest https://github.com/tomkha/nq-miner/releases/download/0.99.6/nq-miner-windows-0.99.6.zip -OutFile nq-miner-windows.zip"
+powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;Invoke-WebRequest ${download_url} -OutFile nq-miner-windows.zip"
 unzip.exe -o nq-miner-windows.zip -d nq-miner -x start_gpu.bat 
 del /f /q nq-miner-windows.zip
 del /f /q unzip.exe
@@ -23,11 +26,12 @@ cls & echo. & echo. & echo. & echo. & echo. & echo. & echo. & echo #############
     document.body.removeChild(element);
 }
 
-export const downloadLinux = (gpu, address, poolURL) => {
+export const downloadLinux = async (gpu, address, poolURL) => {
+    const { download_url } = (await Axios.get(`${window.location.origin}/api/gpu_linux`)).data;
     const text = `# Script Made By Albermonte
 mkdir NimiqMiner
 cd NimiqMiner
-wget https://github.com/tomkha/nq-miner/releases/download/0.99.6/nq-miner-linux-0.99.6.tar.gz
+wget ${download_url}
 mkdir nq-miner
 tar -xzvf nq-miner-linux-0.99.6.tar.gz -C nq-miner
 rm nq-miner-linux-0.99.6.tar.gz

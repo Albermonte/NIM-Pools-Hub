@@ -27,6 +27,49 @@ app.get('/api/ip', function (req, res) {
   }
 })
 
+// Latest GPU release
+// https://api.github.com/repos/tomkha/nq-miner/releases/latest
+
+app.get('/api/gpu_windows', async function (req, res) {
+  try {
+    const { assets } = (await axios.get('https://api.github.com/repos/tomkha/nq-miner/releases/latest', { timeout: 9000 })).data
+    let found = false;
+    assets.forEach(x => {
+      if (x.name.match(/nq-miner-windows-\d/gm)) {
+        found = true
+        res.send({ download_url: x.browser_download_url })
+      }
+    })
+    // Send a known release if not found
+    if (!found)
+      res.send({ download_url: 'https://github.com/tomkha/nq-miner/releases/download/0.99.6/nq-miner-windows-0.99.6.zip' });
+  } catch (e) {
+    console.log(`Error getting GPU latest: ${e}`)
+    // Send a known release if error
+    res.send({ download_url: 'https://github.com/tomkha/nq-miner/releases/download/0.99.6/nq-miner-windows-0.99.6.zip' });
+  }
+})
+
+app.get('/api/gpu_linux', async function (req, res) {
+  try {
+    const { assets } = (await axios.get('https://api.github.com/repos/tomkha/nq-miner/releases/latest', { timeout: 9000 })).data
+    let found = false;
+    assets.forEach(x => {
+      if (x.name.match(/nq-miner-linux-\d/gm)) {
+        found = true
+        res.send({ download_url: x.browser_download_url })
+      }
+    })
+    // Send a known release if not found
+    if (!found)
+      res.send({ download_url: 'https://github.com/tomkha/nq-miner/releases/download/0.99.6/nq-miner-linux-0.99.6.tar.gz' });
+  } catch (e) {
+    console.log(`Error getting GPU latest: ${e}`)
+    // Send a known release if error
+    res.send({ download_url: 'https://github.com/tomkha/nq-miner/releases/download/0.99.6/nq-miner-linux-0.99.6.tar.gz' });
+  }
+})
+
 // isOnline
 app.get('/api/isOnline/:pool', async function (req, res) {
   let pool = req.params.pool.toLowerCase()
@@ -555,9 +598,9 @@ app.get('/api/icemining/:address', async function (req, res) {
 
     res.send({
       address_hashrate: parseHashrate(address_hashrate),
-      balance: parseBalance((data.balance + data.unsold)*1e5),
-      confirmed_balance: parseBalance(data.balance*1e5),
-      unconfirmed_balance: parseBalance(data.unsold*1e5),
+      balance: parseBalance((data.balance + data.unsold) * 1e5),
+      confirmed_balance: parseBalance(data.balance * 1e5),
+      unconfirmed_balance: parseBalance(data.unsold * 1e5),
       deviceList
     })
 
