@@ -106,7 +106,7 @@
             class="ml-n3"
             style="min-width: 50px;"
             nuxt
-            href="/"
+            to="/"
           >
             <v-icon>mdi-home</v-icon>
           </v-btn>
