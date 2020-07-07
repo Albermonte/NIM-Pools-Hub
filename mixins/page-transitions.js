@@ -17,14 +17,13 @@ const enterSplashScreenTransition = [
     translateY: "0",
     opacity: 0,
     duration: 100,
-    delay: 1000,
     easing: "easeOutExpo"
   },
   {
     targets: ".splashScreen h1",
     translateY: "0",
     opacity: 1,
-    duration: 1500,
+    duration: 500,
     easing: "easeInExpo",
     direction: "alternate"
   },
@@ -40,7 +39,7 @@ const enterSplashScreenTransition = [
     targets: ".splashScreen",
     translateY: "-100%",
     delay: 100,
-    duration: 1200,
+    duration: 600,
     easing: "easeInOutQuad"
     // not working (like autoAlpha in gsap) -> using store instead
     // visibility: "hidden"
