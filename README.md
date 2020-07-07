@@ -22,5 +22,3 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
-
-<a href="https://www.openode.io/">Cloud hosted on opeNode.io</a>
