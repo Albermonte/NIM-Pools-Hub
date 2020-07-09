@@ -1,7 +1,9 @@
 const express = require("express");
 const axios = require("axios");
 const requestIp = require("request-ip");
+const apicache = require("apicache");
 const app = express();
+const cache = apicache.middleware;
 
 // Server IP
 
@@ -32,7 +34,7 @@ app.get("/api/ip", function(req, res) {
 // Latest GPU release
 // https://api.github.com/repos/tomkha/nq-miner/releases/latest
 
-app.get("/api/gpu_windows", async function(req, res) {
+app.get("/api/gpu_windows", cache("1 hour"), async function(req, res) {
   try {
     const { assets } = (
       await axios.get(
@@ -63,7 +65,7 @@ app.get("/api/gpu_windows", async function(req, res) {
   }
 });
 
-app.get("/api/gpu_linux", async function(req, res) {
+app.get("/api/gpu_linux", cache("1 hour"), async function(req, res) {
   try {
     const { assets } = (
       await axios.get(
@@ -95,7 +97,7 @@ app.get("/api/gpu_linux", async function(req, res) {
 });
 
 // isOnline
-app.get("/api/isOnline/:pool", async function(req, res) {
+app.get("/api/isOnline/:pool", cache("15 minutes"), async function(req, res) {
   let pool = req.params.pool.toLowerCase();
   pool = pool.charAt(0).toUpperCase() + pool.slice(1);
   try {
@@ -307,7 +309,7 @@ app.get("/api/balance/:address", async function(req, res) {
 
 // Pool Stats
 
-app.get("/api/stats/nimpool", async function(req, res) {
+app.get("/api/stats/nimpool", cache("5 minutes"), async function(req, res) {
   try {
     const { result } = (
       await axios.get("https://api.nimpool.io/pool", { timeout: 5000 })
@@ -326,7 +328,7 @@ app.get("/api/stats/nimpool", async function(req, res) {
   }
 });
 
-app.get("/api/stats/blankpool", async function(req, res) {
+app.get("/api/stats/blankpool", cache("5 minutes"), async function(req, res) {
   try {
     const stats = (
       await axios.get("https://mine.blank.drawpad.org/api/pool/stats", {
@@ -357,7 +359,7 @@ app.get("/api/stats/blankpool", async function(req, res) {
   }
 });
 
-app.get("/api/stats/balkanpool", async function(req, res) {
+app.get("/api/stats/balkanpool", cache("5 minutes"), async function(req, res) {
   try {
     const stats = (
       await axios.get("https://pool.balkanminingpool.com/api/pool/stats", {
@@ -389,7 +391,7 @@ app.get("/api/stats/balkanpool", async function(req, res) {
   }
 });
 
-app.get("/api/stats/siriuspool", async function(req, res) {
+app.get("/api/stats/siriuspool", cache("5 minutes"), async function(req, res) {
   try {
     const stats = (
       await axios.get("https://siriuspool.net/stats_refr.php", {
@@ -410,7 +412,7 @@ app.get("/api/stats/siriuspool", async function(req, res) {
   }
 });
 
-app.get("/api/stats/skypool", async function(req, res) {
+app.get("/api/stats/skypool", cache("5 minutes"), async function(req, res) {
   try {
     const stats = (
       await axios.get("https://api.nimiq.skypool.xyz/api/v1/pool/poolProfile", {
@@ -437,7 +439,7 @@ app.get("/api/stats/skypool", async function(req, res) {
   }
 });
 
-app.get("/api/stats/icemining", async function(req, res) {
+app.get("/api/stats/icemining", cache("5 minutes"), async function(req, res) {
   try {
     const { NIM } = (
       await axios.get("https://icemining.ca/api/currencies", { timeout: 5000 })
@@ -462,7 +464,7 @@ app.get("/api/stats/icemining", async function(req, res) {
   }
 });
 
-app.get("/api/stats/nimiqwatch", async function(req, res) {
+app.get("/api/stats/nimiqwatch", cache("5 minutes"), async function(req, res) {
   try {
     const data = (
       await axios.get("https://pool.nimiq.watch/api/stats.json", {
@@ -847,6 +849,18 @@ app.get("/api/in_us", async function(req, res) {
   } catch {
     res.send(false);
   }
+});
+
+// Cache performance
+
+// Add route to display cache performance (courtesy of @killdash9)
+app.get("/api/cache/performance", (req, res) => {
+  res.json(apicache.getPerformance());
+});
+
+// Add route to display cache index
+app.get("/api/cache/index", (req, res) => {
+  res.json(apicache.getIndex());
 });
 
 // Parse Hasrate
