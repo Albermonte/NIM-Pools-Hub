@@ -51,12 +51,13 @@
                   <span
                     v-if="poolFee.decimal"
                     class="title font-weight-regular mr-1 d-flex align-end"
-                    style="height: 100%; margin-left: -2px"
+                    style="height: 100%; margin-left: -2px; font-size: 20px !important;"
                   >.{{ poolFee.decimal }}</span>
                   <span class="d-flex align-end" style="height: 100%;">%</span>
                 </div>
                 <div
-                  class="mt-n1 text-uppercase overline font-weight-bold grey--text text--darken-1"
+                  class="mt-n2 text-uppercase overline font-weight-bold grey--text text--darken-1"
+                  style="font-size: 10px !important; max-height: 16px;"
                 >Pool fee</div>
               </v-col>
               <v-col
