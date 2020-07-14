@@ -54,7 +54,6 @@
                     style="height: 100%; margin-left: -2px"
                   >.{{ poolFee.decimal }}</span>
                   <span class="d-flex align-end" style="height: 100%;">%</span>
-                  <!--  -->
                 </div>
                 <div
                   class="mt-n1 text-uppercase overline font-weight-bold grey--text text--darken-1"
@@ -62,10 +61,28 @@
               </v-col>
               <v-col
                 class="pa-0 d-flex flex-column justify-center align-center"
-                style="height: 70px; max-width: max-content; max-width: 125px; min-width: 125px;"
+                style="height: 70px; max-width: max-content; min-width: 180px;"
               >
-                <div class="py-1 text-center" style="max-width: max-content;">{{pool.extras[1]}}</div>
-                <div class="pb-1 text-center" style="max-width: max-content;">{{pool.message}}</div>
+                <v-row
+                  class="justify-space-around"
+                  style="max-height: max-content; min-width: inherit;"
+                >
+                  <div style="max-width: max-content;">{{`Minimum Payout:`}}</div>
+                  <div
+                    class="pl-2 font-weight-regular"
+                    style="max-width: max-content;"
+                  >{{`${minimumPayout} NIM`}}</div>
+                </v-row>
+                <v-row
+                  class="justify-space-around"
+                  style="max-height: max-content; min-width: inherit;"
+                >
+                  <div style="max-width: max-content;">{{`Payout Interval:`}}</div>
+                  <div
+                    class="pl-1 font-weight-regular"
+                    style="max-width: max-content;"
+                  >{{`${payoutFrecuency} ${payoutFrecuency > 1 ? 'hours' : 'hour'}`}}</div>
+                </v-row>
               </v-col>
             </v-row>
           </v-list-item-title>
@@ -111,6 +128,12 @@ export default {
         whole: num[0],
         decimal: num[1]
       };
+    },
+    minimumPayout() {
+      return eval("this.$store.state." + this.pool.name + ".minimum_payout");
+    },
+    payoutFrecuency() {
+      return eval("this.$store.state." + this.pool.name + ".payout_frecuency");
     }
   }
 };

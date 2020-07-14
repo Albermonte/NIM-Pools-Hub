@@ -321,7 +321,9 @@ app.get("/api/stats/nimpool", cache("5 minutes"), async function(req, res) {
       ),
       miners: result.users_online,
       workers: result.devices_online,
-      pool_fee: "1.0%"
+      pool_fee: "1.0%",
+      minimum_payout: 5,
+      payout_frecuency: 3
     });
   } catch (e) {
     res.send({ result: "offline", pool_fee: "1.0%" });
@@ -352,7 +354,9 @@ app.get("/api/stats/blankpool", cache("5 minutes"), async function(req, res) {
       miners: stats.clientCounts.total,
       workers: workers.length,
       blocksMined: stats.blocksMined.total,
-      pool_fee
+      pool_fee,
+      minimum_payout: 0,
+      payout_frecuency: 2
     });
   } catch (e) {
     res.send("offline");
@@ -383,7 +387,9 @@ app.get("/api/stats/balkanpool", cache("5 minutes"), async function(req, res) {
       miners: stats.clientCounts.total,
       workers: workers.length,
       blocksMined: stats.blocksMined.total,
-      pool_fee
+      pool_fee,
+      minimum_payout: 10,
+      payout_frecuency: 2
     });
   } catch (e) {
     console.log(e);
@@ -404,7 +410,9 @@ app.get("/api/stats/siriuspool", cache("5 minutes"), async function(req, res) {
       miners: stats.connected_users,
       workers: null,
       blocksMined: stats.pool_blocks_mined,
-      pool_fee: "1.0%"
+      pool_fee: "1.0%",
+      minimum_payout: 10,
+      payout_frecuency: 1
     });
   } catch (e) {
     console.log(e);
@@ -431,7 +439,9 @@ app.get("/api/stats/skypool", cache("5 minutes"), async function(req, res) {
       miners: stats.addressNumber,
       workers: null,
       blocksMined: blocks,
-      pool_fee: "~1%"
+      pool_fee: "~1%",
+      minimum_payout: 10,
+      payout_frecuency: 12
     });
   } catch (e) {
     console.log(e);
@@ -456,7 +466,9 @@ app.get("/api/stats/icemining", cache("5 minutes"), async function(req, res) {
       miners: NIM.workers,
       workers: null,
       blocksMined: blocks,
-      pool_fee: "1.25%"
+      pool_fee: "1.25%",
+      minimum_payout: NIM.payout_min,
+      payout_frecuency: 2
     });
   } catch (e) {
     console.log(e);
@@ -471,7 +483,7 @@ app.get("/api/stats/nimiqwatch", cache("5 minutes"), async function(req, res) {
         timeout: 5000
       })
     ).data;
-    const { fee } = (
+    const { fee, payout_frequency } = (
       await axios.get("https://pool.nimiq.watch/api/pool.json", {
         timeout: 5000
       })
@@ -483,7 +495,9 @@ app.get("/api/stats/nimiqwatch", cache("5 minutes"), async function(req, res) {
       miners: data.user_count,
       workers: data.device_count,
       blocksMined: data.block_count,
-      pool_fee: (fee < 1 ? parseFloat(fee).toFixed(2) : fee) + "%"
+      pool_fee: (fee < 1 ? parseFloat(fee).toFixed(2) : fee) + "%",
+      minimum_payout: 10,
+      payout_frecuency: Number(payout_frequency.match(/\d+/)[0])
     });
   } catch (e) {
     console.log(e);
