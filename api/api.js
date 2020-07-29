@@ -996,7 +996,7 @@ app.get("/api/acemining/:address", async function(req, res) {
         deviceName: x.device,
         deviceId: x.device,
         hashrate: parseHashrate(x.hashrate),
-        total_shares: "Unknown"
+        total_shares: x.shares
       });
     });
 
