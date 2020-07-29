@@ -36,50 +36,50 @@ export default {
   props: {
     color: {
       type: String,
-      default: "secondary"
+      default: "secondary",
     },
     elevation: {
       type: [Number, String],
-      default: 10
+      default: 10,
     },
     inline: {
       type: Boolean,
-      default: false
+      default: false,
     },
     fullWidth: {
       type: Boolean,
-      default: false
+      default: false,
     },
     offset: {
       type: [Number, String],
-      default: 24
+      default: 24,
     },
     title: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     text: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     placedTop: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
-      dev: config.dev
+      dev: config.dev,
     };
   },
   computed: {
     styles() {
       return {
         marginBottom: `${this.offset}px`,
-        marginTop: `${this.offset * 2}px`
+        marginTop: `${this.offset * 2}px`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

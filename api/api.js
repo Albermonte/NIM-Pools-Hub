@@ -243,6 +243,41 @@ const isNimiqwatchOnline = async retry => {
   }
 };
 
+const isAceminingOnline = async retry => {
+  try {
+    const { hashrate } = (
+      await axios.get("https://api.acemining.co/api/hashrate", {
+        timeout: 20000
+      })
+    ).data;
+
+    const { total } = (
+      await axios.get("https://api.acemining.co/api/miners", {
+        timeout: 20000
+      })
+    ).data;
+
+    return total > 0 || hashrate > 0;
+  } catch {
+    if (retry) return isAceminingOnline(false);
+    return false;
+  }
+};
+
+const isHashexpressOnline = async retry => {
+  try {
+    const { device_count, hashrate } = (
+      await axios.get("https://nim.hash.express/api/stats.json", {
+        timeout: 5000
+      })
+    ).data;
+    return device_count > 0 || hashrate > 0;
+  } catch {
+    if (retry) return isHashexpressOnline(false);
+    return false;
+  }
+};
+
 // Nimiq Stats
 
 app.get("/api/stats/nimiq", async function(req, res) {
@@ -485,6 +520,83 @@ app.get("/api/stats/nimiqwatch", cache("5 minutes"), async function(req, res) {
     ).data;
     const { fee, payout_frequency } = (
       await axios.get("https://pool.nimiq.watch/api/pool.json", {
+        timeout: 5000
+      })
+    ).data;
+
+    res.send({
+      hashrate: parseHashrate(data.hashrate),
+      hashrateComplete: Number(data.hashrate.toFixed(0)),
+      miners: data.user_count,
+      workers: data.device_count,
+      blocksMined: data.block_count,
+      pool_fee: (fee < 1 ? parseFloat(fee).toFixed(2) : fee) + "%",
+      minimum_payout: 10,
+      payout_frecuency: Number(payout_frequency.match(/\d+/)[0])
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/stats/acemining", cache("5 minutes"), async function(req, res) {
+  try {
+    const { hashrate } = (
+      await axios.get("https://api.acemining.co/api/hashrate", {
+        timeout: 20000
+      })
+    ).data;
+
+    const { total } = (
+      await axios.get("https://api.acemining.co/api/miners", {
+        timeout: 20000
+      })
+    ).data;
+
+    const { users } = (
+      await axios.get("https://api.acemining.co/api/users", {
+        timeout: 20000
+      })
+    ).data;
+
+    const { poolfee, minimal, payoutinterval } = (
+      await axios.get("https://api.acemining.co/api/poolinfo", {
+        timeout: 20000
+      })
+    ).data;
+
+    const { BlocksMined } = (
+      await axios.get("https://api.acemining.co/api/blocksmined", {
+        timeout: 20000
+      })
+    ).data;
+
+    res.send({
+      hashrate: parseHashrate(hashrate),
+      hashrateComplete: Number(hashrate.toFixed(0)),
+      miners: users,
+      workers: total,
+      blocksMined: BlocksMined,
+      pool_fee: poolfee,
+      minimum_payout: Number(minimal.match(/\d+/)[0]),
+      payout_frecuency: Number(payoutinterval.match(/\d+/)[0])
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/stats/hashexpress", cache("5 minutes"), async function(req, res) {
+  try {
+    const data = (
+      await axios.get("https://nim.hash.express/api/stats.json", {
+        timeout: 5000
+      })
+    ).data;
+    const { fee, payout_frequency } = (
+      await axios.get("https://nim.hash.express/api/pool.json", {
         timeout: 5000
       })
     ).data;
@@ -843,6 +955,106 @@ app.get("/api/icemining/:address", async function(req, res) {
       balance: parseBalance((data.balance + data.unsold) * 1e5),
       confirmed_balance: parseBalance(data.balance * 1e5),
       unconfirmed_balance: parseBalance(data.unsold * 1e5),
+      deviceList
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/acemining/:address", async function(req, res) {
+  try {
+    const address = req.params.address;
+    const { hashrate } = (
+      await axios.get(`https://api.acemining.co/api/userhash/${address}`, {
+        timeout: 5000
+      })
+    ).data;
+
+    const { balance } = (
+      await axios.get(`https://api.acemining.co/api/balance/${address}`, {
+        timeout: 5000
+      })
+    ).data;
+
+    const devices = (
+      await axios.get(`https://api.acemining.co/api/devices/${address}`, {
+        timeout: 5000
+      })
+    ).data;
+
+    if (hashrate === null) {
+      res.send("Not found");
+      return;
+    }
+
+    const deviceList = [];
+
+    devices.forEach(x => {
+      deviceList.push({
+        deviceName: x.device,
+        deviceId: x.device,
+        hashrate: parseHashrate(x.hashrate),
+        total_shares: "Unknown"
+      });
+    });
+
+    res.send({
+      address_hashrate: parseHashrate(hashrate),
+      balance: parseBalance(balance),
+      confirmed_balance: parseBalance(balance),
+      unconfirmed_balance: 0,
+      deviceList
+    });
+  } catch (e) {
+    console.log("Error ACE: ", e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/hashexpress/:address", async function(req, res) {
+  try {
+    const address = req.params.address;
+    const { id } = (
+      await axios.get(`https://nim.hash.express/api/user/${address}.json`, {
+        timeout: 5000
+      })
+    ).data;
+
+    if (id === null) {
+      res.send("Not found");
+      return;
+    }
+
+    const devices = (
+      await axios.get(`https://nim.hash.express/api/user/${id}/devices.json`, {
+        timeout: 5000
+      })
+    ).data;
+    const { confirmed } = (
+      await axios.get(`https://nim.hash.express/api/user/${id}/balance.json`, {
+        timeout: 5000
+      })
+    ).data;
+
+    const deviceList = [];
+    let address_hashrate = 0;
+    devices.forEach(x => {
+      address_hashrate += x.hashrate;
+      deviceList.push({
+        deviceName: x.id,
+        deviceId: x.id,
+        hashrate: parseHashrate(x.hashrate),
+        total_shares: "Unknown"
+      });
+    });
+
+    res.send({
+      address_hashrate: parseHashrate(address_hashrate),
+      balance: parseBalance(confirmed),
+      confirmed_balance: parseBalance(confirmed),
+      unconfirmed_balance: 0,
       deviceList
     });
   } catch (e) {

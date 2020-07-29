@@ -39,7 +39,7 @@ export const state = () => [
     slogan: "First Greek Pool for Nimiq!",
     url: "siriuspool.net:8443"
   },
-  {
+  /* {
     icon: "/balkanpool.png",
     name: "balkanpool",
     displayName: "Balkan Mining Pool",
@@ -48,7 +48,7 @@ export const state = () => [
     extras: ["Slow API"],
     slogan: "Nimiq Pool hosted by Balkan users",
     url: "pool.balkanminingpool.com:8444"
-  },
+  }, */
   {
     icon: "/skypool.png",
     name: "skypool",
@@ -68,16 +68,27 @@ export const state = () => [
     extras: ["Pool run by Sören (Team Nimiq)"],
     slogan: "Nimiq Mining you can trust.",
     url: "pool.nimiq.watch:8443"
+  },
+  {
+    icon: "/hashexpress.png",
+    name: "hashexpress",
+    displayName: "HashExpress",
+    message: "PPLNS model",
+    status: "",
+    extras: ["PPLNS window is 240 blocks (~4 hours)"],
+    slogan: "Nimiq @ HashExpress",
+    url: "nim.hash.express:8444"
+  },
+  {
+    icon: "/acemining.png",
+    name: "acemining",
+    displayName: "Acemining",
+    message: "Maximum Uptime",
+    status: "",
+    extras: ["World Class Customer Support"],
+    slogan: "Join The Fight Against Mining Centralization!",
+    url: "pool.acemining.co:8443"
   }
-  /* {
-            icon: "/urp.png",
-            name: "urp",
-            displayName: "URP Best",
-            message: "Lowest Fees",
-            status: "",
-            extras: [" Pool fee: 0.5%"],
-            url: ""
-        } */
 ];
 
 export const mutations = {
