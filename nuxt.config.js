@@ -82,10 +82,6 @@ export default {
     {
       src: "~/plugins/notifications.js",
       ssr: false
-    },
-    {
-      src: "~/plugins/coinzilla.js",
-      ssr: false
     }
   ],
   /*
