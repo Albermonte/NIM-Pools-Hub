@@ -14,17 +14,21 @@
         data-ad-format="horizontal"
         data-full-width-responsive="true"
       />-->
-      <ins
+      <!-- <ins
         v-if="$vuetify.breakpoint.smAndDown"
         class="bmadblock-5ecbb30693ee28580bb674bb"
         style="display:inline-block;width:320px;height:100px;"
-      ></ins>
+      ></ins>-->
       <!-- <ins
         v-else
         class="bmadblock-5ecbb43593ee287b36b675b0"
         style="display:inline-block;width:728px;height:90px;"
       ></ins>-->
-      <div v-else class="coinzilla" data-zone="C-8375eca4229a60ea729"></div>
+      <div
+        class="coinzilla"
+        data-zone="C-8375eca4229a60ea729"
+        :style="$vuetify.breakpoint.smAndDown ? 'width: 320px;height: 100px' : 'width: 728px;height: 90px'"
+      ></div>
     </v-card>
   </div>
 </template>
