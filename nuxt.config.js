@@ -19,11 +19,10 @@ export default {
       }
     ],
     script: [
-      {
+      /* {
         src: "https://ad.bitmedia.io/js/adbybm.js/5ecbb30693ee28580bb674bb",
         async: true
-      },
-      /*
+      }, 
       {
         src: "https://ad.bitmedia.io/js/adbybm.js/5ecbb43593ee287b36b675b0",
         async: true
