@@ -19,11 +19,12 @@
         class="bmadblock-5ecbb30693ee28580bb674bb"
         style="display:inline-block;width:320px;height:100px;"
       ></ins>
-      <ins
+      <!-- <ins
         v-else
         class="bmadblock-5ecbb43593ee287b36b675b0"
         style="display:inline-block;width:728px;height:90px;"
-      ></ins>
+      ></ins>-->
+      <div v-else class="coinzilla" data-zone="C-8375eca4229a60ea729"></div>
     </v-card>
   </div>
 </template>

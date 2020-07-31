@@ -243,7 +243,7 @@ import DialogHelper from "~/components/CustomVuetify/DialogHelper";
 
 export default {
   components: {
-    DialogHelper
+    DialogHelper,
   },
   data: () => ({
     address: "",
@@ -255,7 +255,7 @@ export default {
     snackbar: false,
     stateInputAddress: false,
     preventInputAddressClose: false,
-    openDialog: false
+    openDialog: false,
   }),
   computed: {
     pageTransitionEnabled() {
@@ -279,7 +279,7 @@ export default {
     },
     addressBalance() {
       return this.$store.state.nimiq.balance;
-    }
+    },
   },
   mounted() {
     if (this.$store.state.localStorage.address)
@@ -287,13 +287,13 @@ export default {
         /(.{4})/g,
         "$1 "
       );
-    this.$root.$on("updateFromAddressInput", e => {
+    this.$root.$on("updateFromAddressInput", (e) => {
       this.address = e;
     });
   },
   updated() {
     let poolList = [...this.$store.state.poolList];
-    poolList.forEach(x => {
+    poolList.forEach((x) => {
       if (x.name === this.$route.name) {
         this.pageName = x.displayName;
       } else if (this.$route.name === "index") {
@@ -311,7 +311,7 @@ export default {
 
     const num = value
       .split("")
-      .map(c => {
+      .map((c) => {
         const code = c.toUpperCase().charCodeAt(0);
         return code >= 48 && code <= 57 ? c : (code - 55).toString();
       })
@@ -350,9 +350,9 @@ export default {
     showInputAddress(value) {
       if (this.preventInputAddressClose) return;
       this.stateInputAddress = value;
-    }
+    },
   },
-  middleware: "updateInfo"
+  middleware: "updateInfo",
 };
 </script>
 

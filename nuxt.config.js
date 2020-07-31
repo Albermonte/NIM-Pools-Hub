@@ -23,6 +23,7 @@ export default {
         src: "https://ad.bitmedia.io/js/adbybm.js/5ecbb30693ee28580bb674bb",
         async: true
       },
+      /*
       {
         src: "https://ad.bitmedia.io/js/adbybm.js/5ecbb43593ee287b36b675b0",
         async: true
@@ -38,12 +39,19 @@ export default {
       {
         src: "https://ad.bitmedia.io/js/adbybm.js/5ecbb7ad93ee2861f0b6771b",
         async: true
-      }
+      } */
       /* {
         src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
         async: true,
         "data-ad-client": "ca-pub-6521406599691829"
       } */
+      /* {
+        src: "https://coinzillatag.com/lib/sticky.js"
+      }, */
+      {
+        src: "https://coinzillatag.com/lib/display.js",
+        async: true
+      }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
@@ -73,6 +81,10 @@ export default {
     },
     {
       src: "~/plugins/notifications.js",
+      ssr: false
+    },
+    {
+      src: "~/plugins/coinzilla.js",
       ssr: false
     }
   ],
