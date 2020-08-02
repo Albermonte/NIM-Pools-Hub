@@ -278,6 +278,20 @@ const isHashexpressOnline = async retry => {
   }
 };
 
+const isSicknetworkOnline = async retry => {
+  try {
+    const { device_count, hashrate } = (
+      await axios.get("http://nimiq.sick.network/api/stats.json", {
+        timeout: 5000
+      })
+    ).data;
+    return device_count > 0 || hashrate > 0;
+  } catch {
+    if (retry) return isHashexpressOnline(false);
+    return false;
+  }
+};
+
 // Nimiq Stats
 
 app.get("/api/stats/nimiq", async function(req, res) {
@@ -597,6 +611,35 @@ app.get("/api/stats/hashexpress", cache("5 minutes"), async function(req, res) {
     ).data;
     const { fee, payout_frequency } = (
       await axios.get("https://nim.hash.express/api/pool.json", {
+        timeout: 5000
+      })
+    ).data;
+
+    res.send({
+      hashrate: parseHashrate(data.hashrate),
+      hashrateComplete: Number(data.hashrate.toFixed(0)),
+      miners: data.user_count,
+      workers: data.device_count,
+      blocksMined: data.block_count,
+      pool_fee: (fee < 1 ? parseFloat(fee).toFixed(2) : fee) + "%",
+      minimum_payout: 10,
+      payout_frecuency: Number(payout_frequency.match(/\d+/)[0])
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/stats/sicknetwork", cache("5 minutes"), async function(req, res) {
+  try {
+    const data = (
+      await axios.get("http://nimiq.sick.network/api/stats.json", {
+        timeout: 5000
+      })
+    ).data;
+    const { fee, payout_frequency } = (
+      await axios.get("http://nimiq.sick.network/api/pool.json", {
         timeout: 5000
       })
     ).data;
@@ -1034,6 +1077,56 @@ app.get("/api/hashexpress/:address", async function(req, res) {
     ).data;
     const { confirmed } = (
       await axios.get(`https://nim.hash.express/api/user/${id}/balance.json`, {
+        timeout: 5000
+      })
+    ).data;
+
+    const deviceList = [];
+    let address_hashrate = 0;
+    devices.forEach(x => {
+      address_hashrate += x.hashrate;
+      deviceList.push({
+        deviceName: x.id,
+        deviceId: x.id,
+        hashrate: parseHashrate(x.hashrate),
+        total_shares: "Unknown"
+      });
+    });
+
+    res.send({
+      address_hashrate: parseHashrate(address_hashrate),
+      balance: parseBalance(confirmed),
+      confirmed_balance: parseBalance(confirmed),
+      unconfirmed_balance: 0,
+      deviceList
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/sicknetwork/:address", async function(req, res) {
+  try {
+    const address = req.params.address;
+    const { id } = (
+      await axios.get(`http://nimiq.sick.network/api/user/${address}.json`, {
+        timeout: 5000
+      })
+    ).data;
+
+    if (id === null) {
+      res.send("Not found");
+      return;
+    }
+
+    const devices = (
+      await axios.get(`http://nimiq.sick.network/api/user/${id}/devices.json`, {
+        timeout: 5000
+      })
+    ).data;
+    const { confirmed } = (
+      await axios.get(`http://nimiq.sick.network/api/user/${id}/balance.json`, {
         timeout: 5000
       })
     ).data;

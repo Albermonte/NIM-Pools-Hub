@@ -1,11 +1,21 @@
 export const state = () => [
   {
+    icon: "/acemining.png",
+    name: "acemining",
+    displayName: "Acemining",
+    message: "Recommended",
+    status: "",
+    extras: ["World Class Customer Support", "Maximum Uptime"],
+    slogan: "Join The Fight Against Mining Centralization!",
+    url: "pool.acemining.co:8443"
+  },
+  {
     icon: "/nimpool.png",
     name: "nimpool",
     displayName: "Nimpool",
-    message: "Recommended",
+    message: "Non-profit",
     status: "",
-    extras: ["Non-profit"],
+    extras: ["Managed by a member of Team Nimiq"],
     slogan: "Nimiq Pool Mining Done Right. Secure. Distributed.",
     url: "eu.nimpool.io:8444"
   },
@@ -80,14 +90,14 @@ export const state = () => [
     url: "nim.hash.express:8444"
   },
   {
-    icon: "/acemining.png",
-    name: "acemining",
-    displayName: "Acemining",
-    message: "Maximum Uptime",
+    icon: "/nologo.png",
+    name: "sicknetwork",
+    displayName: "NIMIQ SICK NETWORK!",
+    message: "Spain Based",
     status: "",
-    extras: ["World Class Customer Support"],
-    slogan: "Join The Fight Against Mining Centralization!",
-    url: "pool.acemining.co:8443"
+    extras: ["Small Pool"],
+    slogan: "DAAAMP EEEEEEET",
+    url: "nimiq.sick.network:8444"
   }
 ];
 

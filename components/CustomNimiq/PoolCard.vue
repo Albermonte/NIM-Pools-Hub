@@ -109,16 +109,16 @@
 export default {
   props: {
     pool: {
-      type: Object
+      type: Object,
     },
     height: {
       type: Number,
-      default: 190
+      default: 190,
     },
     width: {
       type: Number,
-      default: 360
-    }
+      default: 360,
+    },
   },
   computed: {
     poolFee() {
@@ -127,7 +127,7 @@ export default {
       const num = percentage.substr(0, percentage.indexOf("%")).split(".");
       return {
         whole: num[0],
-        decimal: num[1]
+        decimal: num[1],
       };
     },
     minimumPayout() {
@@ -135,8 +135,8 @@ export default {
     },
     payoutFrecuency() {
       return eval("this.$store.state." + this.pool.name + ".payout_frecuency");
-    }
-  }
+    },
+  },
 };
 </script>
 
