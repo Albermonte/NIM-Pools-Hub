@@ -1009,7 +1009,7 @@ app.get("/api/icemining/:address", async function(req, res) {
 app.get("/api/acemining/:address", async function(req, res) {
   try {
     const address = req.params.address;
-    const { hashrate } = (
+    const hashrate = (
       await axios.get(`https://api.acemining.co/api/userhash/${address}`, {
         timeout: 5000
       })
@@ -1044,7 +1044,7 @@ app.get("/api/acemining/:address", async function(req, res) {
     });
 
     res.send({
-      address_hashrate: parseHashrate(hashrate),
+      address_hashrate: parseHashrate(hashrate[0].total),
       balance: parseBalance(balance),
       confirmed_balance: parseBalance(balance),
       unconfirmed_balance: 0,
