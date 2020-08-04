@@ -88,8 +88,8 @@ export const state = () => [
     extras: ["PPLNS window is 240 blocks (~4 hours)"],
     slogan: "Nimiq @ HashExpress",
     url: "nim.hash.express:8444"
-  },
-  {
+  }
+  /* {
     icon: "/nologo.png",
     name: "sicknetwork",
     displayName: "NIMIQ SICK NETWORK!",
@@ -98,7 +98,7 @@ export const state = () => [
     extras: ["Small Pool"],
     slogan: "DAAAMP EEEEEEET",
     url: "nimiq.sick.network:8444"
-  }
+  } */
 ];
 
 export const mutations = {
