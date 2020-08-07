@@ -1,6 +1,11 @@
 <template>
   <v-row justify="space-around">
-    <v-card class="ml-6 d-flex flex-column justify-space-between" width="45%">
+    <v-card
+      hover
+      class="ml-6 d-flex flex-column justify-space-between"
+      width="45%"
+      href="https://github.com/Albermonte/nim-pools-hub-miner/releases/latest"
+    >
       <v-list class="pt-3">
         <v-list-item class="d-flex justify-center align-center">
           <v-list-item-avatar tile size="70">
@@ -37,7 +42,12 @@
         >Download</v-btn>
       </v-card-actions>
     </v-card>
-    <v-card class="mr-6 d-flex flex-column justify-space-between" width="45%">
+    <v-card
+      hover
+      class="mr-6 d-flex flex-column justify-space-between"
+      width="45%"
+      @click="chooseWizard"
+    >
       <v-list class="pt-3">
         <v-list-item class="d-flex justify-center align-center">
           <span class="font-weight-regular h2">NQ-Miner</span>
