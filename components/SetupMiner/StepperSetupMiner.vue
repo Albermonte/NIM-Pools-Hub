@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="px-12 mx-12">
     <v-lazy v-model="isActive" transition="fade-transition">
       <v-stepper v-model="page">
         <v-stepper-header>
@@ -27,6 +27,12 @@
               @click:clear="clearAddress"
             />
             <div class="py-2 d-flex justify-end align-center" style="min-height: 70px">
+              <v-btn
+                text
+                class="mr-auto mt-2"
+                color="grey darken-4"
+                @click="chooseWizard"
+              >Back to Miner selection</v-btn>
               <v-scroll-y-reverse-transition>
                 <v-btn
                   v-if="isButtonActive"
@@ -222,14 +228,14 @@
 </template>
 
 <script>
-import PageHeader from "./PageHeader.vue";
+import PageHeader from "~/components/CustomNimiq/PageHeader.vue";
 import PoolList from "~/components/CustomNimiq/PoolList";
 import { downloadWindows, downloadLinux } from "~/components/downloadHelper";
 
 export default {
   components: {
     PageHeader,
-    PoolList
+    PoolList,
   },
   data() {
     return {
@@ -253,25 +259,25 @@ export default {
           title: "First, enter you Address",
           text:
             "This is the address where all the pool's payments will go<br>Make sure it's an address you own",
-          button: "Let's Choose a Pool"
+          button: "Let's Choose a Pool",
         },
         {
           title: "Now Choose a Pool",
           text:
             "Here's the list of pools supported by NIM POOLS HUB, click one to select it:",
-          button: "Let's MINE!"
+          button: "Let's MINE!",
         },
         {
           title: "What GPU do you have?",
           text: "If you don't know, choose AMD",
-          button: "Got it!"
+          button: "Got it!",
         },
         {
           title: "All Ready to Start Mining",
           text: "",
-          button: "Finished!"
-        }
-      ]
+          button: "Finished!",
+        },
+      ],
     };
   },
   computed: {
@@ -283,7 +289,7 @@ export default {
     },
     buttonText() {
       return this.content[this.page - 1].button;
-    }
+    },
   },
   mounted() {
     this.$root.$on("poolURL", ({ url, name }) => {
@@ -307,7 +313,7 @@ export default {
 
     const num = value
       .split("")
-      .map(c => {
+      .map((c) => {
         const code = c.toUpperCase().charCodeAt(0);
         return code >= 48 && code <= 57 ? c : (code - 55).toString();
       })
@@ -369,8 +375,11 @@ export default {
     },
     openDialog() {
       this.dialogFinal = true;
-    }
-  }
+    },
+    chooseWizard() {
+      this.$emit("chooseWizard", false);
+    },
+  },
 };
 </script>
 

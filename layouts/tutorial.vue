@@ -6,8 +6,8 @@
           <v-icon left>mdi-arrow-left</v-icon>Back to Hub
         </v-btn>
         <v-row align="center" justify="center" style="height: calc(100% - 110px)">
-          <v-col cols="10">
-            <nuxt />
+          <v-col class="d-flex justify-center align-center" style="height: 100%; width: 100%">
+            <nuxt style="width: 100%" />
           </v-col>
         </v-row>
       </v-container>

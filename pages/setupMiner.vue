@@ -1,13 +1,23 @@
 <template>
-  <Wizard />
+  <div>
+    <div v-if="$vuetify.breakpoint.smAndDown" class="text-center">
+      <span>Please visit us on a Desktop PC</span>
+    </div>
+    <div v-else>
+      <MinerSelect v-if="!wizardDisplay" class="pl-3" @chooseWizard="chooseWizard" />
+      <Wizard v-else @chooseWizard="chooseWizard" />
+    </div>
+  </div>
 </template>
 
 <script>
-import Wizard from "~/components/CustomNimiq/StepperSetupMiner";
+import Wizard from "~/components/SetupMiner/StepperSetupMiner";
+import MinerSelect from "~/components/SetupMiner/MinerSelect";
 
 export default {
   components: {
-    Wizard
+    Wizard,
+    MinerSelect,
   },
   layout: "tutorial",
   async fetch({ store, params, $axios }) {
@@ -24,7 +34,7 @@ export default {
         if (region === "us")
           store.dispatch("poolList/UPDATE_POOLURL", {
             index,
-            url: "us.nimpool.io:8444"
+            url: "us.nimpool.io:8444",
           });
         const status = (await $axios.$get(
           `${window.location.origin}/api/isOnline/${x.name}` + region
@@ -45,6 +55,16 @@ export default {
       await store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
     });
   },
-  fetchOnServer: false
+  fetchOnServer: false,
+  data() {
+    return {
+      wizardDisplay: false,
+    };
+  },
+  methods: {
+    chooseWizard(value) {
+      this.wizardDisplay = value;
+    },
+  },
 };
 </script>
