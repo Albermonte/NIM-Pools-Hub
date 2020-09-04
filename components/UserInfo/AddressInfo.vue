@@ -9,8 +9,8 @@
         title="Balance"
         :value="balance"
         :small-value="currency"
-        :sub-text-right="'Confirmed: ' + confirmedBalance"
-        :sub-text-left="'Unconfirmed: ' + unconfirmedBalance"
+        :sub-text-right="`Confirmed: ${confirmedBalance}`"
+        :sub-text-left="`Expected 24 Hours: ${(adressHashrate * nim_day_kh).toFixed(0)} NIM`"
       />
     </v-col>
     <v-col class="py-0">
@@ -49,12 +49,12 @@ import materialStatsCard from "~/components/CustomVuetify/material/AppStatsCard"
 
 export default {
   components: {
-    materialStatsCard
+    materialStatsCard,
   },
   data: () => ({
     interval: "10 minutes",
     time: ["10 minutes", "30 minutes", "1 hour", "3 hours", "24 hours"],
-    currency: "NIM"
+    currency: "NIM",
   }),
   computed: {
     balance() {
@@ -78,7 +78,7 @@ export default {
       let adressHashrate = eval(
         "this.$store.state." + this.$route.name + ".address_hashrate"
       );
-      if (adressHashrate !== 0 && typeof(adressHashrate) !== "undefined")
+      if (adressHashrate !== 0 && typeof adressHashrate !== "undefined")
         return Number(adressHashrate.substr(0, adressHashrate.indexOf(" ")));
       else return 0;
     },
@@ -86,7 +86,7 @@ export default {
       let adressHashrate = eval(
         "this.$store.state." + this.$route.name + ".address_hashrate"
       );
-      if (adressHashrate !== 0 && typeof(adressHashrate) !== "undefined")
+      if (adressHashrate !== 0 && typeof adressHashrate !== "undefined")
         return adressHashrate.substr(adressHashrate.indexOf(" ") + 1);
       else return "kH/s";
     },
@@ -96,10 +96,16 @@ export default {
         return eval(
           "this.$store.state." + this.$route.name + ".deviceList.length"
         );
-      }catch{
-        return 0
+      } catch {
+        return 0;
       }
-    }
+    },
+    nim_day_kh() {
+      const nim_day_kh = this.$store.state.nimiq.nim_day_kh;
+      if (nim_day_kh !== 0 && typeof nim_day_kh !== "undefined")
+        return Number(nim_day_kh.substr(0, nim_day_kh.indexOf(" ")));
+      else return 0;
+    },
   },
   updated() {
     // const temp = window.localStorage.updateInterval
@@ -115,6 +121,6 @@ export default {
   },
   mounted() {
     this.interval = window.localStorage.updateInterval;
-  }
+  },
 };
 </script>
