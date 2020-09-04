@@ -287,7 +287,7 @@ const isSicknetworkOnline = async retry => {
     ).data;
     return device_count > 0 || hashrate > 0;
   } catch {
-    if (retry) return isHashexpressOnline(false);
+    if (retry) return isSicknetworkOnline(false);
     return false;
   }
 };
