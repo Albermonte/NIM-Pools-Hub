@@ -1019,7 +1019,9 @@ app.get("/api/acemining/:address", async function(req, res) {
       await axios.get(`https://api.acemining.co/api/balance/${address}`, {
         timeout: 5000
       })
-    ).data;
+    ).data[0];
+
+    console.log(balance);
 
     const devices = (
       await axios.get(`https://api.acemining.co/api/devices/${address}`, {
@@ -1034,10 +1036,10 @@ app.get("/api/acemining/:address", async function(req, res) {
 
     const deviceList = [];
 
-    devices.forEach(x => {
+    devices.forEach((x, index) => {
       deviceList.push({
         deviceName: x.device,
-        deviceId: x.device,
+        deviceId: index,
         hashrate: parseHashrate(x.hashrate),
         total_shares: x.shares
       });
