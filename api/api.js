@@ -1021,8 +1021,6 @@ app.get("/api/acemining/:address", async function(req, res) {
       })
     ).data[0];
 
-    console.log(balance);
-
     const devices = (
       await axios.get(`https://api.acemining.co/api/devices/${address}`, {
         timeout: 5000
