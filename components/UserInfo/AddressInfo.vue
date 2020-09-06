@@ -9,7 +9,7 @@
         title="Balance"
         :value="balance"
         :small-value="currency"
-        :sub-text-right="`Confirmed: ${confirmedBalance}`"
+        :sub-text-right="`Confirmed: ${confirmedBalance} NIM`"
         :sub-text-left="`Expected 24 Hours: ${(adressHashrate * nim_day_kh).toFixed(0)} NIM`"
       />
     </v-col>

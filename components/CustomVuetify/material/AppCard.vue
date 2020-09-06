@@ -1,11 +1,5 @@
 <template>
-  <v-card
-    v-bind="$attrs"
-    :style="styles"
-    min-width="300"
-    max-width="640"
-    v-on="$listeners"
-  >
+  <v-card v-bind="$attrs" :style="styles" :min-width="minWidth" max-width="640" v-on="$listeners">
     <helper-offset v-if="hasOffset" :inline="inline" :full-width="fullWidth" :offset="offset">
       <v-card
         v-if="!$slots.offset"
@@ -23,7 +17,10 @@
       <slot v-else name="offset" />
     </helper-offset>
 
-    <v-card-text class="d-flex flex-column justify-center" :style="$vuetify.breakpoint.xs ? 'max-height: 250px;' : 'max-height: 215px;'">
+    <v-card-text
+      class="d-flex flex-column justify-center"
+      :style="$vuetify.breakpoint.xs ? 'max-height: 250px;' : 'max-height: 215px;'"
+    >
       <slot />
     </v-card-text>
 
@@ -34,59 +31,65 @@
 </template>
 
 <script>
-import helperOffset from '~/components/CustomVuetify/helper/AppOffset'
+import helperOffset from "~/components/CustomVuetify/helper/AppOffset";
 
 export default {
   components: {
-    helperOffset
+    helperOffset,
   },
   inheritAttrs: false,
   props: {
     color: {
       type: String,
-      default: 'secondary'
+      default: "secondary",
     },
     elevation: {
       type: [Number, String],
-      default: 10
+      default: 10,
     },
     inline: {
       type: Boolean,
-      default: false
+      default: false,
     },
     fullWidth: {
       type: Boolean,
-      default: false
+      default: false,
     },
     offset: {
       type: [Number, String],
-      default: 24
+      default: 24,
     },
     title: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     text: {
       type: String,
-      default: undefined
-    }
+      default: undefined,
+    },
+    minWidth: {
+      type: Number,
+      default: 300,
+    },
   },
   computed: {
-    hasOffset () {
+    hasOffset() {
       return (
         this.$slots.header || this.$slots.offset || this.title || this.text
-      )
+      );
     },
-    styles () {
-      if (!this.hasOffset) { return null }
+    styles() {
+      if (!this.hasOffset) {
+        return null;
+      }
 
       return {
         marginBottom: `${this.offset}px`,
-        marginTop: `${this.offset * 2}px`
-      }
-    }
-  }
-}
+        marginTop: `${this.offset * 2}px`,
+      };
+    },
+  },
+};
 </script>
 
 <style lang="scss">

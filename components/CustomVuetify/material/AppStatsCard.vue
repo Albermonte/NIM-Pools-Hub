@@ -3,7 +3,7 @@
     <material-card
       v-bind="$attrs"
       class="v-card--material-stats card"
-      min-width="300"
+      min-width="340"
       v-on="$listeners"
     >
       <v-card
