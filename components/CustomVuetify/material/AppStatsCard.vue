@@ -70,11 +70,7 @@
         <v-row v-else class="pt-3 pb-1 pl-5">
           <v-icon v-show="subIcon" :color="subIconColor" size="20" class="mr-2">{{ subIcon }}</v-icon>
           <span :class="subTextColor" class="caption font-weight-light" v-text="subTextLeft" />
-          <span
-            :class="[subTextColor, subTextAlingRight ? 'ml-auto pr-5' : 'pr-5']"
-            class="caption font-weight-light"
-            v-text="subTextRight"
-          />
+          <span class="caption font-weight-light ml-auto pr-5" v-text="subTextRight" />
         </v-row>
       </template>
     </material-card>
@@ -90,83 +86,70 @@ export default {
   components: {
     materialCard,
     materialChart,
-    materialCheckbox
+    materialCheckbox,
   },
   inheritAttrs: false,
   props: {
     ...materialCard.props,
     icon: {
       type: String,
-      required: true
+      required: true,
     },
     subIcon: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     subIconColor: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     subTextColor: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     subTextLeft: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     subTextRight: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     currencyBtn: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     title: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     value: {
       type: Number,
-      default: undefined
+      default: undefined,
     },
     smallValue: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     graph: {
       type: Array,
-      default: undefined
+      default: undefined,
     },
     checkbox: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      subTextAlingRight: true,
-      activateUSD: false
+      activateUSD: false,
     };
   },
   computed: {
     usdPrice() {
       return Number(this.$store.state.nimiq.price.slice(0, -2));
-    }
+    },
   },
-  mounted() {
-    if (this.subTextRight && this.subTextLeft) {
-      this.subTextAlingRight =
-        this.subTextLeft.length + this.subTextRight.length < 42;
-    }
-  },
-  updated() {
-    if (this.subTextRight && this.subTextLeft) {
-      this.subTextAlingRight =
-        this.subTextLeft.length + this.subTextRight.length < 42;
-    }
-  }
 };
 </script>
 

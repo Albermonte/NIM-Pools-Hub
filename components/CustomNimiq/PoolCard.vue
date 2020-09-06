@@ -64,20 +64,14 @@
                 class="pa-0 d-flex flex-column justify-center align-center"
                 style="height: 70px; max-width: max-content; min-width: 180px;"
               >
-                <v-row
-                  class="justify-space-around"
-                  style="max-height: max-content; min-width: inherit;"
-                >
+                <v-row class="justify-space-around" style="max-height: 22px; min-width: inherit;">
                   <div style="max-width: max-content;">{{`Minimum Payout:`}}</div>
                   <div
                     class="pl-2 font-weight-regular"
                     style="max-width: max-content;"
                   >{{`${minimumPayout} NIM`}}</div>
                 </v-row>
-                <v-row
-                  class="justify-space-around"
-                  style="max-height: max-content; min-width: inherit;"
-                >
+                <v-row class="justify-space-around" style="max-height: 22px; min-width: inherit;">
                   <div style="max-width: max-content;">{{`Payout Interval:`}}</div>
                   <div
                     class="pl-1 font-weight-regular"
