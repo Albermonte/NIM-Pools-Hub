@@ -89,16 +89,6 @@ export const state = () => [
     slogan: "Nimiq @ HashExpress",
     url: "nim.hash.express:8444"
   }
-  /* {
-    icon: "/nologo.png",
-    name: "sicknetwork",
-    displayName: "NIMIQ SICK NETWORK!",
-    message: "Spain Based",
-    status: "",
-    extras: ["Small Pool"],
-    slogan: "DAAAMP EEEEEEET",
-    url: "nimiq.sick.network:8444"
-  } */
 ];
 
 export const mutations = {

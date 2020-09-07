@@ -10,7 +10,7 @@
         :value="balance"
         :small-value="currency"
         :sub-text-right="`Confirmed: ${confirmedBalance} NIM`"
-        :sub-text-left="`Expected 24 Hours: ${(adressHashrate * nim_day_kh).toFixed(0)} NIM`"
+        :sub-text-left="`Expected 24 Hours: ${(adressHashrateComplete / 1e3 * nim_day_kh).toFixed(0)} NIM`"
       />
     </v-col>
     <v-col class="py-0">
@@ -81,6 +81,12 @@ export default {
       if (adressHashrate !== 0 && typeof adressHashrate !== "undefined")
         return Number(adressHashrate.substr(0, adressHashrate.indexOf(" ")));
       else return 0;
+    },
+    adressHashrateComplete() {
+      const hs = eval(
+        "this.$store.state." + this.$route.name + ".address_hashrate_complete"
+      );
+      return Number(hs);
     },
     adressHashrateSmallValue() {
       let adressHashrate = eval(

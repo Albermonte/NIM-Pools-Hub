@@ -68,7 +68,6 @@ export default {
       default: undefined,
     },
     minWidth: {
-      type: Number,
       default: 300,
     },
   },

@@ -14,6 +14,7 @@ export const state = () => ({
   unconfirmed_balance: 0,
   deviceList: [],
   address_hashrate: 0,
+  address_hashrate_complete: 0,
   address_hashrate_array: [0],
   snackbarText: ""
 });
@@ -25,6 +26,7 @@ export const mutations = {
     state.unconfirmed_balance = value.unconfirmed_balance;
     state.deviceList = value.deviceList;
     state.address_hashrate = value.address_hashrate;
+    state.address_hashrate_complete = value.address_hashrate_complete;
     state.address_hashrate_array.push(value.address_hashrate);
   },
   updatePoolInfo(state, value) {

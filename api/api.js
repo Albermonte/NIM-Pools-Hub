@@ -680,12 +680,14 @@ app.get("/api/nimpool/:address", async function(req, res) {
           deviceName: x.device_id,
           deviceId: x.device_id,
           hashrate: parseHashrate(x.hashes_per_second),
+          hashrateComplete: Number(x.hashes_per_second.toFixed(2)),
           total_shares: x.shares
         });
       });
 
     res.send({
       address_hashrate: parseHashrate(address_hashrate),
+      address_hashrate_complete: address_hashrate,
       balance: parseBalance(result.balance),
       confirmed_balance: parseBalance(result.balanceWithoutPending),
       unconfirmed_balance: parseBalance(
@@ -726,6 +728,7 @@ app.get("/api/blankpool/:address", async function(req, res) {
           deviceName: x.deviceID,
           deviceId: x.deviceID,
           hashrate: parseHashrate(x.stats1.hash),
+          hashrateComplete: Number(x.stats1.hash.toFixed(2)),
           total_shares: x.stats24.shares
         });
       });
@@ -734,6 +737,8 @@ app.get("/api/blankpool/:address", async function(req, res) {
       address_hashrate: parseHashrate(
         info.hashrate[info.hashrate.length - 1].avgHR || 0
       ),
+      address_hashrate_complete:
+        info.hashrate[info.hashrate.length - 1].avgHR || 0,
       address_hashrate_array,
       balance: parseBalance(info.balance.owed),
       confirmed_balance: parseBalance(
@@ -783,6 +788,7 @@ app.get("/api/balkanpool/:address", async function(req, res) {
           deviceName: x.deviceID,
           deviceId: x.deviceID,
           hashrate: parseHashrate(x.stats1.hash),
+          hashrateComplete: Number(x.stats1.hash.toFixed(2)),
           total_shares: x.stats24.shares
         });
       });
@@ -791,6 +797,8 @@ app.get("/api/balkanpool/:address", async function(req, res) {
       address_hashrate: parseHashrate(
         info.hashrate[info.hashrate.length - 1].avgHR || 0
       ),
+      address_hashrate_complete:
+        info.hashrate[info.hashrate.length - 1].avgHR || 0,
       address_hashrate_array,
       balance: parseBalance(info.balance.owed),
       confirmed_balance: parseBalance(
@@ -840,13 +848,14 @@ app.get("/api/siriuspool/:address", async function(req, res) {
           deviceName: x.dev_name,
           deviceId: x.device_id,
           hashrate: parseHashrate(x.hashes_per_second),
+          hashrateComplete: Number(x.hashes_per_second.toFixed(2)),
           total_shares: x.shares
         });
       });
 
     res.send({
-      hashrate: parseHashrate(address_hashrate),
       address_hashrate: parseHashrate(address_hashrate),
+      address_hashrate_complete: address_hashrate,
       balance: parseBalance(ballance * 1e5), //Needs to be * 1e5 because it's on NIM and not Luna like all the rest
       confirmed_balance: parseBalance(confirmed * 1e5),
       unconfirmed_balance:
@@ -871,7 +880,7 @@ app.get("/api/skypool/:address", async function(req, res) {
     const { data, code } = (
       await axios.get(
         `https://api.nimiq.skypool.xyz/api/v1/pool/profile?address=${address}`,
-        { timeout: 8000 }
+        { timeout: 10000 }
       )
     ).data;
     if (code === -1) {
@@ -882,27 +891,26 @@ app.get("/api/skypool/:address", async function(req, res) {
     const address_hashrate_array = [];
     data.hashAndTimestamp.forEach(x => {
       address_hashrate_array.push(
-        parseHashrate(parseFloat((x.accepts + x.expired) / (20 * 60)))
+        parseFloat((x.accepts + x.expired) / (20 * 60))
       );
     });
+
+    const address_hashrate_complete = data.allDeviceCurrentAccepts / (5 * 60);
 
     const deviceList = [];
     data.workers.forEach((x, index) => {
       deviceList.push({
         deviceName: x.name,
         deviceId: index,
-        hashrate: parseHashrate(
-          parseFloat(
-            (x.totalAccepts + x.totalExpired) / (24 * 60 * 60)
-          ).toFixed(2)
-        ),
-        total_shares: "Unknown"
+        hashrate: parseHashrate(x.currentAccepts / (5 * 60)),
+        hashrateComplete: Number((x.currentAccepts / (5 * 60)).toFixed(2)),
+        total_shares: x.totalAccepts + x.totalExpired
       });
     });
 
     res.send({
-      address_hashrate:
-        address_hashrate_array[address_hashrate_array.length - 1] || 0,
+      address_hashrate: parseHashrate(address_hashrate_complete),
+      address_hashrate_complete,
       address_hashrate_array,
       balance: parseBalance(data.balance),
       confirmed_balance: 0,
@@ -948,12 +956,14 @@ app.get("/api/nimiqwatch/:address", async function(req, res) {
         deviceName: x.id,
         deviceId: x.id,
         hashrate: parseHashrate(x.hashrate),
+        hashrateComplete: Number(x.hashrate.toFixed(2)),
         total_shares: "Unknown"
       });
     });
 
     res.send({
       address_hashrate: parseHashrate(address_hashrate),
+      address_hashrate_complete: address_hashrate,
       balance: parseBalance(confirmed),
       confirmed_balance: parseBalance(confirmed),
       unconfirmed_balance: 0,
@@ -989,12 +999,14 @@ app.get("/api/icemining/:address", async function(req, res) {
         deviceName: x.worker,
         deviceId: data.userid,
         hashrate: parseHashrate(x.hashrate),
+        hashrateComplete: Number(x.hashrate.toFixed(2)),
         total_shares: x.shares_per_min + " per minute"
       });
     });
 
     res.send({
       address_hashrate: parseHashrate(address_hashrate),
+      address_hashrate_complete: address_hashrate,
       balance: parseBalance((data.balance + data.unsold) * 1e5),
       confirmed_balance: parseBalance(data.balance * 1e5),
       unconfirmed_balance: parseBalance(data.unsold * 1e5),
@@ -1039,12 +1051,14 @@ app.get("/api/acemining/:address", async function(req, res) {
         deviceName: x.device,
         deviceId: index,
         hashrate: parseHashrate(x.hashrate),
+        hashrateComplete: Number(x.hashrate.toFixed(2)),
         total_shares: x.shares
       });
     });
 
     res.send({
       address_hashrate: parseHashrate(hashrate[0].total),
+      address_hashrate_complete: hashrate[0].total,
       balance: parseBalance(balance),
       confirmed_balance: parseBalance(balance),
       unconfirmed_balance: 0,
@@ -1089,62 +1103,14 @@ app.get("/api/hashexpress/:address", async function(req, res) {
         deviceName: x.id,
         deviceId: x.id,
         hashrate: parseHashrate(x.hashrate),
+        hashrateComplete: Number(x.hashrate.toFixed(2)),
         total_shares: "Unknown"
       });
     });
 
     res.send({
       address_hashrate: parseHashrate(address_hashrate),
-      balance: parseBalance(confirmed),
-      confirmed_balance: parseBalance(confirmed),
-      unconfirmed_balance: 0,
-      deviceList
-    });
-  } catch (e) {
-    console.log(e);
-    res.send("offline");
-  }
-});
-
-app.get("/api/sicknetwork/:address", async function(req, res) {
-  try {
-    const address = req.params.address;
-    const { id } = (
-      await axios.get(`http://nimiq.sick.network/api/user/${address}.json`, {
-        timeout: 5000
-      })
-    ).data;
-
-    if (id === null) {
-      res.send("Not found");
-      return;
-    }
-
-    const devices = (
-      await axios.get(`http://nimiq.sick.network/api/user/${id}/devices.json`, {
-        timeout: 5000
-      })
-    ).data;
-    const { confirmed } = (
-      await axios.get(`http://nimiq.sick.network/api/user/${id}/balance.json`, {
-        timeout: 5000
-      })
-    ).data;
-
-    const deviceList = [];
-    let address_hashrate = 0;
-    devices.forEach(x => {
-      address_hashrate += x.hashrate;
-      deviceList.push({
-        deviceName: x.id,
-        deviceId: x.id,
-        hashrate: parseHashrate(x.hashrate),
-        total_shares: "Unknown"
-      });
-    });
-
-    res.send({
-      address_hashrate: parseHashrate(address_hashrate),
+      address_hashrate_complete: address_hashrate,
       balance: parseBalance(confirmed),
       confirmed_balance: parseBalance(confirmed),
       unconfirmed_balance: 0,
@@ -1201,7 +1167,7 @@ const parseHashrate = number => {
 };
 
 const parseBalance = number => {
-  if (typeof number === "undefined") return 0;
+  if (typeof number === "undefined" || number === null) return 0;
   return Number((parseFloat(number) / 1e5).toFixed(1));
 };
 
