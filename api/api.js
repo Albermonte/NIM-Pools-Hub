@@ -679,8 +679,7 @@ app.get("/api/nimpool/:address", async function(req, res) {
         deviceList.push({
           deviceName: x.device_id,
           deviceId: x.device_id,
-          hashrate: parseHashrate(x.hashes_per_second),
-          hashrateComplete: Number(x.hashes_per_second.toFixed(2)),
+          hashrate: `${(x.hashes_per_second / 1e3).toFixed(2)} kH/s`,
           total_shares: x.shares
         });
       });
@@ -727,8 +726,7 @@ app.get("/api/blankpool/:address", async function(req, res) {
         deviceList.push({
           deviceName: x.deviceID,
           deviceId: x.deviceID,
-          hashrate: parseHashrate(x.stats1.hash),
-          hashrateComplete: Number(x.stats1.hash.toFixed(2)),
+          hashrate: `${(x.stats1.hash / 1e3).toFixed(2)} kH/s`,
           total_shares: x.stats24.shares
         });
       });
@@ -787,8 +785,7 @@ app.get("/api/balkanpool/:address", async function(req, res) {
         deviceList.push({
           deviceName: x.deviceID,
           deviceId: x.deviceID,
-          hashrate: parseHashrate(x.stats1.hash),
-          hashrateComplete: Number(x.stats1.hash.toFixed(2)),
+          hashrate: `${(x.stats1.hash / 1e3).toFixed(2)} kH/s`,
           total_shares: x.stats24.shares
         });
       });
@@ -847,8 +844,7 @@ app.get("/api/siriuspool/:address", async function(req, res) {
         deviceList.push({
           deviceName: x.dev_name,
           deviceId: x.device_id,
-          hashrate: parseHashrate(x.hashes_per_second),
-          hashrateComplete: Number(x.hashes_per_second.toFixed(2)),
+          hashrate: `${(x.hashes_per_second / 1e3).toFixed(2)} kH/s`,
           total_shares: x.shares
         });
       });
@@ -902,8 +898,7 @@ app.get("/api/skypool/:address", async function(req, res) {
       deviceList.push({
         deviceName: x.name,
         deviceId: index,
-        hashrate: parseHashrate(x.currentAccepts / (5 * 60)),
-        hashrateComplete: Number((x.currentAccepts / (5 * 60)).toFixed(2)),
+        hashrate: `${(x.currentAccepts / (5 * 60) / 1e3).toFixed(2)} kH/s`,
         total_shares: x.totalAccepts + x.totalExpired
       });
     });
@@ -956,7 +951,7 @@ app.get("/api/nimiqwatch/:address", async function(req, res) {
         deviceName: x.id,
         deviceId: x.id,
         hashrate: parseHashrate(x.hashrate),
-        hashrateComplete: Number(x.hashrate.toFixed(2)),
+        hashrate: `${(x.hashrate / 1e3).toFixed(2)} kH/s`,
         total_shares: "Unknown"
       });
     });
@@ -998,8 +993,7 @@ app.get("/api/icemining/:address", async function(req, res) {
       deviceList.push({
         deviceName: x.worker,
         deviceId: data.userid,
-        hashrate: parseHashrate(x.hashrate),
-        hashrateComplete: Number(x.hashrate.toFixed(2)),
+        hashrate: `${(x.hashrate / 1e3).toFixed(2)} kH/s`,
         total_shares: x.shares_per_min + " per minute"
       });
     });
@@ -1050,8 +1044,7 @@ app.get("/api/acemining/:address", async function(req, res) {
       deviceList.push({
         deviceName: x.device,
         deviceId: index,
-        hashrate: parseHashrate(x.hashrate),
-        hashrateComplete: Number(x.hashrate.toFixed(2)),
+        hashrate: `${(x.hashrate / 1e3).toFixed(2)} kH/s`,
         total_shares: x.shares
       });
     });
@@ -1102,8 +1095,7 @@ app.get("/api/hashexpress/:address", async function(req, res) {
       deviceList.push({
         deviceName: x.id,
         deviceId: x.id,
-        hashrate: parseHashrate(x.hashrate),
-        hashrateComplete: Number(x.hashrate.toFixed(2)),
+        hashrate: `${(x.hashrate / 1e3).toFixed(2)} kH/s`,
         total_shares: "Unknown"
       });
     });
