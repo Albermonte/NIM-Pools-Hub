@@ -726,17 +726,14 @@ app.get("/api/blankpool/:address", async function(req, res) {
         deviceList.push({
           deviceName: x.deviceID,
           deviceId: x.deviceID,
-          hashrate: `${(x.stats1.hash / 1e3).toFixed(2)} kH/s`,
+          hashrate: `${(x.stats.hash / 1e3).toFixed(2)} kH/s`,
           total_shares: x.stats24.shares
         });
       });
 
     res.send({
-      address_hashrate: parseHashrate(
-        info.hashrate[info.hashrate.length - 1].avgHR || 0
-      ),
-      address_hashrate_complete:
-        info.hashrate[info.hashrate.length - 1].avgHR || 0,
+      address_hashrate: parseHashrate(info.general.stats.hash || 0),
+      address_hashrate_complete: info.general.stats.hash || 0,
       address_hashrate_array,
       balance: parseBalance(info.balance.owed),
       confirmed_balance: parseBalance(
