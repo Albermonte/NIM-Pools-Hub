@@ -1055,6 +1055,8 @@ app.get("/api/acemining/:address", async function(req, res) {
       deviceList
     });
   } catch (e) {
+    if (e.response.data.Error === "invalid address") res.send("Not found");
+
     console.log("Error ACE: ", e);
     res.send("offline");
   }
