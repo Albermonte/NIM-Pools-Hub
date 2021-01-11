@@ -509,6 +509,7 @@ app.get("/api/stats/icemining", cache("5 minutes"), async function(req, res) {
         { timeout: 15000 }
       )
     ).data;
+
     res.send({
       hashrate: parseHashrate(NIM.hashrate),
       hashrateComplete: Number(NIM.hashrate.toFixed(0)),

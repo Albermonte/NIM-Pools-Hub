@@ -105,11 +105,12 @@
                     {{
                       `${payoutFrecuency} ${
                         payoutFrecuency !== 1 ? "hours" : "hour"
+
                       }`
                     }}
                   </div>
                 </v-row>
-              </v-col>
+              </div>
             </v-row>
           </v-list-item-title>
         </v-list-item-content>
