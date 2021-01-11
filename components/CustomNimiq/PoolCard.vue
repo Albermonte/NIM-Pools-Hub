@@ -46,7 +46,7 @@
             <v-row class="pb-0" justify="center">
               <v-col
                 class="py-0 pb-1 d-flex flex-column align-center justify-center"
-                style="max-width: 125px; min-width: 125px"
+                style="max-width: 125px; min-width: 125px; height: 70px"
               >
                 <div class="headline d-flex">
                   <span
@@ -73,28 +73,19 @@
                   Pool fee
                 </div>
               </v-col>
-              <v-col
-                class="pa-0 d-flex flex-column justify-center align-center"
-                style="height: 80px; max-width: max-content; min-width: 180px"
-              >
-                <v-row
-                  class="justify-space-around mt-1"
-                  style="max-height: 22px; min-width: inherit"
-                >
+              <div style="max-width: max-content; min-width: 180px">
+                <v-row class="justify-space-around" style="max-height: 22px">
                   <div style="max-width: max-content">
                     {{ `Minimum Payout:` }}
                   </div>
                   <div
-                    class="pl-2 font-weight-regular mt-4"
+                    class="pl-2 font-weight-regular"
                     style="max-width: max-content"
                   >
                     {{ `${minimumPayout} NIM` }}
                   </div>
                 </v-row>
-                <v-row
-                  class="justify-space-around"
-                  style="max-height: 22px; min-width: inherit"
-                >
+                <v-row class="justify-space-around" style="max-height: 22px">
                   <div style="max-width: max-content">
                     {{ `Payout Interval:` }}
                   </div>
@@ -104,12 +95,12 @@
                   >
                     {{
                       `${payoutFrecuency} ${
-                        payoutFrecuency > 1 ? "hours" : "hour"
+                        payoutFrecuency === 1 ? "hour" : "hours"
                       }`
                     }}
                   </div>
                 </v-row>
-              </v-col>
+              </div>
             </v-row>
           </v-list-item-title>
         </v-list-item-content>
