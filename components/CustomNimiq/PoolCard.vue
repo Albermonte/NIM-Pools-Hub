@@ -1,14 +1,25 @@
 <template>
-	<v-card :height="height" :width="width" outlined style="border-radius: 8px">
+	<v-card
+		:height="height"
+		:width="width"
+		outlined
+		style="border-radius: 8px"
+	>
 		<v-list class="pt-3 pb-1">
 			<v-list-item>
 				<v-list-item-avatar size="50">
 					<v-img :src="pool.icon"></v-img>
 				</v-list-item-avatar>
-				<v-col class="pa-0" cols="6">
+				<v-col
+					class="pa-0"
+					cols="6"
+				>
 					<div class="headline">{{ pool.displayName }}</div>
 				</v-col>
-				<v-col class="pa-0 d-flex justify-center align-center" cols="3">
+				<v-col
+					class="pa-0 d-flex justify-center align-center"
+					cols="3"
+				>
 					<div class="mx-auto">
 						<v-chip
 							v-if="pool.status === 'online'"
@@ -16,24 +27,21 @@
 							color="green lighten-5"
 							class="font-weight-light"
 							x-small
-							>Online</v-chip
-						>
+						>Online</v-chip>
 						<v-chip
 							v-else-if="pool.status === 'offline'"
 							text-color="red accent-4"
 							color="red lighten-5"
 							class="font-weight-light"
 							x-small
-							>Offline</v-chip
-						>
+						>Offline</v-chip>
 						<v-chip
 							v-else
 							text-color="blue-grey accent-4"
 							color="blue-grey lighten-5"
 							x-small
 							class="font-weight-light"
-							>Checking</v-chip
-						>
+						>Checking</v-chip>
 					</div>
 				</v-col>
 			</v-list-item>
@@ -43,7 +51,10 @@
 						pool.slogan
 					}}</v-list-item-subtitle>
 					<v-list-item-title>
-						<v-row class="pb-0" justify="center">
+						<v-row
+							class="pb-0"
+							justify="center"
+						>
 							<v-col
 								class="py-0 pb-1 d-flex flex-column align-center justify-center"
 								style="max-width: 125px; min-width: 125px"
@@ -52,8 +63,7 @@
 									<span
 										class="font-weight-medium"
 										style="font-size: 32px; height: 100%"
-										>{{ poolFee.whole }}</span
-									>
+									>{{ poolFee.whole }}</span>
 									<span
 										v-if="poolFee.decimal"
 										class="title font-weight-regular mr-1 d-flex align-end"
@@ -62,9 +72,11 @@
 											margin-left: -2px;
 											font-size: 20px !important;
 										"
-										>.{{ poolFee.decimal }}</span
-									>
-									<span class="d-flex align-end" style="height: 100%">%</span>
+									>.{{ poolFee.decimal }}</span>
+									<span
+										class="d-flex align-end"
+										style="height: 100%"
+									>%</span>
 								</div>
 								<div
 									class="mt-n2 text-uppercase overline font-weight-bold grey--text text--darken-1"
@@ -79,10 +91,8 @@
 							>
 								<div class="m-grid">
 									<div>Minimum Payout:</div>
-									<!-- prettier-ignore -->
-									<div class="font-weight-regular text-right"> {{ minimumPayout }} NIM </div>
+									<div class="font-weight-regular text-right">{{ minimumPayout }} NIM</div>
 									<div>Payout Interval:</div>
-									<!-- prettier-ignore -->
 									<div class="font-weight-regular text-right">{{ payoutFrecuency }}</div>
 								</div>
 							</v-col>
@@ -101,8 +111,7 @@
 				color="primary"
 				nuxt
 				:to="pool.name"
-				>Go!</v-btn
-			>
+			>Go!</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
@@ -165,6 +174,6 @@ export default {
 	grid-template-columns: repeat(2, auto);
 	grid-template-rows: repeat(2, auto);
 	grid-row-gap: 5px;
-	width: 175px;
+	width: 180px;
 }
 </style>
