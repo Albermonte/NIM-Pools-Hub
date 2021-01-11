@@ -2,10 +2,18 @@
   <v-app style="background-color: #fafafa">
     <div
       v-if="$route.name !== 'index'"
-      :class="[$vuetify.breakpoint.xs ? 'navbar-mobile' : 'navbar', show ? 'stay-on-top' : '']"
-      :style="[$vuetify.breakpoint.xs && (show || sidebarOpen) ? 'width: 100%' : 'width: 0', sidebarOpen ? 'width: 100%' : 'width: 35px']"
+      :class="[
+        $vuetify.breakpoint.xs ? 'navbar-mobile' : 'navbar',
+        show ? 'stay-on-top' : '',
+      ]"
+      :style="[
+        $vuetify.breakpoint.xs && (show || sidebarOpen)
+          ? 'width: 100%'
+          : 'width: 0',
+        sidebarOpen ? 'width: 100%' : 'width: 35px',
+      ]"
     >
-      <v-card flat style="border-radius: 0 8px 8px 0;">
+      <v-card flat style="border-radius: 0 8px 8px 0">
         <v-navigation-drawer
           v-model="show"
           clipped
@@ -21,13 +29,22 @@
             <v-list
               nav
               class="d-flex flex-column justify-center"
-              :class="[!sidebarOpen && !$vuetify.breakpoint.xs ? 'align-center' : 'align-start', $vuetify.breakpoint.xs ? 'align-start' : '']"
+              :class="[
+                !sidebarOpen && !$vuetify.breakpoint.xs
+                  ? 'align-center'
+                  : 'align-start',
+                $vuetify.breakpoint.xs ? 'align-start' : '',
+              ]"
             >
               <template v-for="pool in poolList">
                 <v-list-item
                   :key="pool.displayName"
                   nuxt
-                  style="max-height: 60px; margin: 10px 15px 8px !important; width: 88%;"
+                  style="
+                    max-height: 60px;
+                    margin: 10px 15px 8px !important;
+                    width: 88%;
+                  "
                   :to="`${pool.name}`"
                   :disabled="!(pool.status === 'online')"
                 >
@@ -35,15 +52,25 @@
                     <img
                       :src="pool.icon"
                       alt="avatar"
-                      style="width: 35px; height: 35px; margin-right: 5px; border-radius: 50px"
+                      style="
+                        width: 35px;
+                        height: 35px;
+                        margin-right: 5px;
+                        border-radius: 50px;
+                      "
                     />
                   </v-list-item-action>
                   <v-list-item-content>
-                    <v-list-item-title>{{ pool.displayName }}</v-list-item-title>
+                    <v-list-item-title>{{
+                      pool.displayName
+                    }}</v-list-item-title>
                     <v-list-item-subtitle
-                      :class="pool.status === 'offline' ? 'red--text' : 'green--text'"
+                      :class="
+                        pool.status === 'offline' ? 'red--text' : 'green--text'
+                      "
                       class="text-capitalize text--darken-2"
-                    >{{ pool.status }}</v-list-item-subtitle>
+                      >{{ pool.status }}</v-list-item-subtitle
+                    >
                   </v-list-item-content>
                 </v-list-item>
               </template>
@@ -56,8 +83,8 @@
     <v-btn
       v-if="$route.name !== 'index'"
       class="hidden-sm-and-up"
-      style="top: 50%; margin-left: -50px;"
-      :style="show ? 'z-index: 1': 'z-index:10'"
+      style="top: 50%; margin-left: -50px"
+      :style="show ? 'z-index: 1' : 'z-index:10'"
       color="pink"
       dark
       fab
@@ -68,16 +95,28 @@
       <v-icon class="ml-7">mdi-chevron-right</v-icon>
     </v-btn>
 
-    <v-app-bar clipped-left app color="grey lighten-5" dark elevate-on-scroll style="z-index:15">
+    <v-app-bar
+      clipped-left
+      app
+      color="grey lighten-5"
+      dark
+      elevate-on-scroll
+      style="z-index: 15"
+    >
       <v-toolbar-title style="width: 100%">
-        <div v-if="$route.name === 'index'" class="d-flex align-center" style="width: max-content;">
+        <div
+          v-if="$route.name === 'index'"
+          class="d-flex align-center"
+          style="width: max-content"
+        >
           <v-avatar :size="$vuetify.breakpoint.xs ? 35 : 44">
             <img src="/nimpoolshub.png" alt="Logo" />
           </v-avatar>
           <span
             class="pl-2 black--text font-weight-medium text-uppercase"
-            :class="[$vuetify.breakpoint.xs ? 'body-2' : '',]"
-          >{{ pageName || heading }}</span>
+            :class="[$vuetify.breakpoint.xs ? 'body-2' : '']"
+            >{{ pageName || heading }}</span
+          >
           <v-tooltip
             :disabled="$vuetify.breakpoint.xs"
             bottom
@@ -93,9 +132,12 @@
                 absolute
                 right
                 href="/setupMiner"
-              >Setup Miner</v-btn>
+                >Setup Miner</v-btn
+              >
             </template>
-            <span class="green--text text--accent-3 text-center">Helper to setup your GPU Miner</span>
+            <span class="green--text text--accent-3 text-center"
+              >Helper to setup your GPU Miner</span
+            >
           </v-tooltip>
         </div>
         <div v-else class="d-flex align-center">
@@ -104,7 +146,7 @@
             color="grey darken-4"
             absolute
             class="ml-n3"
-            style="min-width: 50px;"
+            style="min-width: 50px"
             nuxt
             to="/"
           >
@@ -117,8 +159,11 @@
           >
             <span
               class="black--text font-weight-medium text-uppercase"
-              :style="$vuetify.breakpoint.xs ? 'font-size: 18px;' : 'font-size: 20px;'"
-            >{{ pageName || heading }}</span>
+              :style="
+                $vuetify.breakpoint.xs ? 'font-size: 18px;' : 'font-size: 20px;'
+              "
+              >{{ pageName || heading }}</span
+            >
             <div
               v-if="addressBalance && !$vuetify.breakpoint.xs"
               style="position: absolute; top: 12.5px; right: 55px"
@@ -128,28 +173,31 @@
                   <div v-on="on">
                     <span
                       class="black--text text-uppercase font-weight-medium"
-                      style="font-size: 18px;"
-                    >{{addressBalance}}</span>
+                      style="font-size: 18px"
+                      >{{ addressBalance }}</span
+                    >
                     <span
                       class="black--text text-uppercase font-weight-regular"
-                      style="font-size: 13px;"
-                    >{{' '}}NIM</span>
+                      style="font-size: 13px"
+                      >{{ " " }}NIM</span
+                    >
                   </div>
                 </template>
-                <span
-                  class="white--text"
-                >This is your address balance, it will be updated every 15 minutes</span>
+                <span class="white--text"
+                  >This is your address balance, it will be updated every 15
+                  minutes</span
+                >
               </v-tooltip>
             </div>
           </div>
-          <div style="position: absolute; right: 18px; top: 11px;">
+          <div style="position: absolute; right: 18px; top: 11px">
             <v-btn
               v-if="!stateInputAddress"
               text
               color="grey darken-4"
               right
               class="mr-n4"
-              style="min-width: 50px;"
+              style="min-width: 50px"
               @click="showInputAddress(true)"
               @mouseover="showInputAddress(true)"
             >
@@ -162,7 +210,7 @@
         <div
           v-if="stateInputAddress"
           @mouseleave="showInputAddress(false)"
-          style="position: absolute; right: 8px; top: 10px;"
+          style="position: absolute; right: 8px; top: 10px"
         >
           <v-text-field
             v-model="address"
@@ -180,19 +228,33 @@
             @click:clear="clearAddress"
             :style="$vuetify.breakpoint.xs ? '' : 'width: 500px;'"
             @focus="preventInputAddressClose = true"
-            @blur="preventInputAddressClose = false; showInputAddress(false)"
+            @blur="
+              preventInputAddressClose = false;
+              showInputAddress(false);
+            "
           />
         </div>
       </v-slide-x-reverse-transition>
     </v-app-bar>
-    <v-content style="height: 100%;">
+    <v-content style="height: 100%">
       <v-container
         class="fill-height pb-0 pr-0"
-        :class="[$vuetify.breakpoint.xs ? 'ml-n2' : 'pl-11 ml-1', $vuetify.breakpoint.sm || $vuetify.breakpoint.md ? 'pl-12 ml-2' : null, $route.name === 'index' && !$vuetify.breakpoint.xs ? 'pr-12' : 'pl-6']"
+        :class="[
+          $vuetify.breakpoint.xs ? 'ml-n2' : 'pl-11 ml-1',
+          $vuetify.breakpoint.sm || $vuetify.breakpoint.md
+            ? 'pl-12 ml-2'
+            : null,
+          $route.name === 'index' && !$vuetify.breakpoint.xs ? 'pr-12' : 'pl-6',
+        ]"
         fluid
         style="background-color: #fafafa"
       >
-        <v-row align="center" justify="center" class="pb-0" style="height: 100%;">
+        <v-row
+          align="center"
+          justify="center"
+          class="pb-0"
+          style="height: 100%"
+        >
           <div v-show="splashScreenEnabled" class="splashScreen">
             <h1 class="text-uppercase text-center">Loading data...</h1>
           </div>
@@ -201,16 +263,34 @@
         </v-row>
       </v-container>
     </v-content>
-    <v-layout row class="fab-container pb-4 pr-6" style="z-index: 25;">
-      <v-tooltip :disabled="$vuetify.breakpoint.xs" top class="white" color="blue-grey darken-3">
+    <v-layout row class="fab-container pb-4 pr-6" style="z-index: 25">
+      <v-tooltip
+        :disabled="$vuetify.breakpoint.xs"
+        top
+        class="white"
+        color="blue-grey darken-3"
+      >
         <template v-slot:activator="{ on }">
-          <v-btn small fab v-on="on" href="https://discord.gg/4YHc7kd" class="my-auto mx-2">
+          <v-btn
+            small
+            fab
+            v-on="on"
+            href="https://discord.gg/4YHc7kd"
+            class="my-auto mx-2"
+          >
             <v-icon color="#7289da">mdi-discord</v-icon>
           </v-btn>
         </template>
-        <span class="green--text text--accent-3 text-center">Support and report bugs</span>
+        <span class="green--text text--accent-3 text-center"
+          >Support and report bugs</span
+        >
       </v-tooltip>
-      <v-tooltip :disabled="$vuetify.breakpoint.xs" top class="white" color="blue-grey darken-3">
+      <v-tooltip
+        :disabled="$vuetify.breakpoint.xs"
+        top
+        class="white"
+        color="blue-grey darken-3"
+      >
         <template v-slot:activator="{ on }">
           <v-btn
             fab
@@ -224,11 +304,17 @@
             <v-icon>mdi-help</v-icon>
           </v-btn>
         </template>
-        <span class="green--text text--accent-3 text-center">Help / Tutorial</span>
+        <span class="green--text text--accent-3 text-center"
+          >Help / Tutorial</span
+        >
       </v-tooltip>
     </v-layout>
-    <v-snackbar v-model="snackbar" color="red darken-3" class="text-uppercase font-weight-medium">
-      {{ snackbarText || 'Double check your address, it might be wrong' }}
+    <v-snackbar
+      v-model="snackbar"
+      color="red darken-3"
+      class="text-uppercase font-weight-medium"
+    >
+      {{ snackbarText || "Double check your address, it might be wrong" }}
       <v-btn color="grey lighten-3" text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
     <DialogHelper :open="openDialog" @closeDialog="openDialog = false" />
