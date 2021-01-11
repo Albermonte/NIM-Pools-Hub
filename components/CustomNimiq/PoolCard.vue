@@ -1,12 +1,12 @@
 <template>
-  <v-card :height="height" :width="width" outlined style="border-radius: 8px;">
+  <v-card :height="height" :width="width" outlined style="border-radius: 8px">
     <v-list class="pt-3 pb-1">
       <v-list-item>
         <v-list-item-avatar size="50">
           <v-img :src="pool.icon"></v-img>
         </v-list-item-avatar>
         <v-col class="pa-0" cols="6">
-          <div class="headline">{{ pool.displayName}}</div>
+          <div class="headline">{{ pool.displayName }}</div>
         </v-col>
         <v-col class="pa-0 d-flex justify-center align-center" cols="3">
           <div class="mx-auto">
@@ -16,67 +16,98 @@
               color="green lighten-5"
               class="font-weight-light"
               x-small
-            >Online</v-chip>
+              >Online</v-chip
+            >
             <v-chip
               v-else-if="pool.status === 'offline'"
               text-color="red accent-4"
               color="red lighten-5"
               class="font-weight-light"
               x-small
-            >Offline</v-chip>
+              >Offline</v-chip
+            >
             <v-chip
               v-else
               text-color="blue-grey accent-4"
               color="blue-grey lighten-5"
               x-small
               class="font-weight-light"
-            >Checking</v-chip>
+              >Checking</v-chip
+            >
           </div>
         </v-col>
       </v-list-item>
       <v-list-item>
         <v-list-item-content class="pt-1 pb-0">
-          <v-list-item-subtitle class="text-center">{{ pool.slogan }}</v-list-item-subtitle>
+          <v-list-item-subtitle class="text-center">{{
+            pool.slogan
+          }}</v-list-item-subtitle>
           <v-list-item-title>
             <v-row class="pb-0" justify="center">
               <v-col
                 class="py-0 pb-1 d-flex flex-column align-center justify-center"
-                style="max-width: 125px; min-width: 125px;"
+                style="max-width: 125px; min-width: 125px"
               >
                 <div class="headline d-flex">
                   <span
                     class="font-weight-medium"
-                    style="font-size: 32px; height: 100%;"
-                  >{{ poolFee.whole }}</span>
+                    style="font-size: 32px; height: 100%"
+                    >{{ poolFee.whole }}</span
+                  >
                   <span
                     v-if="poolFee.decimal"
                     class="title font-weight-regular mr-1 d-flex align-end"
-                    style="height: 100%; margin-left: -2px; font-size: 20px !important;"
-                  >.{{ poolFee.decimal }}</span>
-                  <span class="d-flex align-end" style="height: 100%;">%</span>
+                    style="
+                      height: 100%;
+                      margin-left: -2px;
+                      font-size: 20px !important;
+                    "
+                    >.{{ poolFee.decimal }}</span
+                  >
+                  <span class="d-flex align-end" style="height: 100%">%</span>
                 </div>
                 <div
                   class="mt-n2 text-uppercase overline font-weight-bold grey--text text--darken-1"
-                  style="font-size: 10px !important; max-height: 16px;"
-                >Pool fee</div>
+                  style="font-size: 10px !important; max-height: 16px"
+                >
+                  Pool fee
+                </div>
               </v-col>
               <v-col
                 class="pa-0 d-flex flex-column justify-center align-center"
-                style="height: 70px; max-width: max-content; min-width: 180px;"
+                style="height: 80px; max-width: max-content; min-width: 180px"
               >
-                <v-row class="justify-space-around" style="max-height: 22px; min-width: inherit;">
-                  <div style="max-width: max-content;">{{`Minimum Payout:`}}</div>
+                <v-row
+                  class="justify-space-around mt-1"
+                  style="max-height: 22px; min-width: inherit"
+                >
+                  <div style="max-width: max-content">
+                    {{ `Minimum Payout:` }}
+                  </div>
                   <div
-                    class="pl-2 font-weight-regular"
-                    style="max-width: max-content;"
-                  >{{`${minimumPayout} NIM`}}</div>
+                    class="pl-2 font-weight-regular mt-4"
+                    style="max-width: max-content"
+                  >
+                    {{ `${minimumPayout} NIM` }}
+                  </div>
                 </v-row>
-                <v-row class="justify-space-around" style="max-height: 22px; min-width: inherit;">
-                  <div style="max-width: max-content;">{{`Payout Interval:`}}</div>
+                <v-row
+                  class="justify-space-around"
+                  style="max-height: 22px; min-width: inherit"
+                >
+                  <div style="max-width: max-content">
+                    {{ `Payout Interval:` }}
+                  </div>
                   <div
                     class="pl-1 font-weight-regular"
-                    style="max-width: max-content;"
-                  >{{`${payoutFrecuency} ${payoutFrecuency > 1 ? 'hours' : 'hour'}`}}</div>
+                    style="max-width: max-content"
+                  >
+                    {{
+                      `${payoutFrecuency} ${
+                        payoutFrecuency > 1 ? "hours" : "hour"
+                      }`
+                    }}
+                  </div>
                 </v-row>
               </v-col>
             </v-row>
@@ -87,14 +118,15 @@
     <v-card-actions class="d-flex justify-center">
       <v-btn
         class="px-8"
-        style="margin-bottom: -34px;"
+        style="margin-bottom: -34px"
         absolute
         bottom
         rounded
         color="primary"
         nuxt
         :to="pool.name"
-      >Go!</v-btn>
+        >Go!</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
