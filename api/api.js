@@ -506,7 +506,7 @@ app.get("/api/stats/icemining", cache("5 minutes"), async function(req, res) {
     const { blocks } = (
       await axios.get(
         `https://api.nimiqx.com/account/NQ04 XEHA A84N FXQ4 DPPE 82PG QS63 TH1X XCHQ?api_key=${process.env.nimiqx_api}`,
-        { timeout: 7000 }
+        { timeout: 15000 }
       )
     ).data;
     res.send({
@@ -520,6 +520,7 @@ app.get("/api/stats/icemining", cache("5 minutes"), async function(req, res) {
       payout_frecuency: 2
     });
   } catch (e) {
+    console.log("Iceminging API error:");
     console.log(e);
     res.send("offline");
   }
@@ -580,11 +581,11 @@ app.get("/api/stats/acemining", cache("5 minutes"), async function(req, res) {
       })
     ).data;
 
-    const { BlocksMined } = (
-      await axios.get("https://api.acemining.co/api/blocksmined", {
+    const BlocksMined = (
+      await axios.get("https://api.acemining.co/api/totalblocks", {
         timeout: 20000
       })
-    ).data;
+    ).data.total;
 
     res.send({
       hashrate: parseHashrate(hashrate),
@@ -597,6 +598,7 @@ app.get("/api/stats/acemining", cache("5 minutes"), async function(req, res) {
       payout_frecuency: Number(payoutinterval.match(/\d+/)[0])
     });
   } catch (e) {
+    console.log("ACE API error:");
     console.log(e);
     res.send("offline");
   }
@@ -1138,6 +1140,11 @@ app.get("/api/cache/performance", (req, res) => {
 app.get("/api/cache/index", (req, res) => {
   res.json(apicache.getIndex());
 });
+
+if (process.env.NODE_ENV === "development")
+  app.get("/api/cache/clear", (req, res) => {
+    res.json(apicache.clear());
+  });
 
 // Parse Hasrate
 
