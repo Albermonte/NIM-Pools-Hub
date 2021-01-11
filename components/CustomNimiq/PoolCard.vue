@@ -74,7 +74,7 @@
                 </div>
               </v-col>
               <v-col
-                class="pa-0 d-flex flex-column justify-center align-center"
+                class="pa-0 d-flex flex-column align-center"
                 style="height: 70px; max-width: max-content; min-width: 180px"
               >
                 <v-row

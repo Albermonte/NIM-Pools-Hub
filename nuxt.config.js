@@ -2,7 +2,7 @@ import colors from "vuetify/es5/util/colors";
 
 export default {
   dev: process.env.NODE_ENV !== "production",
-  mode: "spa",
+  ssr: false,
   /*
    ** Headers of the page
    */
@@ -137,6 +137,9 @@ export default {
    ** Build configuration
    */
   build: {
+    extractCSS: {
+      ignoreOrder: false
+    },
     /*
      ** You can extend webpack config here
      */
