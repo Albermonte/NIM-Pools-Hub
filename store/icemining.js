@@ -82,7 +82,7 @@ export const actions = {
     const info = await this.$axios.$get(
       `${window.location.origin}/api/stats/icemining`
     );
-    console.log(info);
+
     if (info === "offline") {
       console.error(
         "Icemining POOL_INFO not responding ",

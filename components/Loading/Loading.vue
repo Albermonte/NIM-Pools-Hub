@@ -9,7 +9,13 @@
         viewBox="0 0 64 64"
       >
         <defs>
-          <radialGradient id="a" cx="46" cy="55.62" r="59.47" gradientUnits="userSpaceOnUse">
+          <radialGradient
+            id="a"
+            cx="46"
+            cy="55.62"
+            r="59.47"
+            gradientUnits="userSpaceOnUse"
+          >
             <stop offset="0" stop-color="#ec991c" />
             <stop offset="1" stop-color="#e9b213" />
           </radialGradient>
@@ -21,7 +27,12 @@
       </svg>
     </div>
 
-    <v-tooltip :disabled="$vuetify.breakpoint.xs" left class="white" color="blue-grey darken-3">
+    <v-tooltip
+      :disabled="$vuetify.breakpoint.xs"
+      left
+      class="white"
+      color="blue-grey darken-3"
+    >
       <template v-slot:activator="{ on }">
         <v-slide-y-transition>
           <v-btn
@@ -39,7 +50,9 @@
           </v-btn>
         </v-slide-y-transition>
       </template>
-      <span class="green--text text--accent-3 text-center">If the page doesn't load, click here to close the loader</span>
+      <span class="green--text text--accent-3 text-center"
+        >If the page doesn't load, click here to close the loader</span
+      >
     </v-tooltip>
   </v-overlay>
 </template>
@@ -48,7 +61,7 @@
 export default {
   data: () => ({
     loading: false,
-    timeout: false
+    timeout: false,
   }),
   mounted() {
     setTimeout(() => {
@@ -64,8 +77,8 @@ export default {
     },
     closeLoader() {
       this.$nuxt.$loading.finish();
-    }
-  }
+    },
+  },
 };
 </script>
 
