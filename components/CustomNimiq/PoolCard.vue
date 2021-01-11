@@ -81,9 +81,7 @@
 								<div
 									class="mt-n2 text-uppercase overline font-weight-bold grey--text text--darken-1"
 									style="font-size: 10px !important; max-height: 16px"
-								>
-									Pool fee
-								</div>
+								>Pool fee</div>
 							</v-col>
 							<v-col
 								class="pa-0 d-flex flex-column justify-center align-center"
@@ -174,6 +172,6 @@ export default {
 	grid-template-columns: repeat(2, auto);
 	grid-template-rows: repeat(2, auto);
 	grid-row-gap: 5px;
-	width: 180px;
+	width: 186px;
 }
 </style>
