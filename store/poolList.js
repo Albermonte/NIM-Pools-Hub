@@ -39,7 +39,8 @@ export const state = () => [
     slogan: "icemining.ca 🇨🇦 ❄️ the cool pool",
     url: "nimiq.icemining.ca:2053"
   },
-  {
+  /* SiriusPool will suspend its services by the 5th January 2021 21:00 (GMT +2), due low mining activity.. you should change pool until that date. */
+  /* {
     icon: "/siriuspool.png",
     name: "siriuspool",
     displayName: "Siriuspool",
@@ -48,7 +49,7 @@ export const state = () => [
     extras: ["Greek Pool"],
     slogan: "First Greek Pool for Nimiq!",
     url: "siriuspool.net:8443"
-  },
+  }, */
   /* {
     icon: "/balkanpool.png",
     name: "balkanpool",
@@ -78,8 +79,9 @@ export const state = () => [
     extras: ["Pool run by Sören (Team Nimiq)"],
     slogan: "Nimiq Mining you can trust.",
     url: "pool.nimiq.watch:8443"
-  },
-  {
+  }
+  /* Very low hashrate, 0 almost all the time */
+  /* {
     icon: "/hashexpress.png",
     name: "hashexpress",
     displayName: "HashExpress",
@@ -88,7 +90,7 @@ export const state = () => [
     extras: ["PPLNS window is 240 blocks (~4 hours)"],
     slogan: "Nimiq @ HashExpress",
     url: "nim.hash.express:8444"
-  }
+  } */
 ];
 
 export const mutations = {
