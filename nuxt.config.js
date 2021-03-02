@@ -50,6 +50,11 @@ export default {
       {
         src: "https://coinzillatag.com/lib/display.js",
         async: true
+      },
+      {
+        src: "https://static.cloudflareinsights.com/beacon.min.js",
+        "data-cf-beacon": '{"token": "6c24deb8f8b044b093a485de8bef5c8e", "spa": true}',
+        defer: true,
       }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
@@ -143,6 +148,6 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) { }
   }
 };
