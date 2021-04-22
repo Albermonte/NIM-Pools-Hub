@@ -106,7 +106,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     "@nuxtjs/axios",
-    "nuxt-vuex-localstorage"
+    "nuxt-vuex-localstorage",
     ['@nuxtjs/google-adsense', {
       id: 'ca-pub-6521406599691829',
     }],
