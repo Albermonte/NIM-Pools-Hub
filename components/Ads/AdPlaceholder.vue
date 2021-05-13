@@ -21,7 +21,7 @@
         class="bmadblock-5ecbb4a693ee2899f2b675f0"
         style="display:inline-block;width:300px;height:250px;"
       ></ins>-->
-			<!-- <iframe
+			<iframe
 				src="https://viewm.moonicorn.network/#%7B%22options%22%3A%7B%22publisherAddr%22%3A%220x39f9c2962004ad4e9Bc50ac3CCE29B5FBDfFd871%22%2C%22whitelistedTokens%22%3A%5B%220x6B175474E89094C44Da98b954EedeAC495271d0F%22%5D%2C%22whitelistedType%22%3A%22legacy_300x250%22%2C%22randomize%22%3Atrue%2C%22targeting%22%3A%5B%5D%2C%22width%22%3A%22300%22%2C%22height%22%3A%22250%22%2C%22minPerImpression%22%3A%220%22%2C%22fallbackUnit%22%3Anull%2C%22marketSlot%22%3A%22QmXV1qfXqtC9eVZFpYdpKCPcjecPZanBa3irQr16pdmDT1%22%7D%7D"
 				width="300"
 				height="250"
@@ -29,11 +29,11 @@
 				frameborder="0"
 				style="border: 0;"
 				@load="adOnLoad"
-			></iframe> -->
-			<div
+			></iframe>
+			<!-- 			<div
 				class="coinzilla"
 				data-zone="C-7615eca4229a5405545"
-			></div>
+			></div> -->
 		</v-card>
 	</div>
 </template>
@@ -111,12 +111,12 @@ export default {
 		},
 	},
 	mounted() {
-		window.coinzilla_display = window.coinzilla_display || [];
+		/* 		window.coinzilla_display = window.coinzilla_display || [];
 		var c_display_preferences = {};
 		c_display_preferences.zone = "7615eca4229a5405545";
 		c_display_preferences.width = "300";
 		c_display_preferences.height = "250";
-		coinzilla_display.push(c_display_preferences);
+		coinzilla_display.push(c_display_preferences); */
 	},
 };
 </script>
