@@ -55,6 +55,10 @@ export default {
         src: "https://static.cloudflareinsights.com/beacon.min.js",
         "data-cf-beacon": '{"token": "6c24deb8f8b044b093a485de8bef5c8e", "spa": true}',
         defer: true,
+      },
+      {
+        src: "https://arc.io/widget.min.js#8jFZG7Dn",
+        async: true,
       }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
