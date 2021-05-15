@@ -110,6 +110,11 @@ export default {
     ['@nuxtjs/google-adsense', {
       id: 'ca-pub-6521406599691829',
     }],
+    '@nuxtjs/proxy'
+  ],
+  proxy: [
+    // https://github.com/nuxt-community/proxy-module#object-config
+    'https://arc.io/arc-sw.js'
   ],
   /*
    ** Axios module configuration
