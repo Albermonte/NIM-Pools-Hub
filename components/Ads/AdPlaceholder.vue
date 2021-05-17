@@ -30,10 +30,10 @@
 				style="border: 0;"
 				@load="adOnLoad"
 			></iframe>
-			<!-- 			<div
+			<div
 				class="coinzilla"
 				data-zone="C-7615eca4229a5405545"
-			></div> -->
+			></div>
 		</v-card>
 	</div>
 </template>
@@ -111,12 +111,12 @@ export default {
 		},
 	},
 	mounted() {
-		/* 		window.coinzilla_display = window.coinzilla_display || [];
+		window.coinzilla_display = window.coinzilla_display || [];
 		var c_display_preferences = {};
 		c_display_preferences.zone = "7615eca4229a5405545";
 		c_display_preferences.width = "300";
 		c_display_preferences.height = "250";
-		coinzilla_display.push(c_display_preferences); */
+		coinzilla_display.push(c_display_preferences);
 	},
 };
 </script>

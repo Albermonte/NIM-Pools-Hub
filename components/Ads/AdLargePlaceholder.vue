@@ -36,7 +36,10 @@
 				style="border: 0;"
 				@load="adOnLoad"
 			></iframe>
-			<!-- <div class="coinzilla" data-zone="C-8375eca4229a60ea729"></div> -->
+			<div
+				class="coinzilla"
+				data-zone="C-8375eca4229a60ea729"
+			></div>
 		</v-card>
 	</div>
 </template>
@@ -114,7 +117,7 @@ export default {
 		},
 	},
 	mounted() {
-		/* 		window.coinzilla_display = window.coinzilla_display || [];
+		window.coinzilla_display = window.coinzilla_display || [];
 		var c_display_preferences = {};
 		c_display_preferences.zone = "8375eca4229a60ea729";
 		c_display_preferences.width = this.$vuetify.breakpoint.smAndDown
@@ -123,7 +126,7 @@ export default {
 		c_display_preferences.height = this.$vuetify.breakpoint.smAndDown
 			? "100"
 			: "90";
-		coinzilla_display.push(c_display_preferences); */
+		coinzilla_display.push(c_display_preferences);
 	},
 };
 </script>
