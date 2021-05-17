@@ -28,6 +28,7 @@
         style="display:inline-block;width:728px;height:90px;"
       ></ins>-->
 			<iframe
+				v-if="adExDemand"
 				src="https://viewm.moonicorn.network/#%7B%22options%22%3A%7B%22publisherAddr%22%3A%220x39f9c2962004ad4e9Bc50ac3CCE29B5FBDfFd871%22%2C%22whitelistedTokens%22%3A%5B%220x6B175474E89094C44Da98b954EedeAC495271d0F%22%5D%2C%22whitelistedType%22%3A%22legacy_728x90%22%2C%22randomize%22%3Atrue%2C%22targeting%22%3A%5B%5D%2C%22width%22%3A%22728%22%2C%22height%22%3A%2290%22%2C%22minPerImpression%22%3A%220%22%2C%22fallbackUnit%22%3Anull%2C%22marketSlot%22%3A%22QmZFuBe7g957cJZdBdspLJvo4RFZzdHVjXm3TjfNUPWm84%22%7D%7D"
 				width="728"
 				height="90"
@@ -37,6 +38,7 @@
 				@load="adOnLoad"
 			></iframe>
 			<div
+				v-else
 				class="coinzilla"
 				data-zone="C-8375eca4229a60ea729"
 			></div>
@@ -86,6 +88,7 @@ export default {
 	data() {
 		return {
 			dev: config.dev,
+			adExDemand: false,
 		};
 	},
 	methods: {
@@ -93,15 +96,19 @@ export default {
 			window.addEventListener(
 				"message",
 				function (ev) {
+					console.log("#######", ev);
 					if (
 						ev.data.hasOwnProperty("adexHeight") &&
 						"https://viewm.moonicorn.network" === ev.origin
 					) {
+						this.adExDemand = true;
 						for (let f of document.getElementsByTagName("iframe")) {
 							if (f.contentWindow === ev.source) {
 								f.height = ev.data.adexHeight;
 							}
 						}
+					} else {
+						this.adExDemand = false;
 					}
 				},
 				false
