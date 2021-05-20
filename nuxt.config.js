@@ -57,7 +57,7 @@ export default {
         defer: true,
       },
       {
-        src: "https://arc.io/widget.min.js#8jFZG7Dn",
+        src: "https://arc.io/widget.min.js#8jFZG7Dn?onAdblock=requestOptIn",
         async: true,
       }
     ],
