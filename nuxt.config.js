@@ -1,3 +1,4 @@
+import redirectSSL from 'redirect-ssl'
 import colors from "vuetify/es5/util/colors";
 
 export default {
@@ -146,7 +147,12 @@ export default {
       }
     }
   },
-  serverMiddleware: ["~/api/api"],
+  serverMiddleware: [
+    "~/api/api",
+    redirectSSL.create({
+      enabled: process.env.NODE_ENV === 'production'
+    }),
+  ],
   /*
    ** Build configuration
    */
