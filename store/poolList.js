@@ -9,7 +9,7 @@ export const state = () => [
     slogan: "Join The Fight Against Mining Centralization!",
     url: "pool.acemining.co:8443"
   },
-  {
+  /* {
     icon: "/nimpool.png",
     name: "nimpool",
     displayName: "Nimpool",
@@ -18,8 +18,8 @@ export const state = () => [
     extras: ["Managed by a member of Team Nimiq"],
     slogan: "Nimiq Pool Mining Done Right. Secure. Distributed.",
     url: "eu.nimpool.io:8444"
-  },
-  {
+  },*/
+  /*{
     icon: "/blankpool.png",
     name: "blankpool",
     displayName: "BlankPool",
@@ -28,7 +28,7 @@ export const state = () => [
     extras: ["Fees depends on pool H/s"],
     slogan: "Pool ran by Chugwig that uses an adaptive pool fee.",
     url: "mine.blank.drawpad.org:8444"
-  },
+  },*/
   {
     icon: "/icemining.png",
     name: "icemining",
