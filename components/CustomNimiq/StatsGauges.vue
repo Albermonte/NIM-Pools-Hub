@@ -41,7 +41,7 @@
             <div class="d-flex justify-center align-end" style="height: 100%;">
               <v-scale-transition>
                 <v-card
-                  v-if="currentPoolHS / currentNetworkHS > 0.51"
+                  v-if="currentNetworkHS && currentPoolHS / currentNetworkHS > 0.51"
                   class="caption font-weight-light text-uppercase align-self-center white--text mb-4"
                   color="red darken-4"
                   disabled
