@@ -294,7 +294,7 @@ const isSicknetworkOnline = async retry => {
 
 // Nimiq Stats
 
-app.get("/api/stats/nimiq", async function (req, res) {
+app.get("/api/stats/nimiq", cache("15 minutes"), async function (req, res) {
   try {
     const stats = (
       await axios.get(
@@ -341,7 +341,7 @@ app.get("/api/balance/:address", async function (req, res) {
     const address = req.params.address;
     const { balance } = (
       await axios.get(
-        `https://api.nimiq.cafe/account/${address}?api_key=${process.env.nimiqx_api}`,
+        `https://api.nimiq.watch/account/${address}`,
         { timeout: 30000 }
       )
     ).data;
