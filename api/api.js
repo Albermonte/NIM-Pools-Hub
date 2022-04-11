@@ -506,7 +506,7 @@ app.get("/api/stats/icemining", cache("15 minutes"), async function (req, res) {
     const { blocks } = (
       await axios.get(
         `https://api.nimiq.cafe/account/NQ04 XEHA A84N FXQ4 DPPE 82PG QS63 TH1X XCHQ?api_key=${process.env.nimiqx_api}`,
-        { timeout: 30000 }
+        { timeout: 60000 }
       )
     ).data;
     res.send({

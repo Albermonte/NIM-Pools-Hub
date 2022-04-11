@@ -32,11 +32,11 @@ export const actions = {
     const address = vuexContext.rootGetters["localStorage/getAddress"]();
     if (address) {
       const { balance } = await this.$axios.$get(
-        `${window.location.origin}/api/balance/${address
+        `https://api.nimiq.watch/account/${address
           .replace(/(.{4})/g, "$1 ")
           .slice(0, -1)}`
       );
-      addressBalance = balance;
+      addressBalance = Number((parseFloat(balance) / 1e5).toFixed(1));
       if (balance !== 0) {
         let parts = addressBalance.toString().split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
