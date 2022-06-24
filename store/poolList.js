@@ -1,5 +1,5 @@
 export const state = () => [
-  {
+  /*{
     icon: "/acemining.png",
     name: "acemining",
     displayName: "Acemining",
@@ -8,7 +8,7 @@ export const state = () => [
     extras: ["World Class Customer Support", "Maximum Uptime"],
     slogan: "Join The Fight Against Mining Centralization!",
     url: "pool.acemining.co:8443"
-  },
+  },*/
   /* {
     icon: "/nimpool.png",
     name: "nimpool",
