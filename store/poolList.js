@@ -60,6 +60,8 @@ export const state = () => [
     slogan: "Nimiq Pool hosted by Balkan users",
     url: "pool.balkanminingpool.com:8444"
   }, */
+  // Skypool stopped working on April 2022
+  /*
   {
     icon: "/skypool.png",
     name: "skypool",
@@ -70,6 +72,7 @@ export const state = () => [
     slogan: "Connect to unlimited value networks",
     url: "sh1.nimiq.skypool.xyz:5000"
   },
+  */
   {
     icon: "/nimiqwatchpool.png",
     name: "nimiqwatch",
@@ -80,24 +83,12 @@ export const state = () => [
     slogan: "Nimiq Mining you can trust.",
     url: "pool.nimiq.watch:8443"
   }
-  /* Very low hashrate, 0 almost all the time */
-  /* {
-    icon: "/hashexpress.png",
-    name: "hashexpress",
-    displayName: "HashExpress",
-    message: "PPLNS model",
-    status: "",
-    extras: ["PPLNS window is 240 blocks (~4 hours)"],
-    slogan: "Nimiq @ HashExpress",
-    url: "nim.hash.express:8444"
-  } */
 ];
 
 export const mutations = {
   updateStatus(state, { index, status, region }) {
     region
-      ? (state[index].displayName = `${
-          state[index].displayName
+      ? (state[index].displayName = `${state[index].displayName
         } (${region.toUpperCase()})`)
       : null;
     state[index].status = status;
