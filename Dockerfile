@@ -5,6 +5,8 @@ WORKDIR /app
 
 COPY . .
 
+ENV NODE_OPTIONS --openssl-legacy-provider
+
 RUN yarn install \
   --prefer-offline \
   --frozen-lockfile \
@@ -28,5 +30,6 @@ COPY --from=builder /app  .
 
 ENV HOST 0.0.0.0
 ENV PORT 8080
+ENV NODE_OPTIONS --openssl-legacy-provider
 
 CMD [ "yarn", "start" ]
