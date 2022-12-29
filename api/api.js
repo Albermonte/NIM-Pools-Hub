@@ -233,9 +233,10 @@ const isNimiqwatchOnline = async retry => {
   try {
     const { device_count, hashrate } = (
       await axios.get("https://pool.nimiq.watch/api/stats.json", {
-        timeout: 5000
+        timeout: 10000
       })
     ).data;
+    // console.log("Nimiq Watch:", device_count, hashrate);
     return device_count > 0 || hashrate > 0;
   } catch {
     if (retry) return isNimiqwatchOnline(false);
@@ -526,16 +527,16 @@ app.get("/api/stats/icemining", cache("15 minutes"), async function (req, res) {
   }
 });
 
-app.get("/api/stats/nimiqwatch", cache("15 minutes"), async function (req, res) {
+app.get("/api/stats/nimiqwatch", cache("5 minutes"), async function (req, res) {
   try {
     const data = (
       await axios.get("https://pool.nimiq.watch/api/stats.json", {
-        timeout: 5000
+        timeout: 10000
       })
     ).data;
     const { fee, payout_frequency } = (
       await axios.get("https://pool.nimiq.watch/api/pool.json", {
-        timeout: 5000
+        timeout: 10000
       })
     ).data;
 
@@ -925,7 +926,7 @@ app.get("/api/nimiqwatch/:address", async function (req, res) {
     const address = req.params.address;
     const { id } = (
       await axios.get(`https://pool.nimiq.watch/api/user/${address}.json`, {
-        timeout: 5000
+        timeout: 10000
       })
     ).data;
 
@@ -936,12 +937,12 @@ app.get("/api/nimiqwatch/:address", async function (req, res) {
 
     const devices = (
       await axios.get(`https://pool.nimiq.watch/api/user/${id}/devices.json`, {
-        timeout: 5000
+        timeout: 10000
       })
     ).data;
     const { confirmed } = (
       await axios.get(`https://pool.nimiq.watch/api/user/${id}/balance.json`, {
-        timeout: 5000
+        timeout: 10000
       })
     ).data;
 
