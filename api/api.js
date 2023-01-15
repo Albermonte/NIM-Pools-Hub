@@ -521,7 +521,7 @@ app.get("/api/stats/icemining", cache("15 minutes"), async function (req, res) {
       payout_frecuency: 2
     });
   } catch (e) {
-    console.log("Iceminging API error:");
+    console.log("Iceminging NimiqX API error:");
     console.log(e);
     res.send("offline");
   }
@@ -581,22 +581,23 @@ app.get("/api/stats/acemining", cache("15 minutes"), async function (req, res) {
         timeout: 20000
       })
     ).data; */
-    const poolfee = "0.5%";
-    const minimal = "1 NIM";
-    const payoutinterval = "1 hour";
+    const poolfee = "1%";
+    const minimal = "10 NIM";
+    const payoutinterval = "24 hours";
 
-    const BlocksMined = (
-      await axios.get("https://api.acemining.co/api/v1/totalblocks", {
-        timeout: 20000
-      })
-    ).data.total;
+    // const { total: BlocksMined } = (
+    //   await axios.get("https://api.acemining.co/api/v1/totalblocks", {
+    //     timeout: 20000
+    //   })
+    // ).data;
 
     res.send({
       hashrate: parseHashrate(hashrate),
       hashrateComplete: Number(hashrate.toFixed(0)),
       miners: users,
       workers: total,
-      blocksMined: BlocksMined,
+      // blocksMined: BlocksMined,
+      blocksMined: 0,
       pool_fee: poolfee,
       minimum_payout: Number(minimal.match(/\d+/)[0]),
       payout_frecuency: Number(payoutinterval.match(/\d+/)[0])
