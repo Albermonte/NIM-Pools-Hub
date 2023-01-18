@@ -581,9 +581,9 @@ app.get("/api/stats/acemining", cache("15 minutes"), async function (req, res) {
         timeout: 20000
       })
     ).data; */
-    const poolfee = "1%";
+    const poolfee = "0.5%";
     const minimal = "10 NIM";
-    const payoutinterval = "24 hours";
+    const payoutinterval = "1 hour";
 
     // const { total: BlocksMined } = (
     //   await axios.get("https://api.acemining.co/api/v1/totalblocks", {
