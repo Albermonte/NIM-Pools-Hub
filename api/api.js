@@ -558,48 +558,30 @@ app.get("/api/stats/nimiqwatch", cache("5 minutes"), async function (req, res) {
 
 app.get("/api/stats/acemining", cache("15 minutes"), async function (req, res) {
   try {
-    const { hashrate } = (
-      await axios.get("https://api.acemining.co/api/v1/hashrate", {
-        timeout: 20000
-      })
-    ).data;
+    const usersPromise = axios.get("https://api.acemining.co/api/v1/users", {
+      timeout: 20000
+    })
 
-    const { total } = (
-      await axios.get("https://api.acemining.co/api/v1/miners", {
-        timeout: 20000
-      })
-    ).data;
+    const statsPromise = axios.get("https://api.acemining.co/api/v1/currencies", {
+      timeout: 20000
+    })
 
-    const { users } = (
-      await axios.get("https://api.acemining.co/api/v1/users", {
-        timeout: 20000
-      })
-    ).data;
+    const blocksPromise = axios.get("https://api.acemining.co/api/v1/totalblocks", {
+      timeout: 20000
+    })
 
-    /* const { poolfee, minimal, payoutinterval } = (
-      await axios.get("https://api.acemining.co/api/v1/poolinfo", {
-        timeout: 20000
-      })
-    ).data; */
-    const poolfee = "0.5%";
-    const minimal = "10 NIM";
+    const [{ users }, stats, blocks] = (await Promise.all([usersPromise, statsPromise, blocksPromise])).map(res => res.data)
+
     const payoutinterval = "1 hour";
 
-    // const { total: BlocksMined } = (
-    //   await axios.get("https://api.acemining.co/api/v1/totalblocks", {
-    //     timeout: 20000
-    //   })
-    // ).data;
-
     res.send({
-      hashrate: parseHashrate(hashrate),
-      hashrateComplete: Number(hashrate.toFixed(0)),
+      hashrate: parseHashrate(stats.hashrate),
+      hashrateComplete: Number(stats.hashrate.toFixed(0)),
       miners: users,
-      workers: total,
-      // blocksMined: BlocksMined,
-      blocksMined: 0,
-      pool_fee: poolfee,
-      minimum_payout: Number(minimal.match(/\d+/)[0]),
+      workers: stats.workers,
+      blocksMined: blocks.total,
+      pool_fee: stats.NIM.reward_model.PPLNS + "%",
+      minimum_payout: stats.payout_min,
       payout_frecuency: Number(payoutinterval.match(/\d+/)[0])
     });
   } catch (e) {
