@@ -159,7 +159,7 @@
 										>{{' '}}NIM</span>
 									</div>
 								</template>
-								<span class="white--text">This is your address balance, it will be updated every 15 minutes</span>
+								<span class="black--text">This is your address balance, it will be updated every 15 minutes</span>
 							</v-tooltip>
 						</div>
 					</div>

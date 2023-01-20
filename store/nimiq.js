@@ -66,6 +66,8 @@ export const actions = {
         }
       }
     }
+    vuexContext.commit("updateInfo", { balance: addressBalance });
+    
     const info = await this.$axios.$get(
       `${window.location.origin}/api/stats/nimiq`
     );
@@ -74,7 +76,7 @@ export const actions = {
       return "offline";
     }
 
-    vuexContext.commit("updateInfo", { ...info, balance: addressBalance });
+    vuexContext.commit("updateInfo", { ...info });
   }
 };
 

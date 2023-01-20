@@ -67,7 +67,7 @@ export default {
       await store.dispatch("poolList/UPDATE_POOLFEE", { index, name: x.name });
       setInterval(() => {
         store.dispatch(`${x.name}/UPDATE_POOL_INFO`);
-      }, 15 * 60 * 1000);
+      }, 2 * 60 * 1000);
     });
     store.dispatch("nimiq/UPDATE_NIMIQ_INFO");
     setInterval(() => {

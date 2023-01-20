@@ -1,38 +1,15 @@
 <template>
   <v-row class="ml-auto mr-auto pt-2 pb-1 px-3">
     <v-col class="py-0">
-      <material-stats-card
-        min-height="138"
-        color="green"
-        icon="mdi-currency-usd"
-        :currencyBtn="true"
-        title="Balance"
-        :value="balance"
-        :small-value="currency"
-        :sub-text-right="`Confirmed: ${confirmedBalance} NIM`"
-        :sub-text-left="`Expected 24 Hours: ${(addressHashrateComplete / 1e3 * nim_day_kh).toFixed(0)} NIM`"
-      />
+      <material-stats-card min-height="138" color="green" icon="mdi-currency-usd" :currencyBtn="true" title="Balance" :value="balance" :small-value="currency"
+        :sub-text-right="`Confirmed: ${confirmedBalance} NIM`" :sub-text-left="`Expected 24 Hours: ${(addressHashrateComplete / 1e3 * nim_day_kh).toFixed(0)} NIM`" />
     </v-col>
     <v-col class="py-0">
-      <material-stats-card
-        min-height="138"
-        color="red"
-        icon="mdi-devices"
-        title="Device Count"
-        :value="deviceCount"
-        checkbox
-      />
+      <material-stats-card min-height="138" color="red" icon="mdi-devices" title="Device Count" :value="deviceCount" checkbox />
     </v-col>
     <v-col class="py-0">
-      <material-stats-card
-        min-height="138"
-        color="orange"
-        icon="mdi-speedometer"
-        title="Address Hashrate"
-        :value="adressHashrate"
-        :small-value="adressHashrateSmallValue"
-        :graph="[1,2]"
-      />
+      <material-stats-card min-height="138" color="orange" icon="mdi-speedometer" title="Address Hashrate" :value="addressHashrate" :small-value="addressHashrateSmallValue"
+        :graph="[1, 2]" />
     </v-col>
   </v-row>
 </template>
@@ -52,8 +29,6 @@ export default {
     materialStatsCard,
   },
   data: () => ({
-    interval: "10 minutes",
-    time: ["10 minutes", "30 minutes", "1 hour", "3 hours", "24 hours"],
     currency: "NIM",
   }),
   computed: {
@@ -73,14 +48,18 @@ export default {
         "this.$store.state." + this.$route.name + ".unconfirmed_balance"
       );
     },
-    adressHashrate() {
+    addressHashrate() {
       // eslint-disable-next-line
-      let adressHashrate = eval(
+      let addressHashrate = eval(
         "this.$store.state." + this.$route.name + ".address_hashrate"
       );
-      if (adressHashrate !== 0 && typeof adressHashrate !== "undefined")
-        return Number(adressHashrate.substr(0, adressHashrate.indexOf(" ")));
-      else return 0;
+      if (addressHashrate !== 0 && typeof addressHashrate !== "undefined") {
+        document.title = `NIM Pools Hub - ${addressHashrate}`
+        return Number(addressHashrate.substr(0, addressHashrate.indexOf(" ")));;
+      }
+      else {
+        return 0;
+      }
     },
     addressHashrateComplete() {
       const hs = eval(
@@ -88,12 +67,12 @@ export default {
       );
       return Number(hs);
     },
-    adressHashrateSmallValue() {
-      let adressHashrate = eval(
+    addressHashrateSmallValue() {
+      let addressHashrate = eval(
         "this.$store.state." + this.$route.name + ".address_hashrate"
       );
-      if (adressHashrate !== 0 && typeof adressHashrate !== "undefined")
-        return adressHashrate.substr(adressHashrate.indexOf(" ") + 1);
+      if (addressHashrate !== 0 && typeof addressHashrate !== "undefined")
+        return addressHashrate.substr(addressHashrate.indexOf(" ") + 1);
       else return "kH/s";
     },
     deviceCount() {
@@ -112,21 +91,6 @@ export default {
         return Number(nim_day_kh.substr(0, nim_day_kh.indexOf(" ")));
       else return 0;
     },
-  },
-  updated() {
-    // const temp = window.localStorage.updateInterval
-    window.localStorage.setItem("updateInterval", this.interval);
-    /* setTimeout(() => {
-      if (temp != window.localStorage.updateInterval) {
-        console.log(
-          `Temp value of interval: ${temp}, New value from localStorage: ${window.localStorage.updateInterval}`
-        );
-        window.location.reload(true); // Refresh to adecuate the interval
-      }
-    }, 1000); */
-  },
-  mounted() {
-    this.interval = window.localStorage.updateInterval;
   },
 };
 </script>

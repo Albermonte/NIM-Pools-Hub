@@ -46,7 +46,7 @@ export default async function({ store, $axios, route }) {
   if (route.name !== "index" && route.name !== null) {
     if (store.state.localStorage.address !== "") {
       updateUserInfo();
-      setInterval(updateUserInfo, 10 * 60 * 1000); // 10 minute
+      setInterval(updateUserInfo, 2 * 60 * 1000); // 2 minutes
     }
     updateNimiqInfo();
     setInterval(updateNimiqInfo, 15 * 60 * 1000); // 15 minutes
