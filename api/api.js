@@ -312,7 +312,6 @@ app.get("/api/stats/nimiq", cache("15 minutes"), async function (req, res) {
 
     const height = heightData.data[0].height;
     const nim_day_kh = await calculateNIMperDay(height, globalHashrate);
-    console.log("NIM/day:", nim_day_kh);
 
     res.send({
       hashrate: parseHashrate(globalHashrate),
@@ -1211,7 +1210,8 @@ const calculateNIMperDay = async (height = 0, globalHashRate = 0) => {
   }
 
   const minedPerDay = minedPerHour * 24;
-  return minedPerDay;
+  // Round to 3 decimal places
+  return Math.round(minedPerDay * 1000) / 1000;
 }
 
 process.on("unhandledRejection", error => console.error(error));
