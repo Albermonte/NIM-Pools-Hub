@@ -4,9 +4,10 @@ const requestIp = require("request-ip");
 const apicache = require("apicache");
 const app = express();
 const cache = apicache.middleware;
+const { FiatApiSupportedCryptoCurrency, FiatApiSupportedFiatCurrency, getExchangeRates } = require("@nimiq/utils");
+
 
 // Server IP
-
 app.get("/api/ip", function (req, res) {
   try {
     const http = require("http");
@@ -297,39 +298,30 @@ const isSicknetworkOnline = async retry => {
 
 app.get("/api/stats/nimiq", cache("15 minutes"), async function (req, res) {
   try {
-    const stats = (
-      await axios.get(
-        `https://api.nimiq.cafe/network-stats/?api_key=${process.env.nimiqx_api}`,
-        { timeout: 30000 }
-      )
-    ).data;
-    const hs_year = (
-      await axios.get(
-        `https://api.nimiq.cafe/hashrate/year?api_key=${process.env.nimiqx_api}`,
-        { timeout: 30000 }
-      )
-    ).data;
-    const { usd, percent_change_24h } = (
-      await axios.get(
-        `https://api.nimiq.cafe/price/usd?api_key=${process.env.nimiqx_api}`,
-        { timeout: 30000 }
-      )
-    ).data;
+    const getGlobalHashratePromise = getGlobalHashrate();
+    const getGlobalHashrateYearPromise = getGlobalHashrate("year");
+    const getHeightPromise = axios.get("https://api.nimiq.watch/latest/1", { timeout: 30000 });
+    const getExchangeRatesPromise = getExchangeRates([FiatApiSupportedCryptoCurrency.NIM], [FiatApiSupportedFiatCurrency.EUR, FiatApiSupportedFiatCurrency.USD]);
+
+    const [globalHashrate, globalHashrateYear, heightData, { nim }] = await Promise.all([getGlobalHashratePromise, getGlobalHashrateYearPromise, getHeightPromise, getExchangeRatesPromise]);
 
     let top_hashrate = 0;
-    hs_year.forEach(x => {
-      if (x.hashrate > top_hashrate) top_hashrate = x.hashrate;
+    globalHashrateYear.forEach(hashrate => {
+      if (hashrate > top_hashrate) top_hashrate = hashrate;
     });
 
+    const height = heightData.data[0].height;
+    const nim_day_kh = await calculateNIMperDay(height, globalHashrate);
+    console.log("NIM/day:", nim_day_kh);
+
     res.send({
-      hashrate: parseHashrate(stats.hashrate),
+      hashrate: parseHashrate(globalHashrate),
       top_hashrate: parseHashrate(top_hashrate),
-      hashrateComplete: stats.hashrate,
+      hashrateComplete: globalHashrate,
       top_hashrateComplete: top_hashrate,
-      height: stats.height,
-      nim_day_kh: stats.nim_day_kh,
-      price: usd,
-      percent_change_24h: percent_change_24h.usd
+      height,
+      nim_day_kh,
+      price: nim.usd,
     });
   } catch (e) {
     console.log(e);
@@ -504,18 +496,13 @@ app.get("/api/stats/icemining", cache("15 minutes"), async function (req, res) {
     const { NIM } = (
       await axios.get("https://icemining.ca/api/currencies", { timeout: 5000 })
     ).data;
-    const { blocks } = (
-      await axios.get(
-        `https://api.nimiq.cafe/account/NQ04 XEHA A84N FXQ4 DPPE 82PG QS63 TH1X XCHQ?api_key=${process.env.nimiqx_api}`,
-        { timeout: 60000 }
-      )
-    ).data;
+
     res.send({
       hashrate: parseHashrate(NIM.hashrate),
       hashrateComplete: Number(NIM.hashrate.toFixed(0)),
       miners: NIM.workers,
       workers: null,
-      blocksMined: blocks,
+      blocksMined: NIM["24h_blocks"],
       pool_fee: "1.25%",
       minimum_payout: NIM.payout_min,
       payout_frecuency: 2
@@ -1133,8 +1120,61 @@ if (process.env.NODE_ENV === "development")
     res.json(apicache.clear());
   });
 
-// Parse Hasrate
+const getGlobalHashrate = async (range = "day") => {
+  try {
+    const { data } = (
+      await axios.get(`https://api.nimiq.watch/statistics/difficulty/${range}`, {
+        timeout: 15000
+      })
+    );
+    const difficulty = data.map(function (block) { return block['d']; });
+    const timestamp = data.map(function (block) { return block['t']; });
 
+    // Fill empty times
+    let i = 0;
+    let gap;
+    const now = Date.now() / 1000;
+
+    switch (range) {
+      case 'day':
+        gap = 15 * 60; // 15 minutes
+        break;
+      case 'week':
+        gap = 2 * 60 * 60 // 2 hours
+        break;
+      case 'month':
+        gap = 8 * 60 * 60; // 8 hours
+        break;
+      default: // 'year'
+        gap = 4 * 24 * 60 * 60; // 4 days
+        break;
+    }
+
+    while (timestamp[i]) {
+      if (
+        (!timestamp[i + 1] && now - timestamp[i] > gap * 1.8)
+        || (timestamp[i + 1] > timestamp[i] + gap * 1.8)
+      ) {
+        // Add missing time
+        timestamp.splice(i + 1, 0, timestamp[i] + gap);
+        difficulty.splice(i + 1, 0, 0);
+      }
+      i++;
+    }
+    const hashrate = difficulty.map(function (diff) { return Math.round(diff * Math.pow(2, 16) / 60); });
+
+    if (range === 'day')
+      return hashrate[hashrate.length - 1];
+    else
+      return hashrate;
+  } catch (e) {
+    console.log('Cannot get global hashrate');
+    console.log(e.toString());
+    return 0;
+  }
+};
+
+// Parse Hasrate
 const parseHashrate = number => {
   number = Number(number);
   const hs_length = number.toFixed(0).toString().length;
@@ -1156,6 +1196,24 @@ const parseBalance = number => {
   return Number((parseFloat(number) / 1e5).toFixed(1));
 };
 
-process.on("unhandledRejection", error => consola.error(error));
+const calculateNIMperDay = async (height = 0, globalHashRate = 0) => {
+  const lastBlock = (await axios.get(`https://api.nimiq.watch/block/${height}`, { timeout: 30000 })).data;
+  const blockTime = 60;
+  const lastBlockReward = lastBlock.reward / 1e5;
+  // 1 kH/s = 1000 H/s
+  const myWinProbability = 1000 / globalHashRate;
+  const expectedHashTime = (1 / myWinProbability) * blockTime;
+  const numWinning = (3600 / expectedHashTime);
+  let minedPerHour = numWinning * lastBlockReward;
+  const max = 3600 / blockTime * lastBlockReward;
+  if (minedPerHour > max) {
+    minedPerHour = max
+  }
+
+  const minedPerDay = minedPerHour * 24;
+  return minedPerDay;
+}
+
+process.on("unhandledRejection", error => console.error(error));
 
 module.exports = app;
