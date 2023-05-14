@@ -542,6 +542,35 @@ app.get("/api/stats/nimiqwatch", cache("5 minutes"), async function (req, res) {
   }
 });
 
+app.get("/api/stats/e4pool", cache("5 minutes"), async function (req, res) {
+  try {
+    const data = (
+      await axios.get("https://nimiq.e4pool.com/api/stats.json", {
+        timeout: 10000
+      })
+    ).data;
+    const { fee, payout_frequency } = (
+      await axios.get("https://nimiq.e4pool.com/api/pool.json", {
+        timeout: 10000
+      })
+    ).data;
+
+    res.send({
+      hashrate: parseHashrate(data.hashrate),
+      hashrateComplete: Number(data.hashrate.toFixed(0)),
+      miners: data.user_count,
+      workers: data.device_count,
+      blocksMined: data.block_count,
+      pool_fee: (fee < 1 ? parseFloat(fee).toFixed(2) : fee) + "%",
+      minimum_payout: 50,
+      payout_frecuency: Number(payout_frequency.match(/\d+/)[0])
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
 app.get("/api/stats/acemining", cache("15 minutes"), async function (req, res) {
   try {
     const usersPromise = axios.get("https://api.acemining.co/api/v1/users", {

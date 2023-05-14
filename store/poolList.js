@@ -82,6 +82,16 @@ export const state = () => [
     extras: ["Pool run by Sören (Team Nimiq)"],
     slogan: "Nimiq Mining you can trust.",
     url: "pool.nimiq.watch:8443"
+  },
+  {
+    icon: "/e4pool.png",
+    name: "e4pool",
+    displayName: "E4pool",
+    message: "Russia based",
+    status: "",
+    extras: ["Support in Russian"],
+    slogan: "Multicoin CPU/GPU mining pool",
+    url: "nimiq.e4pool.com:6985"
   }
 ];
 
