@@ -517,12 +517,12 @@ app.get("/api/stats/nimiqwatch", cache("5 minutes"), async function (req, res) {
   try {
     const data = (
       await axios.get("https://pool.nimiq.watch/api/stats.json", {
-        timeout: 10000
+        timeout: 20000
       })
     ).data;
     const { fee, payout_frequency } = (
       await axios.get("https://pool.nimiq.watch/api/pool.json", {
-        timeout: 10000
+        timeout: 20000
       })
     ).data;
 
@@ -940,6 +940,58 @@ app.get("/api/nimiqwatch/:address", async function (req, res) {
     ).data;
     const { confirmed } = (
       await axios.get(`https://pool.nimiq.watch/api/user/${id}/balance.json`, {
+        timeout: 10000
+      })
+    ).data;
+
+    const deviceList = [];
+    let address_hashrate = 0;
+    devices.forEach(x => {
+      address_hashrate += x.hashrate;
+      deviceList.push({
+        deviceName: x.id,
+        deviceId: x.id,
+        hashrate: parseHashrate(x.hashrate),
+        hashrate: `${(x.hashrate / 1e3).toFixed(2)} kH/s`,
+        total_shares: "Unknown"
+      });
+    });
+
+    res.send({
+      address_hashrate: parseHashrate(address_hashrate),
+      address_hashrate_complete: address_hashrate,
+      balance: parseBalance(confirmed),
+      confirmed_balance: parseBalance(confirmed),
+      unconfirmed_balance: 0,
+      deviceList
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/e4pool/:address", async function (req, res) {
+  try {
+    const address = req.params.address;
+    const { id } = (
+      await axios.get(`https://nimiq.e4pool.com/api/user/${address}.json`, {
+        timeout: 10000
+      })
+    ).data;
+
+    if (id === null) {
+      res.send("Not found");
+      return;
+    }
+
+    const devices = (
+      await axios.get(`https://nimiq.e4pool.com/api/user/${id}/devices.json`, {
+        timeout: 10000
+      })
+    ).data;
+    const { confirmed } = (
+      await axios.get(`https://nimiq.e4pool.com/api/user/${id}/balance.json`, {
         timeout: 10000
       })
     ).data;
