@@ -294,6 +294,20 @@ const isSicknetworkOnline = async retry => {
   }
 };
 
+const isCoinhuntersOnline = async retry => {
+  try {
+    const res = (
+      await axios.get("eu1-nim.coinhunters.name:8544", {
+        timeout: 5000
+      })
+    ).data;
+    return res === "Coinhunters Nimiq Pool"
+  } catch {
+    if (retry) return isCoinhuntersOnline(false);
+    return false;
+  }
+};
+
 // Nimiq Stats
 
 app.get("/api/stats/nimiq", cache("15 minutes"), async function (req, res) {
@@ -564,6 +578,24 @@ app.get("/api/stats/e4pool", cache("5 minutes"), async function (req, res) {
       pool_fee: (fee < 1 ? parseFloat(fee).toFixed(2) : fee) + "%",
       minimum_payout: 50,
       payout_frecuency: Number(payout_frequency.match(/\d+/)[0])
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/stats/coinhunters", cache("5 minutes"), async function (req, res) {
+  try {
+    res.send({
+      hashrate: null,
+      hashrateComplete: null,
+      miners: null,
+      workers: null,
+      blocksMined: null,
+      pool_fee: "1%",
+      minimum_payout: null,
+      payout_frecuency: null
     });
   } catch (e) {
     console.log(e);
@@ -1016,6 +1048,22 @@ app.get("/api/e4pool/:address", async function (req, res) {
       confirmed_balance: parseBalance(confirmed),
       unconfirmed_balance: 0,
       deviceList
+    });
+  } catch (e) {
+    console.log(e);
+    res.send("offline");
+  }
+});
+
+app.get("/api/coinhunters/:address", async function (req, res) {
+  try {
+    res.send({
+      address_hashrate: null,
+      address_hashrate_complete: null,
+      balance: null,
+      confirmed_balance: null,
+      unconfirmed_balance: null,
+      deviceList: null
     });
   } catch (e) {
     console.log(e);

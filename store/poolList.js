@@ -83,15 +83,25 @@ export const state = () => [
     slogan: "Nimiq Mining you can trust.",
     url: "pool.nimiq.watch:8443"
   },
+  // {
+  //   icon: "/e4pool.png",
+  //   name: "e4pool",
+  //   displayName: "E4pool",
+  //   message: "Russia based",
+  //   status: "",
+  //   extras: ["Support in Russian"],
+  //   slogan: "Multicoin CPU/GPU mining pool",
+  //   url: "nimiq.e4pool.com:6985"
+  // },
   {
-    icon: "/e4pool.png",
-    name: "e4pool",
-    displayName: "E4pool",
+    icon: "/coinhunters.png",
+    name: "coinhunters",
+    displayName: "Coinhunters",
     message: "Russia based",
     status: "",
     extras: ["Support in Russian"],
-    slogan: "Multicoin CPU/GPU mining pool",
-    url: "nimiq.e4pool.com:6985"
+    slogan: "Professional smart tools around blockchains",
+    url: "eu1-nim.coinhunters.name:8544"
   }
 ];
 

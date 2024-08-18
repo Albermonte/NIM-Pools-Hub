@@ -56,6 +56,7 @@
 							justify="center"
 						>
 							<v-col
+								v-if="poolFee"
 								class="py-0 pb-1 d-flex flex-column align-center justify-center"
 								style="max-width: 125px; min-width: 125px"
 							>
@@ -88,10 +89,14 @@
 								style="height: 70px; max-width: max-content; min-width: 180px"
 							>
 								<div class="m-grid">
-									<div>Minimum Payout:</div>
-									<div class="font-weight-regular text-right">{{ minimumPayout }} NIM</div>
-									<div>Payout Interval:</div>
-									<div class="font-weight-regular text-right">{{ payoutFrecuency }}</div>
+									<template v-if="minimumPayout">
+										<div>Minimum Payout:</div>
+										<div class="font-weight-regular text-right">{{ minimumPayout }} NIM</div>
+									</template>
+									<template v-if="payoutFrecuency">
+										<div>Payout Interval:</div>
+										<div class="font-weight-regular text-right">{{ payoutFrecuency }}</div>
+									</template>
 								</div>
 							</v-col>
 						</v-row>
@@ -134,6 +139,7 @@ export default {
 			const fee = this.pool.extras[0];
 			const percentage = fee.substr(fee.indexOf(": ") + 2);
 			const num = percentage.substr(0, percentage.indexOf("%")).split(".");
+			if(num.every((n) => n === '')) return null;
 			return {
 				whole: num[0],
 				decimal: num[1],
@@ -146,7 +152,7 @@ export default {
 			const frequency = eval(
 				"this.$store.state." + this.pool.name + ".payout_frecuency"
 			);
-			return `${frequency} ${frequency !== 1 ? "hours" : "hour"}`;
+			return frequency ? `${frequency} ${frequency !== 1 ? "hours" : "hour"}` : null;
 		},
 	},
 };
