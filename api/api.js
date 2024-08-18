@@ -482,18 +482,18 @@ app.get("/api/stats/skypool", cache("15 minutes"), async function (req, res) {
         timeout: 5000
       })
     ).data.data;
-    const { blocks } = (
-      await axios.get(
-        `https://api.nimiq.cafe/account/NQ48 8CKH BA24 2VR3 N249 N8MN J5XX 74DB 5XJ8?api_key=${process.env.nimiqx_api}`,
-        { timeout: 30000 }
-      )
-    ).data;
+    // const { blocks } = (
+    //   await axios.get(
+    //     `https://api.nimiq.cafe/account/NQ48 8CKH BA24 2VR3 N249 N8MN J5XX 74DB 5XJ8?api_key=${process.env.nimiqx_api}`,
+    //     { timeout: 30000 }
+    //   )
+    // ).data;
     res.send({
       hashrate: parseHashrate(stats.hashrate),
       hashrateComplete: Number(stats.hashrate.toFixed(0)),
       miners: stats.addressNumber,
       workers: null,
-      blocksMined: blocks,
+      blocksMined: 0,
       pool_fee: "~1%",
       minimum_payout: 10,
       payout_frecuency: 12
@@ -521,7 +521,7 @@ app.get("/api/stats/icemining", cache("15 minutes"), async function (req, res) {
       payout_frecuency: 2
     });
   } catch (e) {
-    console.log("Iceminging NimiqX API error:");
+    console.log("Iceminging API error:");
     console.log(e);
     res.send("offline");
   }

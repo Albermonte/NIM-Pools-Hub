@@ -72,7 +72,7 @@ export const actions = {
       `${window.location.origin}/api/stats/nimiq`
     );
     if (info === "offline") {
-      console.error("NimiqX API not responding ", new Date().toUTCString());
+      console.error("Nimiq.Watch API not responding ", new Date().toUTCString());
       return "offline";
     }
 
